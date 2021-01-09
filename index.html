@@ -1,0 +1,22 @@
+<h1>Your Projects</h1>
+<ul id="projects"></ul>
+
+<script>
+const url = "/api/v4/projects?search=pen-&per_page=100&order_by=last_activity_at";
+fetch(url)
+	.then((response) => response.json())
+	.then((data) => {
+		const $el = document.getElementById("projects");
+		$el.innerHTML = "";
+		data
+		.filter((project) => project.name.startsWith("pen-"))
+		.forEach((project) => {
+			const projectElement = document.createElement("li");
+			const a = document.createElement("a");
+			a.innerText = project.name;
+			a.href=`dashboard.html#${project.id}`;
+			projectElement.appendChild(a);
+			$el.appendChild(projectElement);
+		});
+	});
+</script>
