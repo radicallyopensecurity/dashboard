@@ -1,4 +1,25 @@
-<h1>Dashboard</h1>
+<html>
+  <head>
+  	<script type="module" crossorigin="use-credentials">
+      import './elements/ros/project.js';
+    </script>
+  </head>
+  <body>
+    <ros-project id="project"></ros-project>
+    <script>
+      const $project = document.getElementById("project");
+      function onHashChange() {
+        const hash = window.location.hash.substr(1);
+        const projectId = parseInt(hash, 10);
+        $project.gitlabProjectId = projectId;
+      }
+      onHashChange();
+      window.addEventListener("hashchange", onHashChange);
+    </script>
+  </body>
+</html>
+
+<!--
 <div id="events"></div>
 
 <div id="debug">
@@ -90,3 +111,4 @@ fetch(url)
 		});
 	});
 </script>
+-->
