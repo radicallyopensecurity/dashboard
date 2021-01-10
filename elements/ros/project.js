@@ -202,11 +202,11 @@ export class Project extends GitLabProject {
 	}
 
 	get findings() {
-		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.includes("finding"));
+		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding"));
 	}
 
 	get nonFindings() {
-		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.includes("non-finding"));
+		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "non-finding"));
 	}
 
 	static get severities() {
