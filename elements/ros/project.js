@@ -142,7 +142,7 @@ export class ProjectEvent extends LitElement {
 			margin-right: 1em;
 		}
 		.avatar.default {
-			background-color: grey;
+			background-color: lightgrey;
 			border-radius: calc(var(--line-height) / 2);
 		}
 		`;
