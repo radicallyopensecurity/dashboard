@@ -47,9 +47,11 @@ class GitLabProject extends GitLab {
 
 	constructor() {
 		super();
-		this.gitLabProjectData = null;
-		this.gitLabProjectEvents = [];
-		this.gitlabProjectId = null;
+		this.gitlabProjectData = null;
+		this.gitlabProjectEvents = [];
+		this.gitlabProjectLabels = [];
+		this.gitlabProjectIssues = [];
+		
 	}
 
 	static get properties() {
@@ -58,12 +60,20 @@ class GitLabProject extends GitLab {
 				type: Number,
 				reflect: true
 			},
-			gitLabProjectData: {
+			gitlabProjectData: {
 				type: Object,
 				notify: true
 			},
 			gitlabProjectEvents: {
-				type: Object,
+				type: Array,
+				notify: true
+			},
+			gitlabProjectLabels: {
+				type: Array,
+				notify: true
+			},
+			gitlabProjectIssues: {
+				type: Array,
 				notify: true
 			}
 		}
@@ -84,8 +94,13 @@ class GitLabProject extends GitLab {
 	}
 
 	async fetch() {
-		this.gitLabProjectData = await super.fetch();
+		if (this.gitlabProjectId == null) {
+			return;
+		}
+		this.gitlabProjectData = await super.fetch();
+		await this.fetchPaginated("gitlabProjectIssues", `${this.baseUrl}/issues`);
 		await this.fetchPaginated("gitlabProjectEvents", `${this.baseUrl}/events?target=issue`);
+		//await this.fetchPaginated("gitlabProjectLabels", `${this.baseUrl}/labels`);
 	}
 
 }
@@ -151,14 +166,14 @@ export class ProjectEvent extends LitElement {
 		let $message;
 		switch (this.data.action_name) {
 			case "pushed to":
-				$message = html`pushed <b>${this.data.push_data.commit_title}</b>`;
+				$message = html`pushed <a href="${this.project.web_url}/compare/${this.data.push_data.commit_from}...${this.data.push_data.commit_to}">${this.data.push_data.commit_count} commits</a>: ${this.data.push_data.commit_title}`;
 				break;
 			case "opened":
 			case "updated":
 				$message = html`${this.data.action_name} <a href="${this.project.web_url}/issues/${this.data.target_iid}"><b>#${this.data.target_iid}</b> ${this.data.target_title}</a>`;
 				break;
 			case "commented on":
-				$message = html`${this.data.action_name} <a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}">${this.data.target_title} (<b>#${this.data.target_iid}</b>)</a>`;
+				$message = html`<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}">${this.data.action_name}</a> ${this.data.target_title} (<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}">#${this.data.target_iid}</a>)`;
 				break;
 			case "created":
 				$message = html`created the project`;
@@ -181,18 +196,64 @@ customElements.define("ros-project-event", ProjectEvent);
 export class Project extends GitLabProject {
 
 	get title() {
-		if (this.gitLabProjectData.name.startsWith("pen-"))
-		return this.gitLabProjectData.name.substr(4);
+		if (this.gitlabProjectData.name.startsWith("pen-"))
+		return this.gitlabProjectData.name.substr(4);
 	}
 
 	get findings() {
-		return [];
+		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.includes("finding"));
+	}
+
+	get nonFindings() {
+		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.includes("non-finding"));
+	}
+
+	static get severities() {
+		return [
+			"ToDo",
+			"Extreme",
+			"High",
+			"Elevated",
+			"Moderate",
+			"Low",
+			"Unknown"
+		];
+	}
+
+	get findingsBySeverity() {
+		const output = {};
+		const threadLevelPrefix = "threatLevel:";
+		this.findings.forEach((finding) => {
+			let severity = "ToDo";
+			for (let label of finding.labels) {
+				if (label.startsWith(threadLevelPrefix)) {
+					severity = label.substr(threadLevelPrefix.length);
+					break;
+				}
+			}
+			if (!output.hasOwnProperty(severity)) {
+				output[severity] = [];
+			}
+			output[severity].push(finding);
+		});
+
+		const orderedOutput = {};
+		this.constructor.severities.forEach((severity) => {
+			if (output.hasOwnProperty(severity)) {
+				orderedOutput[severity] = output[severity];
+			}
+		});
+
+		return orderedOutput;
 	}
 
 	render() {
-		if (this.gitLabProjectData === null) {
+		if (this.gitlabProjectData === null) {
 			return html`loading ${this.gitlabProjectId}...`;
 		}
+
+		const findings = this.findings;
+		const nonFindings = this.nonFindings;
 
 		return html`
 		<link rel="stylesheet" href="flexboxgrid.css" />
@@ -200,21 +261,48 @@ export class Project extends GitLabProject {
 			<div class="row">
 				<div class="col-xs-12">
 					<h1>${this.title}</h1>
+					<ul>
+						<li>${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+						<li>${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
+					</ul>
 				</div>
 			</div>
 		</div>
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12">
-					<h2>Timeline</h2>
-				</div>
-			</div>
-			<div class="row">
-				${this.gitlabProjectEvents.map((eventData) => html`
-					<div class="col-xs-11">
-						<ros-project-event .data="${eventData}" .project="${this.gitLabProjectData}"></ros-project-event>
+				<div class="col-xs-12 col-md-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<h2>Event History</h2>
+						</div>
 					</div>
-				`)}
+					<div class="row">
+						<div class="col-xs-11">
+							${this.gitlabProjectEvents.map((eventData) => html`
+								<ros-project-event .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
+							`)}
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<h2>Findings</h2>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-11">
+							${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
+								<h3>${severity}</h3>
+								<ul>
+									${findings.map((finding) => {
+										return html`<li>${finding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}">#${finding.iid}</a>)</li>`;
+									})}
+								</ul>
+							`)}
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		`;
