@@ -166,14 +166,14 @@ export class ProjectEvent extends LitElement {
 		let $message;
 		switch (this.data.action_name) {
 			case "pushed to":
-				$message = html`pushed <a href="${this.project.web_url}/compare/${this.data.push_data.commit_from}...${this.data.push_data.commit_to}">${this.data.push_data.commit_count} commits</a>: ${this.data.push_data.commit_title}`;
+				$message = html`pushed <a href="${this.project.web_url}/compare/${this.data.push_data.commit_from}...${this.data.push_data.commit_to}" target="_blank">${this.data.push_data.commit_count} commits</a>: ${this.data.push_data.commit_title}`;
 				break;
 			case "opened":
 			case "updated":
 				$message = html`${this.data.action_name} <a href="${this.project.web_url}/issues/${this.data.target_iid}"><b>#${this.data.target_iid}</b> ${this.data.target_title}</a>`;
 				break;
 			case "commented on":
-				$message = html`<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}">${this.data.action_name}</a> ${this.data.target_title} (<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}">#${this.data.target_iid}</a>)`;
+				$message = html`<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}" target="_blank">${this.data.action_name}</a> ${this.data.target_title} (<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}" target="_blank">#${this.data.target_iid}</a>)`;
 				break;
 			case "created":
 				$message = html`created the project`;
@@ -184,7 +184,8 @@ export class ProjectEvent extends LitElement {
 		}
 
 		return html`
-		${$avatar} ${this.data.author.name}
+		<a href="/${this.data.author.username}" target="_blank">${$avatar}</a>
+		${this.data.author.name}
 		${$message}
 		${moment(created_at).fromNow()}
 		`;
@@ -296,7 +297,7 @@ export class Project extends GitLabProject {
 								<h3>${severity}</h3>
 								<ul>
 									${findings.map((finding) => {
-										return html`<li>${finding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}">#${finding.iid}</a>)</li>`;
+										return html`<li>${finding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank">#${finding.iid}</a>)</li>`;
 									})}
 								</ul>
 							`)}
