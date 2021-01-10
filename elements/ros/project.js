@@ -303,6 +303,20 @@ export class Project extends GitLabProject {
 							`)}
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<h2>Non-Findings</h2>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-11">
+							<ul>
+								${this.nonFindings.map((nonFinding) => html`
+									<li>${nonFinding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank">#${nonFinding.iid}</a>)</li>
+								`)}
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
