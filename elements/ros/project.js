@@ -145,6 +145,9 @@ export class ProjectEvent extends LitElement {
 			background-color: lightgrey;
 			border-radius: calc(var(--line-height) / 2);
 		}
+		.author {
+			display: inline;
+		}
 		`;
 	}
 
@@ -184,8 +187,10 @@ export class ProjectEvent extends LitElement {
 		}
 
 		return html`
-		<a href="/${this.data.author.username}" target="_blank">${$avatar}</a>
-		${this.data.author.name}
+		<span class="author">
+			<a href="/${this.data.author.username}" target="_blank">${$avatar}</a>
+			${this.data.author.name}
+		</span>
 		${$message}
 		${moment(created_at).fromNow()}
 		`;
