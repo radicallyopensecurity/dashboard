@@ -105,7 +105,42 @@ class GitLabProject extends GitLab {
 
 }
 
-export class ProjectEvent extends LitElement {
+class ProjectEventElement extends LitElement {
+
+	static get styles() {
+		return css`
+		.avatar {
+			position: relative;
+			background-repeat: no-repeat;
+			background-size: cover;
+			width: var(--line-height);
+			height: var(--line-height);
+			float: left;
+			margin-right: 1em;
+		}
+		.avatar.default {
+			background-color: lightgrey;
+			border-radius: calc(var(--line-height) / 2);
+		}
+		.author {
+			display: inline;
+		}
+		`;
+	}
+
+	get $avatar() {
+		const $avatar = document.createElement("div");
+		$avatar.classList.add("avatar");
+		if (this.data.author.avatar_url != undefined) {
+			$avatar.style.backgroundImage = `url(${new URL(this.data.author.avatar_url)})`;
+		} else {
+			$avatar.classList.add("default");
+		}
+		return $avatar;
+	}
+}
+
+export class ProjectEvent extends ProjectEventElement {
 
 	constructor() {
 		super();
@@ -135,6 +170,7 @@ export class ProjectEvent extends LitElement {
 			margin-bottom: 10px;
 			display: block;
 		}
+		${super.styles}
 		`;
 	}
 
@@ -160,6 +196,10 @@ export class ProjectEvent extends LitElement {
 			case "created":
 				$message = html`created the project`;
 				break;
+			case "left":
+			case "joined":
+				$message = html`<a href="/${this.data.author.username}" target="_blank">${this.$avatar} ${this.data.author.name}</a> ${this.data.action_name}`;
+				break;
 			default:
 				$message = html`${this.data.action_name}`;
 				break;
@@ -174,7 +214,7 @@ export class ProjectEvent extends LitElement {
 }
 customElements.define("ros-project-event", ProjectEvent);
 
-export class ProjectActivity extends LitElement {
+export class ProjectActivity extends ProjectEventElement {
 
 	constructor() {
 		super();
@@ -204,36 +244,13 @@ export class ProjectActivity extends LitElement {
 			margin-bottom: 10px;
 			display: block;
 		}
-		.avatar {
-			position: relative;
-			background-repeat: no-repeat;
-			background-size: cover;
-			width: var(--line-height);
-			height: var(--line-height);
-			float: left;
-			margin-right: 1em;
-		}
-		.avatar.default {
-			background-color: lightgrey;
-			border-radius: calc(var(--line-height) / 2);
-		}
-		.author {
-			display: inline;
-		}
+		${super.styles}
 		`;
 	}
 
 	render() {
 		if (!this.data) {
 			return html``;
-		}
-
-		const $avatar = document.createElement("div");
-		$avatar.classList.add("avatar");
-		if (this.data.author.avatar_url != undefined) {
-			$avatar.style.backgroundImage = `url(${new URL(this.data.author.avatar_url)})`;
-		} else {
-			$avatar.classList.add("default");
 		}
 
 		const created_at = new Date(this.data.created_at);
@@ -260,7 +277,7 @@ export class ProjectActivity extends LitElement {
 
 		return html`
 		<span class="author">
-			<a href="/${this.data.author.username}" target="_blank">${$avatar}</a>
+			<a href="/${this.data.author.username}" target="_blank">${this.$avatar}</a>
 			${this.data.author.name}
 		</span>
 		${$message}
