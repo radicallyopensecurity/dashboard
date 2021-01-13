@@ -11,7 +11,7 @@ class GitLab extends LitElement {
 		params = params || {};
 		url = url || this.baseUrl;
 		const _url = new URL(url, window.location.href);
-		Object.entries(params || {}).forEach(([key, value]) => url.searchParams.append(key, params[key]))
+		Object.entries(params || {}).forEach(([key, value]) => url.searchParams.append(key, params[key]));
 		return _url;
 	}
 
@@ -120,6 +120,78 @@ export class ProjectEvent extends LitElement {
 			},
 			project: {
 				type: Object
+			},
+			dateFormat: {
+				type: String
+			}
+		};
+	}
+
+	static get styles() {
+		return css`
+		:host {
+			--line-height: 24px;
+			line-height: var(--line-height);
+			margin-bottom: 10px;
+			display: block;
+		}
+		`;
+	}
+
+	render() {
+		if (!this.data) {
+			return html``;
+		}
+
+		const created_at = new Date(this.data.created_at);
+
+		let $message;
+		switch (this.data.action_name) {
+			case "pushed to":
+				$message = html`pushed <a href="${this.project.web_url}/compare/${this.data.push_data.commit_from}...${this.data.push_data.commit_to}" target="_blank">${this.data.push_data.commit_count} commits</a>: ${this.data.push_data.commit_title}`;
+				break;
+			case "opened":
+			case "updated":
+				$message = html`${this.data.action_name} <a href="${this.project.web_url}/issues/${this.data.target_iid}"><b>#${this.data.target_iid}</b> ${this.data.target_title}</a>`;
+				break;
+			case "commented on":
+				$message = html`<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}" target="_blank">${this.data.action_name}</a> ${this.data.target_title} (<a href="${this.project.web_url}/issues/${this.data.note.noteable_iid}#node_${this.data.target_id}" target="_blank">#${this.data.target_iid}</a>)`;
+				break;
+			case "created":
+				$message = html`created the project`;
+				break;
+			default:
+				$message = html`${this.data.action_name}`;
+				break;
+		}
+
+		return html`
+		${$message}
+		on ${moment(created_at).format("ddd, MMM DD YYYY HH:mm")}
+		`;
+	}
+
+}
+customElements.define("ros-project-event", ProjectEvent);
+
+export class ProjectActivity extends LitElement {
+
+	constructor() {
+		super();
+		this.data = null;
+		this.project = "";
+	}
+
+	static get properties() {
+		return {
+			data: {
+				type: Object
+			},
+			project: {
+				type: Object
+			},
+			dateFormat: {
+				type: String
 			}
 		};
 	}
@@ -197,7 +269,7 @@ export class ProjectEvent extends LitElement {
 	}
 
 }
-customElements.define("ros-project-event", ProjectEvent);
+customElements.define("ros-project-activity", ProjectActivity);
 
 export class Project extends GitLabProject {
 
@@ -277,6 +349,18 @@ export class Project extends GitLabProject {
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-md-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<h2>Recent Activity</h2>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-11">
+							${this.gitlabProjectEvents.slice(0, 5).map((eventData) => html`
+								<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
+							`)}
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<h2>Event History</h2>
