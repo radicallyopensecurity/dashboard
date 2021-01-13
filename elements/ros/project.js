@@ -167,7 +167,7 @@ export class ProjectEvent extends LitElement {
 
 		return html`
 		${$message}
-		on ${moment(created_at).format("ddd, MMM DD YYYY HH:mm")}
+		on ${moment(created_at).format("HH:mm")}
 		`;
 	}
 
@@ -325,6 +325,19 @@ export class Project extends GitLabProject {
 		return orderedOutput;
 	}
 
+	get eventsByDay() {
+		const out = {};
+		this.gitlabProjectEvents.forEach((event) => {
+			const date = event.created_at;
+			const key = moment(date).format("YYYY-MM-DD");
+			if (!out.hasOwnProperty(key)) {
+				out[key] = [];
+			}
+			out[key].push(event);
+		});
+		return out;
+	}
+
 	render() {
 		if (this.gitlabProjectData === null) {
 			return html`loading ${this.gitlabProjectId}...`;
@@ -368,9 +381,14 @@ export class Project extends GitLabProject {
 					</div>
 					<div class="row">
 						<div class="col-xs-11">
-							${this.gitlabProjectEvents.map((eventData) => html`
-								<ros-project-event .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
-							`)}
+							${Object.entries(this.eventsByDay).map(([day, events]) => {
+								return html`
+									<h3>${moment(day).format("dddd, DD.MM.YYYY")}</h3>
+									${events.map((eventData) => html`
+										<ros-project-event .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
+									`)}
+								`;
+							})}
 						</div>
 					</div>
 				</div>
