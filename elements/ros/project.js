@@ -206,6 +206,7 @@ export class ProjectEvent extends ProjectEventElement {
 		}
 
 		return html`
+		<link rel="stylesheet" href="style.css"/>
 		${$message}
 		on ${moment(created_at).format("HH:mm")}
 		`;
@@ -276,6 +277,7 @@ export class ProjectActivity extends ProjectEventElement {
 		}
 
 		return html`
+		<link rel="stylesheet" href="style.css"/>
 		<span class="author">
 			<a href="/${this.data.author.username}" target="_blank">${this.$avatar}</a>
 			${this.data.author.name}
@@ -364,6 +366,7 @@ export class Project extends GitLabProject {
 		const nonFindings = this.nonFindings;
 
 		return html`
+		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="flexboxgrid.css" />
 		<div class="container">
 			<div class="row">

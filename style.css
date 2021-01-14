@@ -1,0 +1,39 @@
+body {
+	font-family: Verdana;
+}
+
+:root {
+	--ros-color-background: white;
+	--ros-color-menu: #FFF;
+	--ros-color-hover: #3D3D3D;
+	--ros-color-primary-text: black;
+	--ros-color-secondary-text: #3D3D3D;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--ros-color-background: #181818;
+		--ros-color-menu: #212121;
+		--ros-color-hover: #3D3D3D;
+		--ros-color-primary-text: #FFF;
+		--ros-color-secondary-text: #AAA;
+	}
+}
+
+body {
+	background: var(--ros-color-background);
+	color: var(--ros-color-secondary-text);
+}
+
+a {
+	text-decoration: underline;
+	color: var(--ros-color-secondary-text);
+}
+
+a:hover {
+	color: var(--ros-color-primary-text);
+}
+
+h1, h2, h3 {
+	color: var(--ros-color-primary-text);
+}
