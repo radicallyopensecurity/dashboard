@@ -105,7 +105,15 @@ class GitLabProject extends GitLab {
 
 }
 
-class ProjectEventElement extends LitElement {
+class GitlabUserAvatar extends LitElement {
+
+	static get properties() {
+		return {
+			user: {
+				type: Object
+			}
+		}
+	}
 
 	static get styles() {
 		return css`
@@ -116,7 +124,8 @@ class ProjectEventElement extends LitElement {
 			width: var(--line-height);
 			height: var(--line-height);
 			float: left;
-			margin-right: 1em;
+			margin-right: 10px;
+			border-radius: 2px;
 		}
 		.avatar.default {
 			background-color: lightgrey;
@@ -128,19 +137,20 @@ class ProjectEventElement extends LitElement {
 		`;
 	}
 
-	get $avatar() {
+	render() {
 		const $avatar = document.createElement("div");
 		$avatar.classList.add("avatar");
-		if (this.data.author.avatar_url != undefined) {
-			$avatar.style.backgroundImage = `url(${new URL(this.data.author.avatar_url)})`;
+		if (this.user.avatar_url != undefined) {
+			$avatar.style.backgroundImage = `url(${new URL(this.user.avatar_url)})`;
 		} else {
 			$avatar.classList.add("default");
 		}
 		return $avatar;
 	}
 }
+customElements.define("gitlab-user-avatar", GitlabUserAvatar);
 
-export class ProjectEvent extends ProjectEventElement {
+export class ProjectEvent extends LitElement {
 
 	constructor() {
 		super();
@@ -170,7 +180,6 @@ export class ProjectEvent extends ProjectEventElement {
 			margin-bottom: 10px;
 			display: block;
 		}
-		${super.styles}
 		`;
 	}
 
@@ -198,7 +207,9 @@ export class ProjectEvent extends ProjectEventElement {
 				break;
 			case "left":
 			case "joined":
-				$message = html`<a href="/${this.data.author.username}" target="_blank">${this.$avatar} ${this.data.author.name}</a> ${this.data.action_name}`;
+				$message = html`<a href="/${this.data.author.username}" target="_blank">
+					<gitlab-user-avatar .user="${this.data.author}"></gitlab-user-avatar>
+					${this.data.author.name}</a> ${this.data.action_name}`;
 				break;
 			default:
 				$message = html`${this.data.action_name}`;
@@ -215,7 +226,7 @@ export class ProjectEvent extends ProjectEventElement {
 }
 customElements.define("ros-project-event", ProjectEvent);
 
-export class ProjectActivity extends ProjectEventElement {
+export class ProjectActivity extends LitElement {
 
 	constructor() {
 		super();
@@ -245,7 +256,6 @@ export class ProjectActivity extends ProjectEventElement {
 			margin-bottom: 10px;
 			display: block;
 		}
-		${super.styles}
 		`;
 	}
 
@@ -279,7 +289,9 @@ export class ProjectActivity extends ProjectEventElement {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
 		<span class="author">
-			<a href="/${this.data.author.username}" target="_blank">${this.$avatar}</a>
+			<a href="/${this.data.author.username}" target="_blank">
+				<gitlab-user-avatar .user="${this.data.author}"></gitlab-user-avatar>
+			</a>
 			${this.data.author.name}
 		</span>
 		${$message}
