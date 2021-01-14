@@ -72,10 +72,13 @@ export class GitlabProject extends Gitlab {
 				type: Array,
 				notify: true
 			},
+<<<<<<< HEAD
 			gitlabProjectVariables: {
 				type: Array,
 				notify: true
 			},
+=======
+>>>>>>> 98eb037... app-router
 			gitlabProjectIssues: {
 				type: Array,
 				notify: true
@@ -105,7 +108,10 @@ export class GitlabProject extends Gitlab {
 		await this.fetchPaginated("gitlabProjectIssues", `${this.baseUrl}/issues`);
 		await this.fetchPaginated("gitlabProjectEvents", `${this.baseUrl}/events?target=issue`);
 		//await this.fetchPaginated("gitlabProjectLabels", `${this.baseUrl}/labels`);
+<<<<<<< HEAD
 		await this.fetchPaginated("gitlabProjectVariables", `${this.baseUrl}/variables`);
+=======
+>>>>>>> 98eb037... app-router
 	}
 
 }
