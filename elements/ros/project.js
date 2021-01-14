@@ -1,154 +1,7 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
-
-class GitLab extends LitElement {
-
-	get baseUrl() {
-		return "/api/v4/"
-	}
-
-	getUrl(url, params) {
-		params = params || {};
-		url = url || this.baseUrl;
-		const _url = new URL(url, window.location.href);
-		Object.entries(params || {}).forEach(([key, value]) => url.searchParams.append(key, params[key]));
-		return _url;
-	}
-
-	async fetch(url, params) {
-		const _url = this.getUrl(url, params);
-		const response = await fetch(_url)
-			.then((response) => response.json());
-		return response;
-	}
-
-	async fetchPaginated(key, url, params) {
-		const _url = this.getUrl(url, params);
-
-		let nextPage = 1;
-		const perPage = 50;
-		this[key] = [];
-
-		_url.searchParams.set("per_page", perPage);
-
-		let response;
-		while (!Number.isNaN(nextPage)) {
-			_url.searchParams.set("page", nextPage);
-			response = await fetch(_url);
-			nextPage = parseInt(response.headers.get("x-next-page"), 10);
-			this[key] = this[key].concat(await response.json());
-		}
-
-	}
-
-}
-
-class GitLabProject extends GitLab {
-
-	constructor() {
-		super();
-		this.gitlabProjectData = null;
-		this.gitlabProjectEvents = [];
-		this.gitlabProjectLabels = [];
-		this.gitlabProjectIssues = [];
-		
-	}
-
-	static get properties() {
-		return {
-			gitlabProjectId: {
-				type: Number,
-				reflect: true
-			},
-			gitlabProjectData: {
-				type: Object,
-				notify: true
-			},
-			gitlabProjectEvents: {
-				type: Array,
-				notify: true
-			},
-			gitlabProjectLabels: {
-				type: Array,
-				notify: true
-			},
-			gitlabProjectIssues: {
-				type: Array,
-				notify: true
-			}
-		}
-	}
-
-	async updated(changedProperties) {
-		const keys = [...changedProperties.keys()];
-		if (keys.includes("gitlabProjectId")) {
-			await this.fetch();
-		}
-	}
-
-	get baseUrl() {
-		if (this.gitlabProjectId === null) {
-			throw new Error("Gitlab Project ID undefined");
-		}
-		return super.baseUrl + `projects/${this.gitlabProjectId}`;
-	}
-
-	async fetch() {
-		if (this.gitlabProjectId == null) {
-			return;
-		}
-		this.gitlabProjectData = await super.fetch();
-		await this.fetchPaginated("gitlabProjectIssues", `${this.baseUrl}/issues`);
-		await this.fetchPaginated("gitlabProjectEvents", `${this.baseUrl}/events?target=issue`);
-		//await this.fetchPaginated("gitlabProjectLabels", `${this.baseUrl}/labels`);
-	}
-
-}
-
-class GitlabUserAvatar extends LitElement {
-
-	static get properties() {
-		return {
-			user: {
-				type: Object
-			}
-		}
-	}
-
-	static get styles() {
-		return css`
-		.avatar {
-			position: relative;
-			background-repeat: no-repeat;
-			background-size: cover;
-			width: var(--line-height);
-			height: var(--line-height);
-			float: left;
-			margin-right: 10px;
-			border-radius: 2px;
-		}
-		.avatar.default {
-			background-color: lightgrey;
-			border-radius: calc(var(--line-height) / 2);
-		}
-		.author {
-			display: inline;
-		}
-		`;
-	}
-
-	render() {
-		const $avatar = document.createElement("div");
-		$avatar.classList.add("avatar");
-		if (this.user.avatar_url != undefined) {
-			$avatar.style.backgroundImage = `url(${new URL(this.user.avatar_url)})`;
-		} else {
-			$avatar.classList.add("default");
-		}
-		return $avatar;
-	}
-}
-customElements.define("gitlab-user-avatar", GitlabUserAvatar);
+import { GitlabProject } from '../gitlab/index.js';
+import '../gitlab/avatar.js';
 
 export class ProjectEvent extends LitElement {
 
@@ -164,7 +17,8 @@ export class ProjectEvent extends LitElement {
 				type: Object
 			},
 			project: {
-				type: Object
+				type: Object,
+				notify: true
 			},
 			dateFormat: {
 				type: String
@@ -208,7 +62,7 @@ export class ProjectEvent extends LitElement {
 			case "left":
 			case "joined":
 				$message = html`<a href="/${this.data.author.username}" target="_blank">
-					<gitlab-user-avatar .user="${this.data.author}"></gitlab-user-avatar>
+					<gitlab-avatar .user="${this.data.author}"></gitlab-avatar>
 					${this.data.author.name}</a> ${this.data.action_name}`;
 				break;
 			default:
@@ -290,7 +144,7 @@ export class ProjectActivity extends LitElement {
 		<link rel="stylesheet" href="style.css"/>
 		<span class="author">
 			<a href="/${this.data.author.username}" target="_blank">
-				<gitlab-user-avatar .user="${this.data.author}"></gitlab-user-avatar>
+				<gitlab-avatar .user="${this.data.author}"></gitlab-avatar>
 			</a>
 			${this.data.author.name}
 		</span>
@@ -302,7 +156,7 @@ export class ProjectActivity extends LitElement {
 }
 customElements.define("ros-project-activity", ProjectActivity);
 
-export class Project extends GitLabProject {
+export class Project extends GitlabProject {
 
 	get title() {
 		if (this.gitlabProjectData.name.startsWith("pen-"))
