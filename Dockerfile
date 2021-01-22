@@ -1,7 +1,10 @@
 FROM node:14
 
-WORKDIR /home/node/dashboard/
-VOLUME . /home/node/dashboard/
+ADD docker/build-entrypoint.sh /entrypoint.sh
+VOLUME /source
+VOLUME /target
 
-RUN npm install
-RUN npm run build
+ENV REV=main
+
+WORKDIR /target
+ENTRYPOINT /entrypoint.sh
