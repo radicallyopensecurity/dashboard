@@ -1,6 +1,27 @@
 ROS Dashboard
 =============
 
+Staging Deployment
+------------------
+
+The staging system has a git hook to deploy updates on changes to a branch.
+
+```
+git remote add staging ssh://dev@git.staging.radical.sexy:33222/dashboard.git
+```
+
+A new branch name can be created and pushed to the staging system:
+
+```
+git checkout -b my-cool-feature
+```
+
+It will be deployed to https://git.staging.radical.sexy/ros-dashboard/my-cool-feature once pushed to staging:
+
+```
+git push staging
+```
+
 Docker Build
 ------------
 
