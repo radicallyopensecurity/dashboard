@@ -13,5 +13,9 @@ docker build -t dashboard-builder .
 This builder then can be used in Git Hooks to compile the application assets:
 
 ```
-docker run --rm -v /home/dev/dashboard.git:/source:ro dashboard-builder
+docker run --rm \
+  -v /home/dev/dashboard.git:/source:ro \
+  -v /var/www:/target \
+  -e REV=main \
+  dashboard-builder
 ```
