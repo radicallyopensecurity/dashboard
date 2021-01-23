@@ -1,7 +1,7 @@
 #!/bin/sh
 git init .
 git fetch /source $REV
-git checkout -f FETCH_HEAD
+git reset --hard FETCH_HEAD
 rm -rf .git
 npm install
 npm run build

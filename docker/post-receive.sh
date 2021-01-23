@@ -21,6 +21,6 @@ do
 	docker run --rm \
 		-v "$(pwd):/source:ro" \
 	        -v "$TARGET_DIR:/target:rw" \
-	        -e REV="$1" \
+	        -e REV="$refname" \
 	        dashboard-builder
 done
