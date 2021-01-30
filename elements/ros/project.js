@@ -3,6 +3,8 @@ import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
 
+const gitlabCiJobName = "build";
+
 export class ProjectEvent extends LitElement {
 
 	constructor() {
@@ -223,6 +225,24 @@ export class Project extends GitlabProject {
 		return out;
 	}
 
+	get _artifactDownloadUrl() {
+		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/master/raw/target/${this._assetFileName}?job=${gitlabCiJobName}`;
+	}
+
+	get _assetFileName() {
+		if (this.gitlabProjectData.name.startsWith("pen-")) {
+			return "report.pdf";
+		} else {
+			return "offerte.pdf"
+		}
+	}
+
+	get pdfPassword() {
+		if (this.gitlabProjectVariables instanceof Array) {
+			return this.gitlabProjectVariables.PDF_PASSWORD;
+		}
+	}
+
 	render() {
 		if (this.gitlabProjectData === null) {
 			return html`loading ${this.gitlabProjectId}...`;
@@ -242,6 +262,10 @@ export class Project extends GitlabProject {
 						<li>${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
 						<li>${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 					</ul>
+					<p>
+						Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
+						${!!this.pdfPassword ? html`(Password: <code>${this.pdfPassword}</code>` : ``}
+					</p>
 				</div>
 			</div>
 		</div>
