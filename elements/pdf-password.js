@@ -19,6 +19,14 @@ class PDFPassword extends LitElement {
 		}
 	}
 
+	static get styles() {
+		return css`
+		code {
+			cursor: pointer;
+		}
+		`;
+	}
+
 	get preview() {
 		if (this.visible) {
 			return this.cleartext;
