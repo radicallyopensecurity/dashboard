@@ -239,7 +239,11 @@ export class Project extends GitlabProject {
 
 	get pdfPassword() {
 		if (this.gitlabProjectVariables instanceof Array) {
-			return this.gitlabProjectVariables.PDF_PASSWORD;
+			const match = this.gitlabProjectVariables
+				.filter((data) => data.key.toUpperCase() === "PDF_PASSWORD");
+			if (match.length === 1) {
+				return match[0].value;
+			}
 		}
 	}
 
@@ -264,7 +268,7 @@ export class Project extends GitlabProject {
 					</ul>
 					<p>
 						Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
-						${!!this.pdfPassword ? html`(Password: <code>${this.pdfPassword}</code>` : ``}
+						${!!this.pdfPassword ? html`(Password: <code>${this.pdfPassword}</code> )` : ``}
 					</p>
 				</div>
 			</div>
