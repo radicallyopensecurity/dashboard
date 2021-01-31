@@ -37,3 +37,8 @@ a:hover {
 h1, h2, h3 {
 	color: var(--ros-color-primary-text);
 }
+
+code {
+	padding: 3px;
+	background-color: var(--ros-color-menu);
+}
