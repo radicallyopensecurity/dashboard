@@ -162,7 +162,9 @@ customElements.define("ros-project-activity", ProjectActivity);
 export class Project extends GitlabProject {
 
 	get title() {
-		if (this.gitlabProjectData.name.startsWith("pen-"))
+		// if (this.gitlabProjectData.name.startsWith("pen-")) {
+		// 	return this.gitlabProjectData.name.substr(4);
+		// }
 		return this.gitlabProjectData.name.substr(4);
 	}
 
