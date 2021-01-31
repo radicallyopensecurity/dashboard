@@ -29,8 +29,8 @@ class PDFPassword extends LitElement {
 
 	render() {
 		const copyToClipboard = (e) => {
-			e.target.select();
-			document.execCommand("copy");
+			var data = [new ClipboardItem({ "text/plain": new Blob([this.cleartext], { type: "text/plain" }) })];
+			navigator.clipboard.write(data);
 		}
 		const toggleVisible = () => {
 			this.visible = !this.visible;
