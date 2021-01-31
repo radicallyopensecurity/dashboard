@@ -39,6 +39,11 @@ h1, h2, h3 {
 }
 
 code {
-	padding: 3px;
+	padding: 4px;
 	background-color: var(--ros-color-menu);
+}
+
+button {
+	background: #3D3D3D;
+	border: 0px none;
 }
