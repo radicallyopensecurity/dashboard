@@ -2,6 +2,7 @@ import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
+import '../pdf-password.js';
 
 const gitlabCiJobName = "build";
 
@@ -268,7 +269,7 @@ export class Project extends GitlabProject {
 					</ul>
 					<p>
 						Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
-						${!!this.pdfPassword ? html`(Password: <code>${this.pdfPassword}</code> )` : ``}
+						${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
 					</p>
 				</div>
 			</div>
