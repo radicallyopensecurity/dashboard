@@ -233,7 +233,7 @@ export class Project extends GitlabProject {
 	}
 
 	get _assetFileName() {
-		if (this.gitlabProjectData.name.startsWith("pen-")) {
+		if (this.gitlabProjectData.path.startsWith("pen-")) {
 			return `report_${this.title}.pdf`;
 		} else {
 			return `offerte_${this.title}.pdf`
