@@ -228,8 +228,12 @@ export class Project extends GitlabProject {
 		return out;
 	}
 
+	get branchName() {
+		return "main";
+	}
+
 	get _artifactDownloadUrl() {
-		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/master/raw/target/${this._assetFileName}?job=${gitlabCiJobName}`;
+		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/${this.branchName}/raw/target/${this._assetFileName}?job=${gitlabCiJobName}`;
 	}
 
 	get _assetFileName() {
