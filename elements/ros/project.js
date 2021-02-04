@@ -165,7 +165,7 @@ export class Project extends GitlabProject {
 		// if (this.gitlabProjectData.name.startsWith("pen-")) {
 		// 	return this.gitlabProjectData.name.substr(4);
 		// }
-		return this.gitlabProjectData.name.substr(4);
+		return this.gitlabProjectData.path.substr(4);
 	}
 
 	get findings() {
