@@ -76,7 +76,7 @@ class GitlabNamespaceChooser extends DropdownInput {
 
 	constructor() {
 		super();
-		this.url = "/api/v4/namespaces";
+		this.url = "/api/v4/groups";
 	}
 
 	static mapOptions(item) {
