@@ -143,7 +143,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 				namespace_id: this.namespace_id
 			}
 
-			this.post(this.baseUrl, {}, {
+			this.post("/api/v4/projects", {}, {
 				body: JSON.stringify(createOptions)
 			});
 		}
