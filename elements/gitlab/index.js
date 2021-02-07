@@ -101,7 +101,8 @@ export class Gitlab extends LitElement {
 			case "PUT":
 				options.headers = {
 					...options.headers,
-					...gitlabAuth.headers
+					...gitlabAuth.headers,
+					"Content-Type": "application/json"
 				};
 				break;
 		}
