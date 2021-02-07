@@ -44,8 +44,19 @@ class DropdownInput extends LitNotify(LitElement) {
 		if (this.url === undefined) {
 			return;
 		} else {
-			const data = await fetch(this.url)
-				.then((response) => response.json())
+			const response = await fetch(this.url);
+			const data = await response.json();
+
+			switch (response.status) {
+				case 401:
+				case 403:
+					alert(data.message);
+					break;
+				case 400:
+					alert(data.message.name);
+					break;
+			}
+
 			this.options = data.map(this.constructor.mapOptions);
 		}
 	}

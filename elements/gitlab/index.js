@@ -108,9 +108,18 @@ export class Gitlab extends LitElement {
 				break;
 		}
 
-		const response = await fetch(_url, options)
-			.then((response) => response.json());
-		return response;
+		const response = await fetch(_url, options);
+		const data = await response.json();
+
+		switch (response.status) {
+			case 400:
+			case 401:
+			case 403:
+				alert(data.message.name);
+				break;
+		}
+
+		return data;
 	}
 
 	async fetchPaginated(key, url) {
