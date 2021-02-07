@@ -111,12 +111,18 @@ export class Gitlab extends LitElement {
 		const response = await fetch(_url, options);
 		const data = await response.json();
 
-		switch (response.status) {
-			case 400:
-			case 401:
-			case 403:
-				alert(data.message.name);
-				break;
+		if (!(200 <= response.status < 300)) {
+
+			let message = `HTTP Error ${response.status}`;
+			switch (response.status) {
+				case 400:
+					message += `: ${data}`
+					break;
+			}
+
+			throw new Error(message, {
+				status: response.status
+			});
 		}
 
 		return data;

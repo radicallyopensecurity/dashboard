@@ -154,14 +154,17 @@ class NewRosProject extends LitSync(GitlabProject) {
 				namespace_id: this.namespace_id
 			}
 
-			const response = await this.post("/api/v4/projects", {}, {
-				body: JSON.stringify(createOptions)
-			});
-
-			if (200 >= response.status < 300) {
-				const data = await response.json();
-				window.location.hash = data.id.toString();
+			let response;
+			try {
+				response = await this.post("/api/v4/projects", {}, {
+					body: JSON.stringify(createOptions)
+				});
+			} catch(e) {
+				alert(e.message);
+				return;
 			}
+
+			window.location.hash = response.id.toString();
 		}
 	}
 
