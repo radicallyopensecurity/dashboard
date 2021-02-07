@@ -42,7 +42,13 @@ class Router extends LitElement {
 		return () => {
 			const hash = window.location.hash.substring(1);
 			const hashFragments = hash.split("/", 1);
-			this.gitlabProjectId = parseInt(hashFragments[0], 10) || null;
+
+			if (hashFragments[0] === "new") {
+				this.gitlabProjectId = "new";
+			} else {
+				this.gitlabProjectId = parseInt(hashFragments[0], 10) || null;
+			}
+			this.route = hashFragments[1];
 		}
 	}
 
