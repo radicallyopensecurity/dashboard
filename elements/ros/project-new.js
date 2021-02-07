@@ -135,7 +135,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 	}
 
 	get onSubmitForm() {
-		return (e) => {
+		return async (e) => {
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -154,9 +154,14 @@ class NewRosProject extends LitSync(GitlabProject) {
 				namespace_id: this.namespace_id
 			}
 
-			this.post("/api/v4/projects", {}, {
+			const response = await this.post("/api/v4/projects", {}, {
 				body: JSON.stringify(createOptions)
 			});
+
+			if (200 >= response.status < 300) {
+				const data = await response.json();
+				window.location.hash = data.id.toString();
+			}
 		}
 	}
 
