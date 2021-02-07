@@ -96,6 +96,7 @@ export class Gitlab extends LitElement {
 	async _fetch(url, params, options={}) {
 		const _url = this.getUrl(url, params);
 
+		options.method = options.method || "GET";
 		switch (options.method.toUpperCase()) {
 			case "POST":
 			case "PUT":
