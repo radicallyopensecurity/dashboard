@@ -1,6 +1,37 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement } from '../../web_modules/lit-element.js';
 
+class GitlabAuth {
+
+	constructor(token=null) {
+		this._token = null;
+	}
+
+	get token() {
+		if (this._token === null) {
+			const userInput = prompt("This action requires administrative GitLab Authentication Token");
+			if (userInput && userInput.length) {
+				this._token = userInput;
+			} else {
+				throw new Error("Missing Gitlab Authentication Token")
+			}
+		}
+		return this._token;
+	}
+
+	set token(value) {
+		this._token = value;
+	}
+
+	get headers() {
+		return {
+			"PRIVATE-TOKEN": this.token
+		}
+	}
+
+}
+const gitlabAuth = new GitlabAuth();
+
 export class Gitlab extends LitElement {
 
 	constructor() {
@@ -50,9 +81,32 @@ export class Gitlab extends LitElement {
 		return _url;
 	}
 
-	async fetch(url, params) {
+	async post(url, params, options={}) {
+		options = {
+			...options,
+			method: "POST"
+		}
+		return this._fetch(url, params, options);
+	}
+
+	async fetch(url, params, options) {
+		return this._fetch(url, params, options);
+	}
+
+	async _fetch(url, params, options={}) {
 		const _url = this.getUrl(url, params);
-		const response = await fetch(_url)
+
+		switch (options.method.toUpperCase()) {
+			case "POST":
+			case "PUT":
+				options.headers = {
+					...options.headers,
+					...gitlabAuth.headers
+				};
+				break;
+		}
+
+		const response = await fetch(_url, options)
 			.then((response) => response.json());
 		return response;
 	}
