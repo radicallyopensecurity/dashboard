@@ -151,7 +151,6 @@ export class GitlabProject extends Gitlab {
 		this.gitlabProjectLabels = [];
 		this.gitlabProjectIssues = [];
 		this.gitlabProjectMembers = [];
-
 	}
 
 	static get properties() {

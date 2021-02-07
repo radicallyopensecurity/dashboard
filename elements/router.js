@@ -1,5 +1,6 @@
 import { LitElement, html, css } from '../web_modules/lit-element.js';
 import "./ros/project.js";
+import "./ros/project-new.js";
 import "./ros/projects.js";
 import "./views/allProjectsView.js";
 import "./gitlab/user.js";
@@ -16,7 +17,7 @@ class Router extends LitElement {
 	static get properties() {
 		return {
 			gitlabProjectId: {
-				type: Number,
+				type: String,
 				notify: true,
 				reflect: true
 			},
@@ -59,6 +60,15 @@ class Router extends LitElement {
 
 	render() {
 
+		let view;
+		if (this.gitlabProjectId === "new") {
+			view = html`<ros-project-new></ros-project-new>`;
+		} else if (this.gitlabProjectId !== null) {
+			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"></ros-project>`;
+		} else {
+			view = html`<ros-all-projects-view></ros-all-projects-view>`;
+		}
+
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
@@ -78,12 +88,9 @@ class Router extends LitElement {
 				</li>
 			</ul>
 		</header>
+		${view}`;
 
-		${this.gitlabProjectId !== null ? html`
-			<ros-project .gitlabProjectId="${this.gitlabProjectId}"></ros-project>
-		` : html`
-			<ros-all-projects-view .search="${this.search}"></ros-all-projects-view>
-		`}`;
+
 	}
 
 }
