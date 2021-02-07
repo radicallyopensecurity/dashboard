@@ -86,11 +86,11 @@ export class Gitlab extends LitElement {
 			...options,
 			method: "POST"
 		}
-		return this._fetch(url, params, options);
+		return await this._fetch(url, params, options);
 	}
 
 	async fetch(url, params, options) {
-		return this._fetch(url, params, options);
+		return await this._fetch(url, params, options);
 	}
 
 	async _fetch(url, params, options={}) {
