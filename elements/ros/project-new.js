@@ -174,7 +174,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 
 	render() {
 		return html`
-		<h2>New Project</h2>
+		<h2>Create New Project</h2>
 		<form name="new" @submit="${this.onSubmitForm}">
 			<gitlab-namespace-chooser .value="${this.sync('namespace_id')}"></gitlab-namespace-chooser>
 			<select name="prefix">
