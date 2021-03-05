@@ -142,7 +142,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 		super();
 		this.title = ""
 		this.namespace_id = 5; // ros group on git.staging.radical.sexy
-		this.import_url = Object.values(this.constructor.importUrls)[0];
+		this.import_url = undefined;
 	}
 
 	get type() {
@@ -151,16 +151,6 @@ class NewRosProject extends LitSync(GitlabProject) {
 
 	get prefix() {
 		return "pen-";
-	}
-
-	static get importUrls() {
-		const baseUrl = window.location.hostname;
-		return {
-			"GitHub Standard (Project)": "https://github.com/radicallyopensecurity/pentext-project",
-			"GitHub Standard (Offerte)": "https://github.com/radicallyopensecurity/pentext-offerte",
-			"Ahold (Project)": `https://${baseUrl}/templates/ahold-pentext-project`,
-			"Ahold (Offerte)": `https://${baseUrl}/templates/ahold-pentext-offerte`
-		}
 	}
 
 	static get properties() {
