@@ -105,7 +105,8 @@ class NewRosProject extends LitSync(GitlabProject) {
 	constructor() {
 		super();
 		this.title = ""
-		this.namespace_id = 5;
+		this.namespace_id = 5; // ros group on git.staging.radical.sexy
+		this.import_url = Object.values(this.constructor.importUrls)[0];
 	}
 
 	get type() {
@@ -116,8 +117,14 @@ class NewRosProject extends LitSync(GitlabProject) {
 		return "pen-";
 	}
 
-	get import_url() {
-		return "https://github.com/radicallyopensecurity/pentext-project"
+	static get importUrls() {
+		const baseUrl = window.location.hostname;
+		return {
+			"GitHub Standard (Project)": "https://github.com/radicallyopensecurity/pentext-project",
+			"GitHub Standard (Offerte)": "https://github.com/radicallyopensecurity/pentext-offerte",
+			"Ahold (Project)": `https://${baseUrl}/templates/ahold-pentext-project`,
+			"Ahold (Offerte)": `https://${baseUrl}/templates/ahold-pentext-offerte`
+		}
 	}
 
 	static get properties() {
@@ -130,6 +137,9 @@ class NewRosProject extends LitSync(GitlabProject) {
 			},
 			namespace_id: {
 				type: Number
+			},
+			import_url: {
+				type: String
 			}
 		};
 	}
@@ -183,8 +193,23 @@ class NewRosProject extends LitSync(GitlabProject) {
 			</select>
 			<input type="text" name="title" value="${this.title}" @change="${this.onChangeInput}" placeholder="my-new-project" />
 			<button type="submit">Create</button>
+			<br/>
+			<select name="import_url" @change="${this.onChangeSelect}">
+				${Object.entries(this.constructor.importUrls).map(([name, url]) => {
+					const selected = (url === this.import_url) ? true : false;
+					return html`<option value="${url}" .selected="${selected}">${name}</option>`;
+				})}
+			</select>
 		</form>
 		`;
+	}
+
+	get onChangeSelect() {
+		return (e) => {
+			const key = e.target.name;
+			const value = e.target.value;
+			this[key] = value;
+		}
 	}
 
 	get onChangeInput() {
