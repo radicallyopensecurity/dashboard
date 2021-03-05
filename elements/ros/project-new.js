@@ -99,6 +99,10 @@ class GitlabNamespaceChooser extends DropdownInput {
 	constructor() {
 		super();
 		this.path = "/api/v4/groups";
+		this.params = {
+			all_available: true,
+			min_acces_level: 40
+		}
 	}
 
 	static mapOptions(item) {
