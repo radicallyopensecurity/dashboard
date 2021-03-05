@@ -6,6 +6,7 @@ body {
 	--ros-color-background: #181818;
 	--ros-color-menu: #212121;
 	--ros-color-hover: #3D3D3D;
+	--ros-color-highlight: #F06000;
 	--ros-color-primary-text: #FFF;
 	--ros-color-secondary-text: #AAA;
 }
@@ -34,13 +35,30 @@ code {
 }
 
 button {
-	background: var(--ros-color-menu);
 	border: 0px none;
 	cursor: pointer;
-	color: var(--ros-color-primary-text);
 	cursor: pointer;
 }
 
 button:hover {
 	background: var(--ros-color-hover);
+}
+
+button[type="submit"] {
+	border-color: var(--ros-color-highlight);
+	border-width: 1px;
+	border-style: solid;
+}
+
+form .row {
+	margin-bottom: 5px;
+}
+
+button,
+select,
+input,
+textarea {
+	padding: 5px;
+	background-color: var(--ros-color-menu);
+	color: var(--ros-color-primary-text);
 }

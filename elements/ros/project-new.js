@@ -82,6 +82,7 @@ class DropdownInput extends LitNotify(LitElement) {
 
 	render() {
 		return html`
+		<link rel="stylesheet" href="style.css"/>
 		<select @change="${this.onChangeSelection}">
 			${this.options.map((option) => {
 				const label = option.label || option.value;
