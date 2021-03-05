@@ -158,7 +158,7 @@ class GitlabTemplateChooser extends DropdownInput {
 
 	static mapOptions(item) {
 		return {
-			value: item.web_url,
+			value: item.http_url_to_repo,
 			label: item.name
 		}
 	}
