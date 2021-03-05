@@ -30,7 +30,7 @@ class GitlabAuth {
 	}
 
 }
-const gitlabAuth = new GitlabAuth();
+export const gitlabAuth = new GitlabAuth();
 
 export class Gitlab extends LitElement {
 

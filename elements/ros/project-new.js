@@ -1,6 +1,6 @@
 import { LitElement, html } from '../../web_modules/lit-element.js';
 import { LitSync, LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
-import { GitlabProject } from '../gitlab/index.js';
+import { GitlabProject, gitlabAuth } from '../gitlab/index.js';
 
 const PM_GROUP_PATH = "pm";
 const TEMPLATE_GROUP_PATH = "pentext";
@@ -209,8 +209,12 @@ class NewRosProject extends LitSync(GitlabProject) {
 			const prefix = form.prefix.value;
 			const title = form.title.value.trim();
 
+			const import_url = new URL(this.import_url);
+			import_url.username = "gitlab-ci-token";
+			import_url.password = gitlabAuth.token;
+
 			const createOptions = {
-				import_url: this.import_url,
+				import_url: import_url.toString(),
 				default_branch: "main",
 				wiki_access_level: "disabled",
 				pages_access_level: "disabled",
