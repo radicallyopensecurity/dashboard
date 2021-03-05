@@ -219,17 +219,37 @@ class NewRosProject extends LitSync(GitlabProject) {
 
 	render() {
 		return html`
+		<link rel="stylesheet" href="style.css"/>
+		<link rel="stylesheet" href="flexboxgrid.css"/>
 		<h2>Create New Project</h2>
 		<form name="new" @submit="${this.onSubmitForm}">
-			<gitlab-namespace-chooser .value="${this.sync('namespace_id')}"></gitlab-namespace-chooser>
-			<select name="prefix">
-				<option>pen-</option>
-				<option>off-</option>
-			</select>
-			<input type="text" name="title" value="${this.title}" @change="${this.onChangeInput}" placeholder="my-new-project" />
-			<button type="submit">Create</button>
-			<br/>
-			<gitlab-template-chooser .value="${this.sync('import_url')}"></gitlab-template-chooser>
+			<div class="row">
+				<div class="col-xs-3">Namespace</div>
+				<div class="col-xs-9">
+					<gitlab-namespace-chooser .value="${this.sync('namespace_id')}"></gitlab-namespace-chooser>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">Repository</div>
+				<div class="col-xs-9">
+					<select name="prefix">
+						<option>pen-</option>
+						<option>off-</option>
+					</select>
+					<input type="text" name="title" value="${this.title}" @change="${this.onChangeInput}" placeholder="my-new-project" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">Template</div>
+				<div class="col-xs-9">
+					<gitlab-template-chooser .value="${this.sync('import_url')}"></gitlab-template-chooser>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-offset-3 col-xs-9">
+					<button type="submit">Create</button>
+				</div>
+			</div>
 		</form>
 		`;
 	}
