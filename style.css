@@ -45,9 +45,15 @@ button:hover {
 }
 
 button[type="submit"] {
+	color: var(--ros-color-primary-text);
 	border-color: var(--ros-color-highlight);
 	border-width: 1px;
 	border-style: solid;
+}
+
+button[disabled] {
+	border-color: var(--ros-color-secondary-text);
+	color: var(--ros-color-secondary-text);
 }
 
 form .row {

@@ -140,7 +140,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 
 	constructor() {
 		super();
-		this.title = ""
+		this.title = "";
 		this.namespace_id = 5; // ros group on git.staging.radical.sexy
 		this.import_url = undefined;
 	}
@@ -238,11 +238,18 @@ class NewRosProject extends LitSync(GitlabProject) {
 			</div>
 			<div class="row">
 				<div class="col-xs-offset-3 col-xs-9">
-					<button type="submit">Create</button>
+					<button type="submit" .disabled="${!this.valid}">Create</button>
 				</div>
 			</div>
 		</form>
 		`;
+	}
+
+	get valid() {
+		if (this.title && this.title.length) {
+			return true;
+		}
+		return false;
 	}
 
 	get onChangeInput() {
