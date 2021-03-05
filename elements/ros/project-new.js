@@ -7,15 +7,19 @@ class DropdownInput extends LitNotify(LitElement) {
 
 	constructor() {
 		super();
-		this.url = undefined;
+		this.path = undefined;
+		this.params = {};
 		this.value = undefined;
 		this.options = [];
 	}
 
 	static get properties() {
 		return {
-			url: {
+			path: {
 				type: String
+			},
+			params: {
+				type: Object
 			},
 			options: {
 				type: Object,
@@ -28,9 +32,15 @@ class DropdownInput extends LitNotify(LitElement) {
 		}
 	}
 
+	get url() {
+		const url = new URL(this.path, window.location.toString());
+		Object.entries(this.params).forEach(([key, value]) => url.searchParams.append(key, value));
+		return url;
+	}
+
 	updated(changedProperties) {
 		const keys = [...changedProperties.keys()];
-		if (keys.includes("url")) {
+		if (keys.includes("path") || keys.includes("params")) {
 			this.query();
 		}
 		if (keys.includes("options") && !keys.includes("value")) {
@@ -44,7 +54,7 @@ class DropdownInput extends LitNotify(LitElement) {
 		if (this.url === undefined) {
 			return;
 		} else {
-			const response = await fetch(this.url);
+			const response = await fetch(this.url.toString());
 			const data = await response.json();
 
 			switch (response.status) {
@@ -87,7 +97,7 @@ class GitlabNamespaceChooser extends DropdownInput {
 
 	constructor() {
 		super();
-		this.url = "/api/v4/groups";
+		this.path = "/api/v4/groups";
 	}
 
 	static mapOptions(item) {
@@ -99,6 +109,31 @@ class GitlabNamespaceChooser extends DropdownInput {
 
 }
 customElements.define("gitlab-namespace-chooser", GitlabNamespaceChooser);
+
+class GitlabTemplateChooser extends DropdownInput {
+
+	constructor() {
+		super();
+		this.path = `/api/v4/groups/${this.constructor.templateGroup}/projects`;
+		this.params = {
+			scope: "projects",
+			per_page: 100
+		};
+	}
+
+	static get templateGroup() {
+		return "pentext";
+	}
+
+	static mapOptions(item) {
+		return {
+			value: item.web_url,
+			label: item.name
+		}
+	}
+
+}
+customElements.define("gitlab-template-chooser", GitlabTemplateChooser);
 
 class NewRosProject extends LitSync(GitlabProject) {
 
@@ -194,22 +229,9 @@ class NewRosProject extends LitSync(GitlabProject) {
 			<input type="text" name="title" value="${this.title}" @change="${this.onChangeInput}" placeholder="my-new-project" />
 			<button type="submit">Create</button>
 			<br/>
-			<select name="import_url" @change="${this.onChangeSelect}">
-				${Object.entries(this.constructor.importUrls).map(([name, url]) => {
-					const selected = (url === this.import_url) ? true : false;
-					return html`<option value="${url}" .selected="${selected}">${name}</option>`;
-				})}
-			</select>
+			<gitlab-template-chooser .value="${this.sync('import_url')}"></gitlab-template-chooser>
 		</form>
 		`;
-	}
-
-	get onChangeSelect() {
-		return (e) => {
-			const key = e.target.name;
-			const value = e.target.value;
-			this[key] = value;
-		}
 	}
 
 	get onChangeInput() {
