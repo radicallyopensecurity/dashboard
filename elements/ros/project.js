@@ -276,6 +276,9 @@ export class Project extends GitlabProject {
 					<p>
 						Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
 						${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
+
+						<br/>
+						Repository: <a target="_blank" href="${this.gitlabProjectData.web_url}">${this.gitlabProjectData.web_url}</a>
 					</p>
 				</div>
 			</div>
