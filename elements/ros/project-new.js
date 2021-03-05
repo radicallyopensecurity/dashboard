@@ -2,6 +2,8 @@ import { LitElement, html } from '../../web_modules/lit-element.js';
 import { LitSync, LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/index.js';
 
+const PM_GROUP_PATH = "pm";
+const TEMPLATE_GROUP_PATH = "pentext";
 
 class DropdownInput extends LitNotify(LitElement) {
 
@@ -33,15 +35,18 @@ class DropdownInput extends LitNotify(LitElement) {
 	}
 
 	get url() {
+		if (this.path == undefined) {
+			return;
+		}
 		const url = new URL(this.path, window.location.toString());
 		Object.entries(this.params).forEach(([key, value]) => url.searchParams.append(key, value));
 		return url;
 	}
 
-	updated(changedProperties) {
+	async updated(changedProperties) {
 		const keys = [...changedProperties.keys()];
 		if (keys.includes("path") || keys.includes("params")) {
-			this.query();
+			this.options = await this.query();
 		}
 		if (keys.includes("options") && !keys.includes("value")) {
 			if ((this.value === undefined) && (this.options.length > 0)) {
@@ -50,11 +55,14 @@ class DropdownInput extends LitNotify(LitElement) {
 		}
 	}
 
-	async query() {
-		if (this.url === undefined) {
+	async query(url) {
+		if (url === undefined) {
+			url = this.url;
+		}
+		if (url === undefined) {
 			return;
 		} else {
-			const response = await fetch(this.url.toString());
+			const response = await fetch(url.toString());
 			const data = await response.json();
 
 			switch (response.status) {
@@ -67,7 +75,7 @@ class DropdownInput extends LitNotify(LitElement) {
 					break;
 			}
 
-			this.options = data.map(this.constructor.mapOptions);
+			return data.map(this.constructor.mapOptions);
 		}
 	}
 
@@ -112,6 +120,28 @@ class GitlabNamespaceChooser extends DropdownInput {
 		}
 	}
 
+	async query(url) {
+		const _url = (url === undefined) ? this.url : url;
+		const groups = await super.query(url);
+		const enhancedGroups = await Promise.all(
+			groups
+				.filter((group) => ![PM_GROUP_PATH, TEMPLATE_GROUP_PATH].includes(group.label))
+				.map(async (group) => { // enhance data with group details
+					const groupUrl = new URL(`${this.path}/${group.value}`, window.location.toString());
+					const response = await fetch(groupUrl.toString());
+					const data = await response.json();
+					return data;
+				})
+		);
+
+		// groups listed must have the project topic/tag set
+		return enhancedGroups
+			.filter((group) => group.shared_with_groups.some((sharedGroup) => {
+				return sharedGroup.group_full_path == PM_GROUP_PATH;
+			}))
+			.map(this.constructor.mapOptions); // map again
+	}
+
 }
 customElements.define("gitlab-namespace-chooser", GitlabNamespaceChooser);
 
@@ -119,15 +149,11 @@ class GitlabTemplateChooser extends DropdownInput {
 
 	constructor() {
 		super();
-		this.path = `/api/v4/groups/${this.constructor.templateGroup}/projects`;
+		this.path = `/api/v4/groups/${TEMPLATE_GROUP_PATH}/projects`;
 		this.params = {
 			scope: "projects",
 			per_page: 100
 		};
-	}
-
-	static get templateGroup() {
-		return "pentext";
 	}
 
 	static mapOptions(item) {
