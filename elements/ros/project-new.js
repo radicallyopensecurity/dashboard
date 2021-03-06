@@ -224,6 +224,9 @@ class NewRosProject extends LitSync(GitlabProject) {
 				namespace_id: this.namespace_id
 			}
 
+			const d = new Date();
+			d.setFullYear(d.getFullYear() + 1);
+
 			let response;
 			try {
 				response = await this.post("/api/v4/projects", {}, {
@@ -232,7 +235,8 @@ class NewRosProject extends LitSync(GitlabProject) {
 				access_token = await this.post(`/api/v4/projects/${response.id}/access_tokens`, {}, {
 					body: JSON.stringify({
 						scopes: ["api"],
-						name: "webhooker"
+						name: "webhooker",
+						expires_at: new Date(d.getFullYear() + 1, d.getMonth(), d.getDate())
 					})
 				});
 			} catch(e) {
