@@ -12,7 +12,7 @@ class DropdownInput extends LitNotify(LitElement) {
 		this.path = undefined;
 		this.params = {};
 		this.value = undefined;
-		this.options = [];
+		this._options = [];
 	}
 
 	static get properties() {
@@ -23,7 +23,7 @@ class DropdownInput extends LitNotify(LitElement) {
 			params: {
 				type: Object
 			},
-			options: {
+			_options: {
 				type: Object,
 				notify: true
 			},
@@ -32,6 +32,14 @@ class DropdownInput extends LitNotify(LitElement) {
 				notify: true
 			}
 		}
+	}
+
+	get options() {
+		return this._options;
+	}
+
+	set options(options) {
+		this._options = options;
 	}
 
 	get url() {
@@ -48,7 +56,7 @@ class DropdownInput extends LitNotify(LitElement) {
 		if (keys.includes("path") || keys.includes("params")) {
 			this.options = await this.query();
 		}
-		if (keys.includes("options") && !keys.includes("value")) {
+		if (keys.includes("_options") && !keys.includes("value")) {
 			if ((this.value === undefined) && (this.options.length > 0)) {
 				this.value = this.options[0].value
 			}
@@ -83,10 +91,12 @@ class DropdownInput extends LitNotify(LitElement) {
 		return item;
 	}
 
-	onChangeSelection(e) {
-		e.stopPropagation();
-		this.value = e.currentTarget.value;
-    }
+	get onChangeSelection() {
+		return (e) => {
+			e.stopPropagation();
+			this.value = e.currentTarget.value;
+		}
+	}
 
 	render() {
 		return html`
@@ -147,6 +157,38 @@ customElements.define("gitlab-namespace-chooser", GitlabNamespaceChooser);
 
 class GitlabTemplateChooser extends DropdownInput {
 
+	static get properties() {
+		return {
+			...super.properties,
+			topic: {
+				type: String,
+				notify: true
+			}
+		}
+	}
+
+	updated(changedProperties) {
+		super.updated(changedProperties);
+		const keys = [...changedProperties.keys()];
+		if (keys.includes("topic")) {
+			const options = this.options;
+			if (options !== undefined && !!this.options.length) {
+				this.value = options[0].value;
+			}
+		}
+	}
+
+	get options() {
+		if (this.topic == undefined) {
+			return this._options;
+		}
+		return this._options.filter((option) => option.tag_list.includes(this.topic));
+	}
+
+	set options(options) {
+		this._options = options;
+	}
+
 	constructor() {
 		super();
 		this.path = `/api/v4/groups/${TEMPLATE_GROUP_PATH}/projects`;
@@ -159,7 +201,8 @@ class GitlabTemplateChooser extends DropdownInput {
 	static mapOptions(item) {
 		return {
 			value: item.http_url_to_repo,
-			label: item.name
+			label: item.name,
+			tag_list: item.tag_list
 		}
 	}
 
@@ -170,24 +213,14 @@ class NewRosProject extends LitSync(GitlabProject) {
 
 	constructor() {
 		super();
+		this.topic = "pentest";
 		this.title = "";
 		this.namespace_id = 5; // ros group on git.staging.radical.sexy
 		this.import_url = undefined;
 	}
 
-	get type() {
-		return "pentest";
-	}
-
-	get prefix() {
-		return "pen-";
-	}
-
 	static get properties() {
 		return {
-			prefix: {
-				type: String
-			},
 			title: {
 				type: String
 			},
@@ -196,6 +229,9 @@ class NewRosProject extends LitSync(GitlabProject) {
 			},
 			import_url: {
 				type: String
+			},
+			topic: {
+				type: String // pentest, offerte, ...
 			}
 		};
 	}
@@ -204,10 +240,6 @@ class NewRosProject extends LitSync(GitlabProject) {
 		return async (e) => {
 			e.preventDefault();
 			e.stopPropagation();
-
-			const form = e.target;
-			const prefix = form.prefix.value;
-			const title = form.title.value.trim();
 
 			const import_url = new URL(this.import_url);
 			import_url.username = "gitlab-ci-token";
@@ -248,6 +280,10 @@ class NewRosProject extends LitSync(GitlabProject) {
 		}
 	}
 
+	get prefix() {
+		return `${this.topic.substr(0,3)}-`;
+	}
+
 	get slug() {
 		return `${this.prefix}${this.title}`;
 	}
@@ -267,9 +303,9 @@ class NewRosProject extends LitSync(GitlabProject) {
 			<div class="row">
 				<div class="col-xs-3">Repository</div>
 				<div class="col-xs-9">
-					<select name="prefix">
-						<option>pen-</option>
-						<option>off-</option>
+					<select name="topic" @change="${this.onChangeSelection}">
+						<option value="pentest">pen-</option>
+						<option value="offerte">off-</option>
 					</select>
 					<input type="text" name="title" value="${this.title}" @change="${this.onChangeInput}" placeholder="my-new-project" />
 				</div>
@@ -277,7 +313,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 			<div class="row">
 				<div class="col-xs-3">Template</div>
 				<div class="col-xs-9">
-					<gitlab-template-chooser .value="${this.sync('import_url')}"></gitlab-template-chooser>
+					<gitlab-template-chooser .value="${this.sync('import_url')}" .topic="${this.topic}"></gitlab-template-chooser>
 				</div>
 			</div>
 			<div class="row">
@@ -301,6 +337,13 @@ class NewRosProject extends LitSync(GitlabProject) {
 			e.stopPropagation();
 			this[e.target.name] = e.currentTarget.value;
 		}
+	}
+
+	get onChangeSelection() {
+		return (e) => {
+			e.stopPropagation();
+			this[e.currentTarget.name] = e.currentTarget.value;
+		};
 	}
 
 }
