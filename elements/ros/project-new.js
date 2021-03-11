@@ -256,27 +256,33 @@ class NewRosProject extends LitSync(GitlabProject) {
 				namespace_id: this.namespace_id
 			}
 
-			const d = new Date();
-			d.setFullYear(d.getFullYear() + 1);
+			const nextYear = new Date();
+			nextYear.setFullYear(nextYear.getFullYear() + 1);
 
-			let response;
-			try {
-				response = await this.post("/api/v4/projects", {}, {
-					body: JSON.stringify(createOptions)
-				});
-				access_token = await this.post(`/api/v4/projects/${response.id}/access_tokens`, {}, {
-					body: JSON.stringify({
-						scopes: ["api"],
-						name: "webhooker",
-						expires_at: new Date(d.getFullYear() + 1, d.getMonth(), d.getDate())
-					})
-				});
-			} catch(e) {
-				alert(e.message);
-				return;
-			}
+			const project = await this.post("/api/v4/projects", {}, {
+				body: JSON.stringify(createOptions)
+			});
+			const accessTokenResponse = await this.post(`/api/v4/projects/${project.id}/access_tokens`, {}, {
+				body: JSON.stringify({
+					scopes: ["api"],
+					name: "webhooker",
+					expires_at: nextYear
+				})
+			});
 
-			window.location.hash = response.id.toString();
+			// ToDo after 2021-03-22 release fixing https://gitlab.com/gitlab-org/gitlab/-/merge_requests/55408
+			/*
+			const projectAccessTokenVariableResponse = await this.post(`/api/v4/projects/${project.id}/variables`, {}, {
+				body: JSON.stringify({
+					key: "PROJECT_ACCESS_TOKEN",
+					value: accessTokenResponse.token,
+					protected: false,
+					masked: true
+				})
+			});
+			*/
+
+			window.location.hash = project.id.toString();
 		}
 	}
 
