@@ -1,6 +1,7 @@
 import { LitElement, html, css } from '../web_modules/lit-element.js';
 import "./ros/project.js";
 import "./ros/projects.js";
+import "./views/allProjectsView.js";
 
 class Router extends LitElement {
 
@@ -48,7 +49,7 @@ class Router extends LitElement {
 		if (this.gitlabProjectId !== null) {
 			return html`<ros-project .gitlabProjectId="${this.gitlabProjectId}"></ros-project>`;
 		} else {
-			return html`<ros-projects></ros-projects>`;
+			return html`<ros-all-projects-view></ros-all-projects-view>`;
 		}
 	}
 

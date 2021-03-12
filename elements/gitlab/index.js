@@ -3,9 +3,34 @@ import { LitElement } from '../../web_modules/lit-element.js';
 
 export class Gitlab extends LitElement {
 
+	constructor() {
+		super();
+		this.params = {};
+		this.perPage = 50;
+		this.maxPages = undefined;
+	}
+
 	get baseUrl() {
 		return "/api/v4/"
 	}
+
+	static get properties() {
+		return {
+			params: {
+				type: Object,
+				notify: true
+			},
+			perPage: {
+				type: Number,
+				notify: true
+			},
+			maxPages: {
+				type: Number,
+				notify: true
+			}
+		}
+	}
+
 
 	getUrl(url, params) {
 		params = params || {};
@@ -22,20 +47,21 @@ export class Gitlab extends LitElement {
 		return response;
 	}
 
-	async fetchPaginated(key, url, params, perPage) {
-		const _url = this.getUrl(url, params);
+	async fetchPaginated(key, url) {
+		const _url = this.getUrl(url, this.params);
 
 		let nextPage = 1;
-		perPage = perPage || 50;
 		this[key] = [];
 
-		_url.searchParams.set("per_page", perPage);
+		_url.searchParams.set("per_page", this.perPage);
 
 		let response;
-		while (!Number.isNaN(nextPage)) {
+		let numberOfPagesFetched = 0;
+		while (!Number.isNaN(nextPage) && this.maxPages !== numberOfPagesFetched) {
 			_url.searchParams.set("page", nextPage);
 			response = await fetch(_url);
 			nextPage = parseInt(response.headers.get("x-next-page"), 10);
+			numberOfPagesFetched = parseInt(response.headers.get("x-page"), 10);
 			this[key] = this[key].concat(await response.json());
 		}
 
@@ -72,13 +98,12 @@ export class GitlabProject extends Gitlab {
 				type: Array,
 				notify: true
 			},
-<<<<<<< HEAD
+
 			gitlabProjectVariables: {
 				type: Array,
 				notify: true
 			},
-=======
->>>>>>> 98eb037... app-router
+
 			gitlabProjectIssues: {
 				type: Array,
 				notify: true
@@ -108,10 +133,7 @@ export class GitlabProject extends Gitlab {
 		await this.fetchPaginated("gitlabProjectIssues", `${this.baseUrl}/issues`);
 		await this.fetchPaginated("gitlabProjectEvents", `${this.baseUrl}/events?target=issue`);
 		//await this.fetchPaginated("gitlabProjectLabels", `${this.baseUrl}/labels`);
-<<<<<<< HEAD
 		await this.fetchPaginated("gitlabProjectVariables", `${this.baseUrl}/variables`);
-=======
->>>>>>> 98eb037... app-router
 	}
 
 }
@@ -121,11 +143,16 @@ export class GitlabProjects extends Gitlab {
 	constructor() {
 		super();
 		this.projects = [];
+	}
+
+	connectedCallback() {
+		super.connectedCallback()
 		this.fetch();
 	}
 
 	static get properties() {
 		return {
+			... super.properties,
 			projects: {
 				type: Array
 			}
@@ -137,10 +164,7 @@ export class GitlabProjects extends Gitlab {
 	}
 
 	async fetch() {
-		await super.fetchPaginated("projects", this.baseUrl, {
-			search: "pen-",
-			order_by: "last_activity_at"
-		}, 10);
+		await super.fetchPaginated("projects", this.baseUrl);
 	}
 
 }
