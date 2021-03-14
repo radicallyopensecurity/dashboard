@@ -155,7 +155,30 @@ export class GitlabProjects extends Gitlab {
 			... super.properties,
 			projects: {
 				type: Array
+			},
+			loading: {
+				type: Boolean
 			}
+		}
+	}
+
+	debounce(func, delay = 0) {
+		let timeoutId;
+		return function() {
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(() => {
+				func.apply(this, arguments);
+			}, delay);
+		}
+	};
+
+	debouncedSearch = this.debounce(this.fetch, 500);
+
+	updated(changedProperties) {
+		const keys = [...changedProperties.keys()];
+		if (keys.includes("params") ) {
+			console.log(this.params.search);
+			this.debouncedSearch();
 		}
 	}
 
@@ -164,7 +187,9 @@ export class GitlabProjects extends Gitlab {
 	}
 
 	async fetch() {
+		this.loading = true;
 		await super.fetchPaginated("projects", this.baseUrl);
+		this.loading = false;
 	}
 
 }

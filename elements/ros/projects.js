@@ -12,12 +12,20 @@ class Projects extends GitlabProjects {
 		`;
 	}
 
+	updateParams(key, value) {
+		this.params = {
+			...this.params,
+			[key]: value
+		};
+	}
+
 	render() {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		${!this.projects.length ? html`
-			<div>Loading ...</div>
-		` : html`
+		<input type="text" name="search" @input=${e => this.updateParams('search', e.target.value)} value="${this.params.search}" placeholder="Search"></input>
+		${this.loading ? html`
+			<p>Loading ...</p>
+		` : this.projects.length > 0 ? html`
 			<ul>
 				${this.projects.map((project) => html`
 					<li>
@@ -28,7 +36,7 @@ class Projects extends GitlabProjects {
 					</li>
 				`)}
 			</ul>
-		`}`;
+		`: html`<p>No projects found</p>`}`;
 	}
 
 }
