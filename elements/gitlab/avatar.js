@@ -12,6 +12,10 @@ class GitlabAvatar extends LitElement {
 
 	static get styles() {
 		return css`
+		:host {
+			--line-height: 24px;
+			line-height: var(--line-height);
+		}
 		.avatar {
 			position: relative;
 			background-repeat: no-repeat;
