@@ -4,6 +4,17 @@ import { GitlabProjects } from '../gitlab/index.js';
 
 class Projects extends GitlabProjects {
 
+	get search() {
+		return this.params.search.substr(5);
+	}
+
+	set search(value) {
+		this.params = {
+			...this.params,
+			search: `pen- ${value}`
+		};
+	}
+
 	static get styles() {
 		return css`
 		.small {
@@ -12,17 +23,10 @@ class Projects extends GitlabProjects {
 		`;
 	}
 
-	updateParams(key, value) {
-		this.params = {
-			...this.params,
-			[key]: value
-		};
-	}
-
 	render() {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		<input type="text" name="search" @input=${e => this.updateParams('search', e.target.value)} value="${this.params.search}" placeholder="Search"></input>
+		<input type="text" name="search" @input=${e => { this.search = e.target.value }} value="" placeholder="Search"></input>
 		${this.loading ? html`
 			<p>Loading ...</p>
 		`: ''}
