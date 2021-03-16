@@ -4,6 +4,17 @@ import { GitlabProjects } from '../gitlab/index.js';
 
 class Projects extends GitlabProjects {
 
+	get search() {
+		return this.params.search.substr(5);
+	}
+
+	set search(value) {
+		this.params = {
+			...this.params,
+			search: `pen- ${value}`
+		};
+	}
+
 	static get styles() {
 		return css`
 		.small {
@@ -15,10 +26,11 @@ class Projects extends GitlabProjects {
 	render() {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		<h2>Your Projects</h2>
-		${!this.projects.length ? html`
-			<div>Loading ...</div>
-		` : html`
+		<input type="text" name="search" @input=${e => { this.search = e.target.value }} value="" placeholder="Search"></input>
+		${this.loading ? html`
+			<p>Loading ...</p>
+		`: ''}
+		 ${this.projects.length > 0 ? html`
 			<ul>
 				${this.projects.map((project) => html`
 					<li>
@@ -29,7 +41,7 @@ class Projects extends GitlabProjects {
 					</li>
 				`)}
 			</ul>
-		`}`;
+		`: html`<p>No projects found</p>`}`;
 	}
 
 }

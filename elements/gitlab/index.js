@@ -3,9 +3,44 @@ import { LitElement } from '../../web_modules/lit-element.js';
 
 export class Gitlab extends LitElement {
 
+	constructor() {
+		super();
+		this.params = {};
+		this.perPage = 50;
+		this.maxPages = undefined;
+		this.batch = undefined;
+		this.loading = false;
+	}
+
 	get baseUrl() {
 		return "/api/v4/"
 	}
+
+	static get properties() {
+		return {
+			params: {
+				type: Object,
+				notify: true
+			},
+			perPage: {
+				type: Number,
+				notify: true
+			},
+			maxPages: {
+				type: Number,
+				notify: true
+			},
+			batch: {
+				type: Text,
+				notify: true
+			},
+			loading: {
+				type: Boolean,
+				notify: true
+			}
+		}
+	}
+
 
 	getUrl(url, params) {
 		params = params || {};
@@ -22,23 +57,31 @@ export class Gitlab extends LitElement {
 		return response;
 	}
 
-	async fetchPaginated(key, url, params, perPage) {
-		const _url = this.getUrl(url, params);
+	async fetchPaginated(key, url) {
+		const _url = this.getUrl(url, this.params);
 
 		let nextPage = 1;
-		perPage = perPage || 50;
 		this[key] = [];
 
-		_url.searchParams.set("per_page", perPage);
+		const currentBatch = this.batch = Symbol("paginatedRequestBatch");
+
+		_url.searchParams.set("per_page", this.perPage);
 
 		let response;
-		while (!Number.isNaN(nextPage)) {
+		let numberOfPagesFetched = 0;
+
+		this.loading = true;
+		while (!Number.isNaN(nextPage) && this.maxPages !== numberOfPagesFetched && this.batch === currentBatch) {
 			_url.searchParams.set("page", nextPage);
 			response = await fetch(_url);
 			nextPage = parseInt(response.headers.get("x-next-page"), 10);
+			numberOfPagesFetched = parseInt(response.headers.get("x-page"), 10);
+			if(this.batch !== currentBatch) {
+				return;
+			}
 			this[key] = this[key].concat(await response.json());
 		}
-
+		this.loading = false;
 	}
 
 }
@@ -72,10 +115,12 @@ export class GitlabProject extends Gitlab {
 				type: Array,
 				notify: true
 			},
+
 			gitlabProjectVariables: {
 				type: Array,
 				notify: true
 			},
+
 			gitlabProjectIssues: {
 				type: Array,
 				notify: true
@@ -115,14 +160,39 @@ export class GitlabProjects extends Gitlab {
 	constructor() {
 		super();
 		this.projects = [];
+	}
+
+	connectedCallback() {
+		super.connectedCallback()
 		this.fetch();
 	}
 
 	static get properties() {
 		return {
+			... super.properties,
 			projects: {
 				type: Array
 			}
+		}
+	}
+
+	debounce(func, delay = 0) {
+		let timeoutId;
+		return function() {
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(() => {
+				func.apply(this, arguments);
+			}, delay);
+		}
+	};
+
+	debouncedSearch = this.debounce(this.fetch, 500);
+
+	updated(changedProperties) {
+		const keys = [...changedProperties.keys()];
+		if (keys.includes("params") ) {
+			console.log(this.params.search);
+			this.debouncedSearch();
 		}
 	}
 
@@ -131,10 +201,7 @@ export class GitlabProjects extends Gitlab {
 	}
 
 	async fetch() {
-		await super.fetchPaginated("projects", this.baseUrl, {
-			search: "pen-",
-			order_by: "last_activity_at"
-		}, 10);
+		await super.fetchPaginated("projects", this.baseUrl);
 	}
 
 }
