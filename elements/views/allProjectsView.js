@@ -18,8 +18,7 @@ class AllProjectsView extends LitElement {
 		<h2>Your Recent Projects</h2>
 		<ros-projects
 			.params=${{search: "pen-", order_by: "last_activity_at"}}
-			perPage="50"
-			maxPages="1"
+			perPage="20"
 		></ros-projects>
 		`;
 	}

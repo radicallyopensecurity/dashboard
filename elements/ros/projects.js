@@ -25,7 +25,8 @@ class Projects extends GitlabProjects {
 		<input type="text" name="search" @input=${e => this.updateParams('search', e.target.value)} value="${this.params.search}" placeholder="Search"></input>
 		${this.loading ? html`
 			<p>Loading ...</p>
-		` : this.projects.length > 0 ? html`
+		`: ''}
+		 ${this.projects.length > 0 ? html`
 			<ul>
 				${this.projects.map((project) => html`
 					<li>

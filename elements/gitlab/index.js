@@ -8,6 +8,8 @@ export class Gitlab extends LitElement {
 		this.params = {};
 		this.perPage = 50;
 		this.maxPages = undefined;
+		this.batch = undefined;
+		this.loading = false;
 	}
 
 	get baseUrl() {
@@ -26,6 +28,14 @@ export class Gitlab extends LitElement {
 			},
 			maxPages: {
 				type: Number,
+				notify: true
+			},
+			batch: {
+				type: Text,
+				notify: true
+			},
+			loading: {
+				type: Boolean,
 				notify: true
 			}
 		}
@@ -53,18 +63,25 @@ export class Gitlab extends LitElement {
 		let nextPage = 1;
 		this[key] = [];
 
+		const currentBatch = this.batch = Symbol("paginatedRequestBatch");
+
 		_url.searchParams.set("per_page", this.perPage);
 
 		let response;
 		let numberOfPagesFetched = 0;
-		while (!Number.isNaN(nextPage) && this.maxPages !== numberOfPagesFetched) {
+
+		this.loading = true;
+		while (!Number.isNaN(nextPage) && this.maxPages !== numberOfPagesFetched && this.batch === currentBatch) {
 			_url.searchParams.set("page", nextPage);
 			response = await fetch(_url);
 			nextPage = parseInt(response.headers.get("x-next-page"), 10);
 			numberOfPagesFetched = parseInt(response.headers.get("x-page"), 10);
+			if(this.batch !== currentBatch) {
+				return;
+			}
 			this[key] = this[key].concat(await response.json());
 		}
-
+		this.loading = false;
 	}
 
 }
@@ -155,9 +172,6 @@ export class GitlabProjects extends Gitlab {
 			... super.properties,
 			projects: {
 				type: Array
-			},
-			loading: {
-				type: Boolean
 			}
 		}
 	}
@@ -187,9 +201,7 @@ export class GitlabProjects extends Gitlab {
 	}
 
 	async fetch() {
-		this.loading = true;
 		await super.fetchPaginated("projects", this.baseUrl);
-		this.loading = false;
 	}
 
 }
