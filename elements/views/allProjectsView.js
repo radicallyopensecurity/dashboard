@@ -12,12 +12,22 @@ class AllProjectsView extends LitElement {
 		`;
 	}
 
+	static get properties() {
+		return {
+			... super.properties,
+			search: {
+				type: String,
+				notify: true
+			}
+		}
+	}
+
 	render() {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		<h2>Your Recent Projects</h2>
 		<ros-projects
 			.params=${{search: "pen-", order_by: "last_activity_at"}}
+			.search="${this.search}"
 			perPage="20"
 		></ros-projects>
 		`;

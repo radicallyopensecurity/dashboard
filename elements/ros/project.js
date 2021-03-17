@@ -129,6 +129,7 @@ export class ProjectActivity extends LitElement {
 				$message = html`pushed <a href="${this.project.web_url}/compare/${this.data.push_data.commit_from}...${this.data.push_data.commit_to}" target="_blank">${this.data.push_data.commit_count} commits</a>: ${this.data.push_data.commit_title}`;
 				break;
 			case "opened":
+			case "closed":
 			case "updated":
 				$message = html`${this.data.action_name} <a href="${this.project.web_url}/issues/${this.data.target_iid}"><b>#${this.data.target_iid}</b> ${this.data.target_title}</a>`;
 				break;
@@ -265,7 +266,7 @@ export class Project extends GitlabProject {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="flexboxgrid.css" />
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12">
 					<h1>${this.title}</h1>
@@ -283,7 +284,7 @@ export class Project extends GitlabProject {
 				</div>
 			</div>
 		</div>
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12 col-md-6">
 					<div class="row">
