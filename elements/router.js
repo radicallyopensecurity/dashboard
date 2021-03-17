@@ -73,53 +73,11 @@ class Router extends LitElement {
 			</ul>
 		</header>
 
-		<div class="container-fluid">
-			<div class="row">
-				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-					<div class="position-sticky pt-3">
-						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-							<span>Cross links</span>
-						</h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-									Rocket.Chat
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-gitlab"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"></path></svg>
-									Gitlab
-								</a>
-							</li>
-						</ul>
-					</div>
-				</nav>
-
-				<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-						<h1 class="h2">Dashboard</h1>
-						<div class="btn-toolbar mb-2 mb-md-0">
-							<div class="btn-group me-2">
-								<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-								<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-							</div>
-							<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-								<span data-feather="calendar"></span>
-								This week
-							</button>
-						</div>
-					</div>
-
-					${this.gitlabProjectId !== null ? html`
-						<ros-project .gitlabProjectId="${this.gitlabProjectId}"></ros-project>
-					` : html`
-						<ros-all-projects-view .search="${this.search}"></ros-all-projects-view>
-					`}
-				</main>
-			</div>
-		</div>`;
+		${this.gitlabProjectId !== null ? html`
+			<ros-project .gitlabProjectId="${this.gitlabProjectId}"></ros-project>
+		` : html`
+			<ros-all-projects-view .search="${this.search}"></ros-all-projects-view>
+		`}`;
 	}
 
 }

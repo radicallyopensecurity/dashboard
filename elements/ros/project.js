@@ -265,91 +265,129 @@ export class Project extends GitlabProject {
 
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		<link rel="stylesheet" href="flexboxgrid.css" />
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-xs-12">
-					<h1>${this.title}</h1>
-					<ul>
-						<li>${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
-						<li>${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
-					</ul>
-					<p>
-						Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
-						${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" href="dashboard.css"/>
 
-						<br/>
-						Repository: <a target="_blank" href="${this.gitlabProjectData.web_url}">${this.gitlabProjectData.web_url}</a>
-					</p>
-				</div>
-			</div>
-		</div>
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-xs-12 col-md-6">
-					<div class="row">
-						<div class="col-xs-12">
-							<h2>Recent Activity</h2>
+				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+					<div class="position-sticky pt-3">
+						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+							<span>Cross links</span>
+						</h6>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+									Rocket.Chat
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-gitlab"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"></path></svg>
+									Gitlab
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+
+				<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+						<h1>${this.title}</h1>
+						<div class="btn-toolbar mb-2 mb-md-0">
+							<div class="btn-group me-2">
+								<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+								<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+							</div>
+							<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+								<span data-feather="calendar"></span>
+								This week
+							</button>
 						</div>
 					</div>
+
 					<div class="row">
-						<div class="col-xs-11">
-							${this.gitlabProjectEvents.slice(0, 5).map((eventData) => html`
-								<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
-							`)}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<h2>Event History</h2>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-11">
-							${Object.entries(this.eventsByDay).map(([day, events]) => {
-								return html`
-									<h3>${moment(day).format("dddd, DD.MM.YYYY")}</h3>
-									${events.map((eventData) => html`
-										<ros-project-event .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
-									`)}
-								`;
-							})}
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-12 col-md-6">
-					<div class="row">
-						<div class="col-xs-12">
-							<h2>Findings</h2>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-11">
-							${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
-								<h3>${severity}</h3>
-								<ul>
-									${findings.map((finding) => {
-										return html`<li>${finding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank">#${finding.iid}</a>)</li>`;
-									})}
-								</ul>
-							`)}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<h2>Non-Findings</h2>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-11">
+						<div class="col-12">
 							<ul>
-								${this.nonFindings.map((nonFinding) => html`
-									<li>${nonFinding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank">#${nonFinding.iid}</a>)</li>
-								`)}
+								<li>${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+								<li>${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 							</ul>
+							<p>
+								Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
+								${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
+
+								<br/>
+								Repository: <a target="_blank" href="${this.gitlabProjectData.web_url}">${this.gitlabProjectData.web_url}</a>
+							</p>
 						</div>
 					</div>
-				</div>
+
+					<div class="col-12 col-md-6">
+						<div class="row">
+							<div class="col-12">
+								<h2>Recent Activity</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-11">
+								${this.gitlabProjectEvents.slice(0, 5).map((eventData) => html`
+									<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
+								`)}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<h2>Event History</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-11">
+								${Object.entries(this.eventsByDay).map(([day, events]) => {
+									return html`
+										<h3>${moment(day).format("dddd, DD.MM.YYYY")}</h3>
+										${events.map((eventData) => html`
+											<ros-project-event .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
+										`)}
+									`;
+								})}
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-md-6">
+						<div class="row">
+							<div class="col-12">
+								<h2>Findings</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-11">
+								${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
+									<h3>${severity}</h3>
+									<ul>
+										${findings.map((finding) => {
+											return html`<li>${finding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank">#${finding.iid}</a>)</li>`;
+										})}
+									</ul>
+								`)}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<h2>Non-Findings</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-11">
+								<ul>
+									${this.nonFindings.map((nonFinding) => html`
+										<li>${nonFinding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank">#${nonFinding.iid}</a>)</li>
+									`)}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</main>
 			</div>
 		</div>
 		`;
