@@ -278,13 +278,13 @@ export class Project extends GitlabProject {
 							<li class="nav-item">
 								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com/group/${this.gitlabProjectData.path}" target="_blank">
 									<ui-icon icon="message-square"></ui-icon>
-									Rocket.Chat Channel
+									Channel
 								</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank">
 									<ui-icon icon="gitlab"></ui-icon>
-									Gitlab Repository
+									Repository
 								</a>
 							</li>
 						</ul>
