@@ -271,7 +271,6 @@ class NewRosProject extends LitSync(GitlabProject) {
 			});
 
 			// ToDo after 2021-03-22 release fixing https://gitlab.com/gitlab-org/gitlab/-/merge_requests/55408
-			/*
 			const projectAccessTokenVariableResponse = await this.post(`/api/v4/projects/${project.id}/variables`, {}, {
 				body: JSON.stringify({
 					key: "PROJECT_ACCESS_TOKEN",
@@ -280,7 +279,6 @@ class NewRosProject extends LitSync(GitlabProject) {
 					masked: true
 				})
 			});
-			*/
 
 			window.location.hash = project.id.toString();
 		}
