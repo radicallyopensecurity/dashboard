@@ -305,8 +305,8 @@ export class Project extends GitlabProject {
 						<h1>${this.gitlabProjectData.name}</h1>
 						<div class="btn-toolbar mb-2 mb-md-0">
 							<div class="btn-group me-2">
-								<button type="button" class="btn btn-sm btn-outline-secondary">Report</button>
-								<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+								<a class="btn btn-sm btn-outline-secondary" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">Report</a>
+								${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
 							</div>
 						</div>
 					</div>
@@ -317,10 +317,6 @@ export class Project extends GitlabProject {
 								<li>${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
 								<li>${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 							</ul>
-							<p>
-								Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
-								${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
-							</p>
 						</div>
 					</div>
 
