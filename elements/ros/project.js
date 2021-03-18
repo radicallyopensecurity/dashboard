@@ -190,7 +190,7 @@ export class Project extends GitlabProject {
 
 	get findingsBySeverity() {
 		const output = {};
-		const threadLevelPrefix = "threatLevel:";
+		const threadLevelPrefix = "ThreatLevel:";
 		this.findings.forEach((finding) => {
 			let severity = "ToDo";
 			for (let label of finding.labels) {
@@ -304,85 +304,86 @@ export class Project extends GitlabProject {
 					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
 						<h1>${this.gitlabProjectData.name}</h1>
 						<div class="btn-toolbar mb-2 mb-md-0">
-							<div class="btn-group me-2">
-								<a class="btn btn-sm btn-outline-secondary" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">Report</a>
-								${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
+							<div class="input-group me-2">
+								<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
+									Report
+									<ui-icon icon="file-text"></ui-icon>
+								</a>
+								<span class="input-group-text">${!!this.pdfPassword ? html`<pdf-password cleartext="${this.pdfPassword}"></pdf-password>` : ``}</span>
 							</div>
 						</div>
 					</div>
-
+					
 					<div class="row">
-						<div class="col-12">
-							<ul>
-								<li>${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
-								<li>${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
+						<div class="col-12 mb-3">
+							<ul class="list-group list-group-horizontal">
+								<li class="list-group-item active" aria-current="true">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+								<li class="list-group-item bg-secondary text-white">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 							</ul>
 						</div>
-					</div>
-
-					<div class="col-12 col-md-6">
-						<div class="row">
-							<div class="col-12">
-								<h2>Recent Activity</h2>
+						<div class="col-12 col-lg-6">
+							<div class="row">
+								<div class="col-11">
+									<h2>Findings <span class="badge bg-primary">${findings.length}</span></h2>
+									${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
+									<h4>${severity} <span class="badge bg-warning text-dark">${findings.length}</span></h4>
+									<div class="list-group mb-3">
+										${findings.map((finding) => {
+										return html`
+											<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank" class="list-group-item list-group-item-action">
+												<div class="d-flex w-100 justify-content-between">
+													<h5 class="mb-1">${finding.title} - #${finding.iid}</h5>
+													<small>${moment(finding.updated_at).fromNow()} <ui-icon icon="edit"></ui-icon></small>
+												</div>
+												<p class="mb-1">${finding.description} </p>
+												<small>Created at: ${moment(finding.created_at).calendar()}</small>
+											</a>
+										`;
+									})}
+									</div>
+								`)}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-11">
+									<h2>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h2>
+									<div class="list-group">
+										${this.nonFindings.map((nonFinding) => html`
+											<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank" class="list-group-item list-group-item-action">
+												<div class="d-flex w-100 justify-content-between">
+													<h5 class="mb-1">${nonFinding.title} - #${nonFinding.iid}</h5>
+													<small>${moment(nonFinding.updated_at).fromNow()} <ui-icon icon="edit"></ui-icon></small>
+												</div>
+												<p class="mb-1">${nonFinding.description}</p>
+												<small>Created at: ${moment(nonFinding.created_at).calendar()}</small>
+											</a>`)}
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-11">
-								${this.gitlabProjectEvents.slice(0, 5).map((eventData) => html`
+						<div class="col-12 col-lg-6">
+							<div class="row">
+								<div class="col-12 mb-4">
+									<h2>Recent Activity</h2>
+									${this.gitlabProjectEvents.slice(0, 5).map((eventData) => html`
 									<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
 								`)}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<h2>Event History</h2>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-11">
-								${Object.entries(this.eventsByDay).map(([day, events]) => {
-									return html`
+								</div>
+								<div class="col-12">
+									<h2>Event History</h2>
+									${Object.entries(this.eventsByDay).map(([day, events]) => {
+										return html`
 										<h3>${moment(day).format("dddd, DD.MM.YYYY")}</h3>
 										${events.map((eventData) => html`
 											<ros-project-event .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-event>
 										`)}
 									`;
-								})}
+									})}
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col-12 col-md-6">
-						<div class="row">
-							<div class="col-12">
-								<h2>Findings</h2>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-11">
-								${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
-									<h3>${severity}</h3>
-									<ul>
-										${findings.map((finding) => {
-											return html`<li>${finding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank">#${finding.iid}</a>)</li>`;
-										})}
-									</ul>
-								`)}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<h2>Non-Findings</h2>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-11">
-								<ul>
-									${this.nonFindings.map((nonFinding) => html`
-										<li>${nonFinding.title} (<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank">#${nonFinding.iid}</a>)</li>
-									`)}
-								</ul>
-							</div>
-						</div>
+
+						
 					</div>
 				</main>
 			</div>

@@ -1,4 +1,6 @@
 import { LitElement, html, css } from '../web_modules/lit-element.js';
+import './ui/icon.js';
+
 
 class PDFPassword extends LitElement {
 
@@ -24,6 +26,9 @@ class PDFPassword extends LitElement {
 		code {
 			cursor: pointer;
 		}
+		code:hover{
+			text-decoration: underline;
+		}
 		`;
 	}
 
@@ -45,8 +50,12 @@ class PDFPassword extends LitElement {
 		}
 		return html`
 		<link rel="stylesheet" href="style.css"/>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" href="dashboard.css"/>
 		<code @click="${copyToClipboard}">${this.preview}</code>
-		<button @click="${toggleVisible}">👀 ${this.visible ? "hide" : "show"}</button>
+		<button @click="${toggleVisible}">
+			
+		${this.visible ? html`<ui-icon icon="eye-off"></ui-icon>` : html`<ui-icon icon="eye"></ui-icon>`}</button>
 		`;
 	}
 
