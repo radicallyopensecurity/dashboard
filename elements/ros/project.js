@@ -276,9 +276,9 @@ export class Project extends GitlabProject {
 						</h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
+								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com/group/${this.gitlabProjectData.path}" target="_blank">
 									<ui-icon icon="message-square"></ui-icon>
-									Rocket.Chat
+									Rocket.Chat Channel
 								</a>
 							</li>
 							<li class="nav-item">
