@@ -38,11 +38,7 @@ class GitlabUser extends Gitlab {
 	render() {
 		return html`
 			<link rel="stylesheet" href="style.css"/>
-			<p>Logged in as:</p>
-			<a href="/${this.user.username}" target="_blank">
-				<gitlab-avatar .user="${this.user}"></gitlab-avatar>
-				${this.user.name}</a>
-		`;
+			<a href="/${this.user.username}" target="_blank"><gitlab-avatar .user="${this.user}"></gitlab-avatar>${this.user.name}</a>`;
 	}
 
 }

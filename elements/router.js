@@ -2,6 +2,7 @@ import { LitElement, html, css } from '../web_modules/lit-element.js';
 import "./ros/project.js";
 import "./ros/projects.js";
 import "./views/allProjectsView.js";
+import "./gitlab/user.js";
 
 class Router extends LitElement {
 
@@ -67,7 +68,7 @@ class Router extends LitElement {
 
 			<ul class="navbar-nav px-3">
 				<li class="nav-item text-nowrap">
-					<a class="nav-link" href="#">Sign out</a>
+					<div class="nav-link" href="#"><gitlab-user></gitlab-user></div>
 				</li>
 			</ul>
 		</header>

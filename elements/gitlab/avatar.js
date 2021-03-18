@@ -15,6 +15,8 @@ class GitlabAvatar extends LitElement {
 		:host {
 			--line-height: 24px;
 			line-height: var(--line-height);
+			vertical-align: middle;
+			display: inline-block;
 		}
 		.avatar {
 			position: relative;
@@ -37,7 +39,7 @@ class GitlabAvatar extends LitElement {
 	}
 
 	render() {
-		const $avatar = document.createElement("div");
+		const $avatar = document.createElement("span");
 		$avatar.classList.add("avatar");
 		if (this.user.avatar_url != undefined) {
 			$avatar.style.backgroundImage = `url(${new URL(this.user.avatar_url)})`;

@@ -148,9 +148,7 @@ export class ProjectActivity extends LitElement {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
 		<span class="author">
-			<a href="/${this.data.author.username}" target="_blank">
-				<gitlab-avatar .user="${this.data.author}"></gitlab-avatar>
-			</a>
+			<a href="/${this.data.author.username}" target="_blank"><gitlab-avatar .user="${this.data.author}"></gitlab-avatar></a>
 			${this.data.author.name}
 		</span>
 		${$message}
