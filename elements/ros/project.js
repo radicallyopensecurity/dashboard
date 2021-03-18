@@ -282,9 +282,9 @@ export class Project extends GitlabProject {
 								</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
+								<a class="nav-link" aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank">
 									<ui-icon icon="gitlab"></ui-icon>
-									Gitlab
+									Gitlab Repository
 								</a>
 							</li>
 						</ul>
@@ -293,16 +293,12 @@ export class Project extends GitlabProject {
 
 				<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-						<h1>${this.title}</h1>
+						<h1>${this.gitlabProjectData.name_with_namespace}</h1>
 						<div class="btn-toolbar mb-2 mb-md-0">
 							<div class="btn-group me-2">
 								<button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
 								<button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
 							</div>
-							<button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-								<span data-feather="calendar"></span>
-								This week
-							</button>
 						</div>
 					</div>
 
@@ -315,9 +311,6 @@ export class Project extends GitlabProject {
 							<p>
 								Download: <a href="${this._artifactDownloadUrl}">${this._assetFileName}</a>
 								${!!this.pdfPassword ? html`(Password: <pdf-password cleartext="${this.pdfPassword}"></pdf-password> )` : ``}
-
-								<br/>
-								Repository: <a target="_blank" href="${this.gitlabProjectData.web_url}">${this.gitlabProjectData.web_url}</a>
 							</p>
 						</div>
 					</div>
