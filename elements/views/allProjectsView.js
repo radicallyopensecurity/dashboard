@@ -25,11 +25,41 @@ class AllProjectsView extends LitElement {
 	render() {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		<ros-projects
-			.params=${{search: "pen-", order_by: "last_activity_at"}}
-			.search="${this.search}"
-			perPage="20"
-		></ros-projects>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" href="dashboard.css"/>
+
+		<div class="container-fluid">
+			<div class="row">
+				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+					<div class="position-sticky pt-3">
+						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+							<span>Cross links</span>
+						</h6>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
+									<ui-icon icon="message-square"></ui-icon>
+									Rocket.Chat
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
+									<ui-icon icon="gitlab"></ui-icon>
+									Gitlab
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+				<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+					<ros-projects
+						.params=${{search: "pen-", order_by: "last_activity_at"}}
+						.search="${this.search}"
+						perPage="20"
+					></ros-projects>
+				</main>
+			</div>
+		</div>
 		`;
 	}
 
