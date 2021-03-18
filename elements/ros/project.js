@@ -309,7 +309,7 @@ export class Project extends GitlabProject {
 									Report
 									<ui-icon icon="file-text"></ui-icon>
 								</a>
-								<span class="input-group-text">${!!this.pdfPassword ? html`<pdf-password cleartext="${this.pdfPassword}"></pdf-password>` : ``}</span>
+								${!!this.pdfPassword ? html`<span class="input-group-text"><pdf-password cleartext="${this.pdfPassword}"></pdf-password></span>` : ``}
 							</div>
 						</div>
 					</div>
