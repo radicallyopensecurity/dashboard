@@ -1,0 +1,11 @@
+localhost
+
+handle /cockpit/* {
+    root * /var/www/dashboard
+    uri strip_prefix /cockpit 
+    file_server
+}
+
+reverse_proxy gitlab:80 {
+    header_up +X-Forwarded-Ssl true
+}
