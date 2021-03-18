@@ -3,6 +3,7 @@ import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
+import '../ui/icon.js';
 
 const gitlabCiJobName = "build";
 
@@ -278,13 +279,13 @@ export class Project extends GitlabProject {
 						<ul class="nav flex-column">
 							<li class="nav-item">
 								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+									<ui-icon icon="message-square"></ui-icon>
 									Rocket.Chat
 								</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-gitlab"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"></path></svg>
+									<ui-icon icon="gitlab"></ui-icon>
 									Gitlab
 								</a>
 							</li>
