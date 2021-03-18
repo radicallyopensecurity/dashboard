@@ -9,7 +9,6 @@ class Router extends LitElement {
 	constructor() {
 		super();
 		this.projectId = null;
-		this.route = "";
 		this.search= "",
 		this.onHashChange();
 	}
@@ -20,10 +19,6 @@ class Router extends LitElement {
 				type: Number,
 				notify: true,
 				reflect: true
-			},
-			route: {
-				type: String,
-				notify: true
 			},
 			search: {
 				type: String,
@@ -47,7 +42,18 @@ class Router extends LitElement {
 			const hash = window.location.hash.substring(1);
 			const hashFragments = hash.split("/", 1);
 			this.gitlabProjectId = parseInt(hashFragments[0], 10) || null;
-			this.route = hashFragments[1];
+		}
+	}
+
+	clearSearchInput() {
+		this.search = "";
+	}
+
+	updated(changedProperties) {
+		super.updated(changedProperties);
+		const keys = [...changedProperties.keys()];
+		if (keys.includes("gitlabProjectId") && this.gitlabProjectId !== null) {
+			this.clearSearchInput();
 		}
 	}
 
@@ -64,7 +70,7 @@ class Router extends LitElement {
 			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<input class="form-control form-control-dark w-100" type="text" id="search" name="search" @input=${e => { this.search = e.target.value; this.gitlabProjectId = null; location.hash = ''; }} value="" placeholder="Search" aria-label="Search">
+			<input class="form-control form-control-dark w-100" type="text" id="search" name="search" @input=${e => { this.search = e.target.value; this.gitlabProjectId = null; location.hash = ''; }} .value="${this.search}" placeholder="Search" aria-label="Search">
 
 			<ul class="navbar-nav px-3">
 				<li class="nav-item text-nowrap">
