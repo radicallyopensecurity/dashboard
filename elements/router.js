@@ -64,7 +64,7 @@ class Router extends LitElement {
 			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<input class="form-control form-control-dark w-100" type="text" name="search" @input=${e => { this.search = e.target.value }} value="" placeholder="Search" aria-label="Search">
+			<input class="form-control form-control-dark w-100" type="text" id="search" name="search" @input=${e => { this.search = e.target.value; this.gitlabProjectId = null; location.hash = ''; }} value="" placeholder="Search" aria-label="Search">
 
 			<ul class="navbar-nav px-3">
 				<li class="nav-item text-nowrap">
