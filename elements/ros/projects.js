@@ -58,12 +58,12 @@ class Projects extends GitlabProjects {
 											<h5 class="mb-2">${project.name_with_namespace}</h5>
 										</div>
 										<small>
+											Updated
 											${moment(project.last_activity_at).fromNow()}
-											<ui-icon icon="edit"></ui-icon>
 										</small>
 									</div>
 									<p class="mb-1">
-										created at: ${moment(project.created_at).calendar()}
+										Created at ${moment(project.created_at).format("LL")}
 									</p>
 								</div>
 							</a>
