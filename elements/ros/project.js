@@ -290,7 +290,7 @@ export class Project extends GitlabProject {
 						</ul>
 					</div>
 				</nav>
-
+				 
 				<main class="col-md-9 col-xl-10 ms-sm-auto px-md-4">
 					<div class="w-100 pt-3">
 						<nav aria-label="breadcrumb mb-1">

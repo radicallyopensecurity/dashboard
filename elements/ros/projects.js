@@ -50,7 +50,7 @@ class Projects extends GitlabProjects {
 				 ${this.projects.length > 0 ? html`
 					 <div class="list-group">
 						${this.projects.map((project) => html`
-							<a href="#${project.id}" class="list-group-item list-group-item-action d-flex align-items-center" aria-current="true" >
+							<a href="#${project.id}" class="list-group-item list-group-item-action d-flex" aria-current="true" >
 								<img class="avatar me-3" src="${this.constructor.getAvatarUrl(project)}" />
 								<div class="w-100">
 									<div class="d-flex w-100 justify-content-between">
