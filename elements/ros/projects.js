@@ -16,10 +16,19 @@ class Projects extends GitlabProjects {
 		};
 	}
 
+	static getAvatarUrl(project) {
+		return project.avatar_url || project.namespace.avatar_url;
+	}
+
 	static get styles() {
 		return css`
 		.small {
 			font-size: 0.75em;
+		}
+
+		.avatar {
+			width: 48px;
+			height: 48px;
 		}
 		`;
 	}
@@ -37,21 +46,26 @@ class Projects extends GitlabProjects {
 			`: ''}
 		</div>
 		<div class="row">
-			<div class="col-12">
+			<div class="col-12 col-lg-8 col-xl-6">
 				 ${this.projects.length > 0 ? html`
-					 <div class="list-group w-50">
+					 <div class="list-group">
 						${this.projects.map((project) => html`
-							<a href="#${project.id}" class="list-group-item list-group-item-action" aria-current="true">
-								<div class="d-flex w-100 justify-content-between">
-									<h5 class="mb-2">${project.name_with_namespace}</h5>
-									<small>
-										${moment(project.last_activity_at).fromNow()}
-										<ui-icon icon="edit"></ui-icon>
-									</small>
+							<a href="#${project.id}" class="list-group-item list-group-item-action d-flex align-items-center" aria-current="true" >
+								<img class="avatar me-3" src="${this.constructor.getAvatarUrl(project)}" />
+								<div class="w-100">
+									<div class="d-flex w-100 justify-content-between">
+										<div>
+											<h5 class="mb-2">${project.name_with_namespace}</h5>
+										</div>
+										<small>
+											${moment(project.last_activity_at).fromNow()}
+											<ui-icon icon="edit"></ui-icon>
+										</small>
+									</div>
+									<p class="mb-1">
+										created at: ${moment(project.created_at).calendar()}
+									</p>
 								</div>
-								<p class="mb-1">
-									created at: ${moment(project.created_at).calendar()}
-								</p>
 							</a>
 						`)}
 					 </div>
