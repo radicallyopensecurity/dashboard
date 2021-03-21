@@ -25,7 +25,7 @@ class GitlabAvatar extends LitElement {
 			width: var(--line-height);
 			height: var(--line-height);
 			float: left;
-			margin-right: 10px;
+			margin-right: 5px;
 			border-radius: 2px;
 		}
 		.avatar.default {
