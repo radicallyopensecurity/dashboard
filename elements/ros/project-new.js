@@ -2,6 +2,7 @@ import { LitElement, html } from '../../web_modules/lit-element.js';
 import { LitSync, LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
 import { GitlabProject, gitlabAuth } from '../gitlab/index.js';
 import { DropdownInput } from '../ui/input/dropdown.js';
+import '../ros/project/member-chooser.js';
 
 const PM_GROUP_PATH = "pm";
 const TEMPLATE_GROUP_PATH = "pentext";
@@ -212,6 +213,12 @@ class NewRosProject extends LitSync(GitlabProject) {
 				<div class="col-xs-3">Template</div>
 				<div class="col-xs-9">
 					<gitlab-template-chooser .value="${this.sync('import_url')}" .topic="${this.topic}"></gitlab-template-chooser>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">Members</div>
+				<div class="col-xs-9">
+					<ros-project-member-chooser .gitlabProjectId="${this.gitlabProjectId}" .value="${this.sync('next_member')}" .topic="${this.topic}"></ros-project-member-chooser>
 				</div>
 			</div>
 			<div class="row">
