@@ -94,7 +94,8 @@ export class GitlabProject extends Gitlab {
 		this.gitlabProjectEvents = [];
 		this.gitlabProjectLabels = [];
 		this.gitlabProjectIssues = [];
-		
+		this.gitlabProjectMembers = [];
+
 	}
 
 	static get properties() {
@@ -115,7 +116,10 @@ export class GitlabProject extends Gitlab {
 				type: Array,
 				notify: true
 			},
-
+			gitlabProjectMembers: {
+				type: Array,
+				notify: true
+			},
 			gitlabProjectVariables: {
 				type: Array,
 				notify: true
@@ -147,9 +151,11 @@ export class GitlabProject extends Gitlab {
 			return;
 		}
 		this.gitlabProjectData = await super.fetch();
+		await this.fetchPaginated("gitlabProjectMembers", `${this.baseUrl}/members`);
+		await this.fetchPaginated("gitlabProjectLabels", `${this.baseUrl}/labels`);
 		await this.fetchPaginated("gitlabProjectIssues", `${this.baseUrl}/issues`);
 		await this.fetchPaginated("gitlabProjectEvents", `${this.baseUrl}/events?target=issue`);
-		//await this.fetchPaginated("gitlabProjectLabels", `${this.baseUrl}/labels`);
+
 		await this.fetchPaginated("gitlabProjectVariables", `${this.baseUrl}/variables`);
 	}
 
@@ -191,7 +197,6 @@ export class GitlabProjects extends Gitlab {
 	updated(changedProperties) {
 		const keys = [...changedProperties.keys()];
 		if (keys.includes("params") ) {
-			console.log(this.params.search);
 			this.debouncedSearch();
 		}
 	}

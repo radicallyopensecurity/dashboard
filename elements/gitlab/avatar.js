@@ -12,6 +12,12 @@ class GitlabAvatar extends LitElement {
 
 	static get styles() {
 		return css`
+		:host {
+			--line-height: 24px;
+			line-height: var(--line-height);
+			vertical-align: middle;
+			display: inline-block;
+		}
 		.avatar {
 			position: relative;
 			background-repeat: no-repeat;
@@ -19,7 +25,7 @@ class GitlabAvatar extends LitElement {
 			width: var(--line-height);
 			height: var(--line-height);
 			float: left;
-			margin-right: 10px;
+			margin-right: 5px;
 			border-radius: 2px;
 		}
 		.avatar.default {
@@ -33,7 +39,7 @@ class GitlabAvatar extends LitElement {
 	}
 
 	render() {
-		const $avatar = document.createElement("div");
+		const $avatar = document.createElement("span");
 		$avatar.classList.add("avatar");
 		if (this.user.avatar_url != undefined) {
 			$avatar.style.backgroundImage = `url(${new URL(this.user.avatar_url)})`;
