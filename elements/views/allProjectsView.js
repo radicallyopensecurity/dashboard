@@ -4,6 +4,11 @@ import "../ros/projects.js";
 
 class AllProjectsView extends LitElement {
 
+	constructor() {
+		super();
+		this.search = "";
+	}
+
 	static get styles() {
 		return css`
 		.small {
