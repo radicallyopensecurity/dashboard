@@ -10,7 +10,7 @@ class Router extends LitElement {
 	constructor() {
 		super();
 		this.projectId = null;
-		this.search= "",
+		this.search = "";
 		this.onHashChange();
 	}
 
