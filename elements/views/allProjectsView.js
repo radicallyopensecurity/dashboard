@@ -37,6 +37,12 @@ class AllProjectsView extends LitElement {
 						</h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
+								<a class="nav-link" aria-current="page" href="#">
+									<ui-icon icon="bookmark"></ui-icon>
+									My Projects
+								</a>
+							</li>
+							<li class="nav-item">
 								<a class="nav-link" aria-current="page" href="#new">
 									<ui-icon icon="plus-square"></ui-icon>
 									Start New Project
