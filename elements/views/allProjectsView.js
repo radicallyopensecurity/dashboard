@@ -33,7 +33,7 @@ class AllProjectsView extends LitElement {
 				<nav id="sidebarMenu" class="col-md-3 col-xl-2 d-md-block bg-body sidebar collapse">
 					<div class="position-sticky pt-3">
 						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-							<span>Cross links</span>
+							<span>ROS Services</span>
 						</h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
@@ -46,6 +46,12 @@ class AllProjectsView extends LitElement {
 								<a class="nav-link" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
 									<ui-icon icon="gitlab"></ui-icon>
 									Gitlab
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" href="https://codimd.radicallyopensecurity.com" target="_blank">
+									<ui-icon icon="file-text"></ui-icon>
+									CodiMD
 								</a>
 							</li>
 						</ul>
