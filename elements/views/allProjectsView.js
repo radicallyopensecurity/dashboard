@@ -1,8 +1,9 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
+import { LitSync } from '../../web_modules/@morbidick/lit-element-notify.js';
 import "../ros/projects.js";
 
-class AllProjectsView extends LitElement {
+class AllProjectsView extends LitSync(LitElement) {
 
 	constructor() {
 		super();
@@ -84,7 +85,7 @@ class AllProjectsView extends LitElement {
 					<div class="my-3 p-3 bg-body rounded shadow-sm bg-body">
 						<ros-projects
 							.params=${{search: "pen-", order_by: "last_activity_at"}}
-							.search="${this.search}"
+							.search="${this.sync('search')}"
 							perPage="20"
 						></ros-projects>
 					</div>
