@@ -160,7 +160,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 			const accessTokenResponse = await this.post(`/api/v4/projects/${project.id}/access_tokens`, {}, {
 				body: JSON.stringify({
 					scopes: ["api"],
-					name: "webhooker",
+					name: "CI",
 					expires_at: nextYear
 				})
 			});
