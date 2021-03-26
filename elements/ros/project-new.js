@@ -110,7 +110,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 		super();
 		this.topic = "pentest";
 		this.title = "";
-		this.namespace_id = 5; // ros group on git.staging.radical.sexy
+		this.namespace_id = undefined;
 		this.import_url = undefined;
 	}
 
