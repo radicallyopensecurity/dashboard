@@ -3,7 +3,7 @@ import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { LitSync } from '../../web_modules/@morbidick/lit-element-notify.js';
 import "../ros/projects.js";
 
-class AllProjectsView extends LitSync(LitElement) {
+class SidebarView extends LitSync(LitElement) {
 
 	constructor() {
 		super();
@@ -83,11 +83,7 @@ class AllProjectsView extends LitSync(LitElement) {
 
 				<main class="col-md-9 col-xl-10 ms-sm-auto px-md-4 bg-light">
 					<div class="my-3 p-3 bg-body rounded shadow-sm bg-body">
-						<ros-projects
-							.params=${{search: "pen-", order_by: "last_activity_at"}}
-							.search="${this.sync('search')}"
-							perPage="20"
-						></ros-projects>
+						<slot></slot>
 					</div>
 				</main>
 			</div>
@@ -96,4 +92,4 @@ class AllProjectsView extends LitSync(LitElement) {
 	}
 
 }
-customElements.define("ros-all-projects-view", AllProjectsView);
+customElements.define("sidebar-view", SidebarView);

@@ -1,11 +1,13 @@
 import { LitElement, html, css } from '../web_modules/lit-element.js';
+import { LitSync } from '../web_modules/@morbidick/lit-element-notify.js';
 import "./ros/project.js";
 import "./ros/project-new.js";
 import "./ros/projects.js";
-import "./views/allProjectsView.js";
+import "./ros/overview.js";
+import "./views/sidebar.js";
 import "./gitlab/user.js";
 
-class Router extends LitElement {
+class Router extends LitSync(LitElement) {
 
 	constructor() {
 		super();
@@ -75,11 +77,17 @@ class Router extends LitElement {
 
 		let view;
 		if (this.gitlabProjectId === "new") {
-			view = html`<ros-project-new></ros-project-new>`;
+			view = html`<sidebar-view><ros-project-new></ros-project-new></sidebar-view>`;
 		} else if (this.gitlabProjectId !== null) {
 			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"></ros-project>`;
 		} else {
-			view = html`<ros-all-projects-view></ros-all-projects-view>`;
+			view = html`<sidebar-view>
+				<ros-overview
+					.params=${{search: "pen-", order_by: "last_activity_at"}}
+					.search="${this.sync('search')}"
+					perPage="20"
+				></ros-overview>
+			</sidebar-view>`;
 		}
 
 		return html`
@@ -108,7 +116,9 @@ class Router extends LitElement {
 				</li>
 			</ul>
 		</header>
-		${view}`;
+		<layout-sidebar>
+			${view}
+		</layout-sidebar`;
 
 
 	}
