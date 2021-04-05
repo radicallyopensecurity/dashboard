@@ -21,7 +21,7 @@ class GitlabNamespaceChooser extends DropdownInput {
 	static mapOptions(item) {
 		return {
 			value: item.id,
-			label: item.path
+			label: item.full_path
 		}
 	}
 
