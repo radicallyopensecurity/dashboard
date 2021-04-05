@@ -40,11 +40,34 @@ class PDFPassword extends LitElement {
 		}
 	}
 
-	render() {
-		const copyToClipboard = (e) => {
-			var data = [new ClipboardItem({ "text/plain": new Blob([this.cleartext], { type: "text/plain" }) })];
+	get copyToClipboard() {
+		return (e) => {
+			console.log("copy to clipboard")
+			var data = [
+				new ClipboardItem({
+					"text/plain": new Blob(
+						[this.cleartext],
+						{
+							type: "text/plain"
+						}
+					)
+				})
+			];
 			navigator.clipboard.write(data);
+
+			const tooltip = new bootstrap.Tooltip(e.currentTarget, {
+				placement: "right",
+				title: "copied",
+				trigger: ""
+			});
+			tooltip.show();
+			setTimeout(() => {
+				tooltip.dispose();
+			}, 400);
 		}
+	}
+
+	render() {
 		const toggleVisible = () => {
 			this.visible = !this.visible;
 		}
@@ -52,7 +75,7 @@ class PDFPassword extends LitElement {
 		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
-		<code @click="${copyToClipboard}">${this.preview}</code>
+		<code @click="${this.copyToClipboard}">${this.preview}</code>
 		<button @click="${toggleVisible}">
 			
 		${this.visible ? html`<ui-icon icon="eye-off"></ui-icon>` : html`<ui-icon icon="eye"></ui-icon>`}</button>
