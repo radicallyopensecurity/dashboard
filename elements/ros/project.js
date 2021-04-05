@@ -34,19 +34,19 @@ export class Project extends GitlabProject {
 		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "non-finding"));
 	}
 
-	get membersByRole(){
-		const membersByRole = {
-			'Staff': [],
-			'Client': []
-		};
-		this.gitlabProjectMembers.forEach((member) => {
-			let key = 'Client';
-			if (member.access_level > 30) {
-				key = 'Staff';
-			}
-			membersByRole[key].push(member);
-		});
-		return membersByRole;
+	get members() {
+		return this.gitlabProjectMembers
+			.filter((member) => member.username !== `project_${this.gitlabProjectId}_bot`);
+	}
+
+	get staff() {
+		return this.members
+			.filter((member) => member.access_level >= 40);
+	}
+
+	get customers() {
+		return this.members
+			.filter((member) => member.access_level < 40);
 	}
 
 	static get severities() {
@@ -208,23 +208,32 @@ export class Project extends GitlabProject {
 						</div>
 						<div class="d-flex flex-column-reverse flex-lg-row justify-content-between mb-3 align-items-start">
 							<div class="d-flex">
-								${Object.entries(this.membersByRole).map(([role, members]) => html`
 								<div class="me-4 border p-2 rounded">
-									<h5>${role}</h5>
+									<h5>Staff</h5>
 									<div class="d-flex">
-										${members.map((member) => {
-										return html`
+										${this.staff.map((member) => html`
 											<div class="pe-4">
-												<a href="/${member.username}" target="_blank"><gitlab-avatar .user="${member}"></gitlab-avatar>${member.name}</a>
-											</div>`;
-										})}
-										${members.length < 1 ? html`
-											<div class="pe-4">
-												<span>No members</span>
-											</div>` : html``}
+												<a href="/${member.username}" target="_blank">
+													<gitlab-avatar .user="${member}"></gitlab-avatar>
+													${member.name}
+												</a>
+											</div>
+										`)}
 									</div>
 								</div>
-							`)}
+								<div class="me-4 border p-2 rounded">
+									<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
+									<div class="d-flex">
+										${this.customers.map((member) => html`
+											<div class="pe-4">
+												<a href="/${member.username}" target="_blank">
+													<gitlab-avatar .user="${member}"></gitlab-avatar>
+													${member.name}
+												</a>
+											</div>
+										`)}
+									</div>
+								</div>
 							</div>
 							<div class="btn-toolbar mb-3">
 								<div class="input-group">
