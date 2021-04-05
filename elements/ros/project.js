@@ -237,11 +237,13 @@ export class Project extends GitlabProject {
 							</div>
 							<div class="btn-toolbar mb-3">
 								<div class="input-group">
+									${!!this.pdfPassword ? html`<span class="input-group-text">
+										<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
+									</span>` : ``}
 									<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
 										Report
 										<ui-icon icon="file-text"></ui-icon>
 									</a>
-									${!!this.pdfPassword ? html`<span class="input-group-text"><pdf-password cleartext="${this.pdfPassword}"></pdf-password></span>` : ``}
 								</div>
 							</div>
 						</div>
