@@ -195,8 +195,8 @@ export class Project extends GitlabProject {
 								<div class="w-100 pt-1">
 									<nav aria-label="breadcrumb mb-1">
 										<ol class="breadcrumb">
-											<li class="breadcrumb-item"><a href=".">Projects</a></li>
-											<li class="breadcrumb-item"><a href="https://git.staging.radical.sexy/groups/ros" target="_blank">${this.gitlabProjectData.namespace.name}</a></li>
+											<li class="breadcrumb-item">Projects</li>
+											<li class="breadcrumb-item">${this.gitlabProjectData.namespace.name}</li>
 											<li class="breadcrumb-item active" aria-current="page">${this.gitlabProjectData.name}</li>
 										</ol>
 									</nav>
