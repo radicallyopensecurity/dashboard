@@ -206,36 +206,14 @@ export class Project extends GitlabProject {
 							
 							<img class="avatar me-3" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
 						</div>
-						<div class="d-flex flex-column-reverse flex-lg-row justify-content-between mb-3 align-items-start">
-							<div class="d-flex">
-								<div class="me-4 border p-2 rounded">
-									<h5>Staff</h5>
-									<div class="d-flex">
-										${this.staff.map((member) => html`
-											<div class="pe-4">
-												<a href="/${member.username}" target="_blank">
-													<gitlab-avatar .user="${member}"></gitlab-avatar>
-													${member.name}
-												</a>
-											</div>
-										`)}
-									</div>
-								</div>
-								<div class="me-4 border p-2 rounded">
-									<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
-									<div class="d-flex">
-										${this.customers.map((member) => html`
-											<div class="pe-4">
-												<a href="/${member.username}" target="_blank">
-													<gitlab-avatar .user="${member}"></gitlab-avatar>
-													${member.name}
-												</a>
-											</div>
-										`)}
-									</div>
-								</div>
+						<div class="d-flex flex-row justify-content-between align-items-start">
+							<div class="d-flex me-auto">
+								<ul class="list-group list-group-horizontal">
+									<li class="list-group-item active" aria-current="true">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+									<li class="list-group-item bg-secondary text-white">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
+								</ul>
 							</div>
-							<div class="btn-toolbar mb-3">
+							<div class="d-flex btn-toolbar mb-3">
 								<div class="input-group">
 									${!!this.pdfPassword ? html`<span class="input-group-text">
 										<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
@@ -247,12 +225,33 @@ export class Project extends GitlabProject {
 								</div>
 							</div>
 						</div>
-						<div class="d-flex">
-							<ul class="list-group list-group-horizontal">
-								<li class="list-group-item active" aria-current="true">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
-								<li class="list-group-item bg-secondary text-white">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
-							</ul>
-
+						<div class="d-flex flex-row w-100 align-items-start">
+							<div class="me-auto border p-2 rounded">
+								<h5>Staff</h5>
+								<div class="d-flex">
+									${this.staff.map((member) => html`
+										<div class="pe-4">
+											<a href="/${member.username}" target="_blank">
+												<gitlab-avatar .user="${member}"></gitlab-avatar>
+												${member.name}
+											</a>
+										</div>
+									`)}
+								</div>
+							</div>
+							<div class="border p-2 rounded">
+								<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
+								<div class="d-flex">
+									${this.customers.map((member) => html`
+										<div class="pe-4">
+											<a href="/${member.username}" target="_blank">
+												<gitlab-avatar .user="${member}"></gitlab-avatar>
+												${member.name}
+											</a>
+										</div>
+									`)}
+								</div>
+							</div>
 						</div>
 					</header>
 					<div class="row">
