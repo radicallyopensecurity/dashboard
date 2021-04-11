@@ -67,7 +67,7 @@ export class Project extends GitlabProject {
 		this.findings.forEach((finding) => {
 			let severity = "ToDo";
 			for (let label of finding.labels) {
-				if (label.startsWith(threadLevelPrefix)) {
+				if (label.toLowerCase().startsWith(threadLevelPrefix.toLowerCase())) {
 					severity = label.substr(threadLevelPrefix.length);
 					break;
 				}
