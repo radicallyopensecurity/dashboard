@@ -61,14 +61,39 @@ export class Project extends GitlabProject {
 		];
 	}
 
+	static get severityLabelPrefix() {
+		return "ThreatLevel:";
+	}
+
+	get severityLabels() {
+		const prefix = this.constructor.severityLabelPrefix;
+		const severities = this.constructor.severities;
+		return this.gitlabProjectLabels
+			.filter((label) => {
+				return severities
+					.map((severity) => `${prefix}:${severity}`.toLowerCase())
+					.includes(label.name.toLowerCase());
+			})
+			.map((label) => {
+				return {
+					...label,
+					severity: label.name.substr(prefix.length)
+				};
+			})
+			.sort((a, b) => severities.indexOf(a.name) - severities.indexOf(b.name))
+			.reduce((curr, next) => {
+				curr[next.name] = next;
+				return curr;
+			}, {});
+	}
+
 	get findingsBySeverity() {
 		const output = {};
-		const threadLevelPrefix = "ThreatLevel:";
 		this.findings.forEach((finding) => {
 			let severity = "ToDo";
 			for (let label of finding.labels) {
-				if (label.toLowerCase().startsWith(threadLevelPrefix.toLowerCase())) {
-					severity = label.substr(threadLevelPrefix.length);
+				if (label.toLowerCase().startsWith(this.constructor.severityLabelPrefix.toLowerCase())) {
+					severity = label.substr(this.constructor.severityLabelPrefix.length);
 					break;
 				}
 			}
@@ -88,15 +113,14 @@ export class Project extends GitlabProject {
 		return orderedOutput;
 	}
 
-	severityColorStyle(severity){
-		let style = 'color: #212529 !important; background-color: #ffc107 !important;'
-		for(let i = 0; i < this.gitlabProjectLabels.length; i++) {
-			if (this.gitlabProjectLabels[i].name.toLowerCase() === ('ThreatLevel:' + severity).toLowerCase()) {
-				style = 'color: ' + this.gitlabProjectLabels[i].text_color + ' !important; background-color: ' + this.gitlabProjectLabels[i].color + ' !important;';
-				break;
-			}
+	severityColorStyle(severity) {
+		const severityLabels = this.severityLabels;
+		if (!severityLabels.hasOwnProperty(severity)) {
+			return 'color: #212529 !important; background-color: #ffc107 !important;';
+		} else {
+			const label = severityLabels[severity];
+			return `color: ${label.text_color} !important; background-color: ${label.color}`;
 		}
-		return style;
 	}
 
 	get eventsByDay() {
