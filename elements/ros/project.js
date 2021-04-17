@@ -91,7 +91,7 @@ export class Project extends GitlabProject {
 	severityColorStyle(severity){
 		let style = 'color: #212529 !important; background-color: #ffc107 !important;'
 		for(let i = 0; i < this.gitlabProjectLabels.length; i++) {
-			if (this.gitlabProjectLabels[i].name === 'ThreatLevel:' + severity) {
+			if (this.gitlabProjectLabels[i].name.toLowerCase() === ('ThreatLevel:' + severity).toLowerCase()) {
 				style = 'color: ' + this.gitlabProjectLabels[i].text_color + ' !important; background-color: ' + this.gitlabProjectLabels[i].color + ' !important;';
 				break;
 			}
