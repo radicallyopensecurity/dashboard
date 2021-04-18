@@ -30,7 +30,6 @@ class SidebarView extends LitSync(LitElement) {
 
 	render() {
 		return html`
-		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
@@ -38,6 +37,15 @@ class SidebarView extends LitSync(LitElement) {
 			<div class="row">
 				<nav id="sidebarMenu" class="col-md-3 col-xl-2 d-md-block bg-body sidebar collapse">
 					<div class="position-sticky pt-3">
+						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1">
+							<span>Search</span>
+						</h6>
+						<input id="search" name="search"
+							@input=${this.onChangeSearchInput}
+							.value="${this.search}"
+							class="form-control form-control-dark w-100" type="text"
+							placeholder="Search"
+							aria-label="Search" />
 						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
 							<span>Actions</span>
 						</h6>
