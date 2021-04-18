@@ -8,6 +8,7 @@ import './project/projectActivity.js';
 import './project/projectRecentIssues.js';
 
 const gitlabCiJobName = "build";
+const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?<prefix>pen|off)-(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
 export class Project extends GitlabProject {
 
@@ -140,6 +141,22 @@ export class Project extends GitlabProject {
 		return "main";
 	}
 
+	get channelName() {
+		const namespace = this.gitlabProjectData.namespace.path;
+		const projectPath = this.gitlabProjectData.path_with_namespace;
+		const match = projectPath.match(gitlabProjectPathPattern);
+
+		if (match === null) {
+			return;
+		}
+
+		if (namespace === "ros") {
+			return `${match.groups.prefix}-${match.groups.name}`;
+		} else {
+			return `${namespace}-${match.groups.prefix}-${match.groups.name}`;
+		}
+	}
+
 	get _artifactDownloadUrl() {
 		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/${this.branchName}/raw/target/${this._assetFileName}?job=${gitlabCiJobName}`;
 	}
@@ -183,6 +200,8 @@ export class Project extends GitlabProject {
 		const findings = this.findings;
 		const nonFindings = this.nonFindings;
 
+		const channelName = this.channelName;
+
 		return html`
 		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
@@ -214,10 +233,10 @@ export class Project extends GitlabProject {
 
 				<main class="col-md-9 col-xl-10 ms-sm-auto px-md-4 bg-light">
 					<header class="my-3 p-3 bg-body rounded shadow-sm bg-body">
-						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-							<div>
+						<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2 mb-3 border-bottom">
+							<div class="flex-grow-1">
 								<div class="w-100 pt-1">
-									<nav aria-label="breadcrumb mb-1">
+									<nav aria-label="breadcrumb" class="d-flex">
 										<ol class="breadcrumb">
 											<li class="breadcrumb-item">Projects</li>
 											<li class="breadcrumb-item">${this.gitlabProjectData.namespace.name}</li>
@@ -227,18 +246,31 @@ export class Project extends GitlabProject {
 								</div>
 								<h1>${this.gitlabProjectData.name}</h1>
 							</div>
-							
 							<img class="avatar me-3" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
 						</div>
-						<div class="d-flex flex-row justify-content-between align-items-start">
+						<div class="d-flex flex-row justify-content-between align-items-end mb-3">
 							<div class="d-flex me-auto">
 								<ul class="list-group list-group-horizontal">
 									<li class="list-group-item active" aria-current="true">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
 									<li class="list-group-item bg-secondary text-white">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 								</ul>
 							</div>
-							<div class="d-flex btn-toolbar mb-3">
-								<div class="input-group">
+							<div class="d-flex">
+								${channelName !== undefined ? html`
+									<a aria-current="page" href="https://chat.radicallyopensecurity.com/group/${channelName}" target="_blank" role="button" class="btn btn-secondary me-2">
+										<ui-icon icon="message-square"></ui-icon>
+										Chat
+									</a>
+								` : ''}
+								${this.gitlabProjectData.web_url !== undefined ? html`
+									<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
+										<ui-icon icon="gitlab"></ui-icon>
+										Git
+									</a>
+								` : ''}
+							</div>
+							<div class="d-flex btn-toolbar">
+								<div class="input-group flex-nowrap">
 									${!!this.pdfPassword ? html`<span class="input-group-text">
 										<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
 									</span>` : ``}
