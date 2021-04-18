@@ -258,27 +258,29 @@ export class Project extends GitlabProject {
 							</div>
 						</div>
 					</div>
-					<div class="d-flex flex-row w-100 align-items-start">
-						<div class="me-auto border p-2 rounded">
+					<div class="d-flex flex-row w-100 align-self-stretch">
+						<div class="me-auto border rounded p-2">
 							<h5>Staff</h5>
-							<div class="d-flex">
+							<div class="d-flex flex-wrap">
 								${this.staff.map((member) => html`
-									<div class="pe-4">
+									<div class="p-2 flex-fill flex-nowrap text-nowrap text-center">
 										<a href="/${member.username}" target="_blank">
 											<gitlab-avatar .user="${member}"></gitlab-avatar>
+											<br/>
 											${member.name}
 										</a>
 									</div>
 								`)}
 							</div>
 						</div>
-						<div class="border p-2 rounded">
+						<div class="border rounded p-2 ms-2">
 							<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
-							<div class="d-flex">
+							<div class="d-flex flex-wrap">
 								${this.customers.map((member) => html`
-									<div class="pe-4">
+									<div class="p-2 flex-fill flex-nowrap text-nowrap text-center">
 										<a href="/${member.username}" target="_blank">
 											<gitlab-avatar .user="${member}"></gitlab-avatar>
+											<br/>
 											${member.name}
 										</a>
 									</div>
