@@ -89,10 +89,8 @@ class SidebarView extends LitSync(LitElement) {
 					</div>
 				</nav>
 
-				<main class="col-md-9 col-xl-10 ms-sm-auto px-md-4 bg-light">
-					<div class="my-3 p-3 bg-body rounded shadow-sm bg-body">
-						<slot></slot>
-					</div>
+				<main class="col-md-9 col-xl-10 offset-md-3 offset-xl-2">
+					<slot></slot>
 				</main>
 			</div>
 		</div>

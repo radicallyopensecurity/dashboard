@@ -208,7 +208,7 @@ export class Project extends GitlabProject {
 		<link rel="stylesheet" href="dashboard.css"/>
 
 		<div class="row">
-			<main class="col-12 ms-sm-auto px-md-4 bg-light">
+			<div class="col-12 bg-light">
 				<header class="my-3 p-3 bg-body rounded shadow-sm bg-body">
 					<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2 mb-3 border-bottom">
 						<div class="flex-grow-1">
@@ -352,7 +352,7 @@ export class Project extends GitlabProject {
 						</div>
 					</div>
 				</div>
-			</main>
+			</div>
 		</div>
 		`;
 	}

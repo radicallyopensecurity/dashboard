@@ -81,13 +81,11 @@ class Router extends LitSync(LitElement) {
 		} else if (this.gitlabProjectId !== null) {
 			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"></ros-project>`;
 		} else {
-			view = html`<sidebar-view>
-				<ros-overview
+			view = html`<ros-overview
 					.params=${{search: "pen-", order_by: "last_activity_at"}}
 					.search="${this.sync('search')}"
 					perPage="20"
-				></ros-overview>
-			</sidebar-view>`;
+				></ros-overview>`;
 		}
 
 		return html`

@@ -72,23 +72,25 @@ class Overview extends GitlabProjects {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-		<div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3 pb-2 mb-3 border-bottom">
-			<h1>Overview</h1>
-			${this.loading ? html`
-				<div class="spinner-border mb-2" role="status">
-					<span class="visually-hidden">Loading...</span>
-				</div>
-			`: ''}
-		</div>
-		${this.projects.length > 0 ? html`
-			<div class="row">
-				${this.renderSection("Pentests", pentests)}
-				${this.renderSection("Offers", offertes)}
+
+		<div class="col-12 bg-light">
+			<div class="my-3 p-3 bg-body rounded shadow-sm bg-body">
+				<h1>Overview</h1>
+				${this.loading ? html`
+					<div class="spinner-border mb-2" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				`: ''}
 			</div>
-		` : (!this.loading) ? html`
-			<p>No projects found</p>
-		` : ''}
-		`;
+			${this.projects.length > 0 ? html`
+				<div class="row">
+					${this.renderSection("Pentests", pentests)}
+					${this.renderSection("Offers", offertes)}
+				</div>
+			` : (!this.loading) ? html`
+				<p>No projects found</p>
+			` : ''}
+		</div>`;
 	}
 
 }
