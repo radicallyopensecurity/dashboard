@@ -108,7 +108,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 
 	constructor() {
 		super();
-		this.topic = "pentest";
+		this.topic = "offerte";
 		this.title = "";
 		this.namespace_id = undefined;
 		this.import_url = undefined;
@@ -189,7 +189,6 @@ class NewRosProject extends LitSync(GitlabProject) {
 
 	render() {
 		return html`
-		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
@@ -202,28 +201,18 @@ class NewRosProject extends LitSync(GitlabProject) {
 				</div>
 			</div>
 			<div class="row mb-3">
-				<label class="col-3 col-form-label">Project</label>
+				<label class="col-3 col-form-label" for="repository">Project</label>
 				<div class="col-9">
 					<div class="input-group">
 						<span class="input-group-text">off-</span>
-						<select name="topic"
-							class="form-select"
-							@change="${this.onChangeSelection}"
-						>
-							<option value="pentest">pen-</option>
-							<option value="offerte">off-</option>
-						</select>
-						<div class="form-floating">
-							<input type="text" name="title"
-								aria-label="Name"
-								id="repository"
-								class="form-control"
-								value="${this.title}"
-								@change="${this.onChangeInput}"
-								placeholder="my-new-project"
-							/>
-							<label for="repository" class="form-label">Name</label>
-						</div>
+						<input type="text" name="title"
+							aria-label="Name"
+							id="repository"
+							class="form-control"
+							value="${this.title}"
+							@change="${this.onChangeInput}"
+							placeholder="my-new-project"
+						/>
 					</div>
 				</div>
 			</div>
