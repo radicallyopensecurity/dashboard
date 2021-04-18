@@ -259,7 +259,7 @@ export class Project extends GitlabProject {
 						</div>
 					</div>
 					<div class="d-flex flex-row w-100 align-self-stretch">
-						<div class="me-auto border rounded p-2">
+						<div class="border rounded p-2">
 							<h5>Staff</h5>
 							<div class="d-flex flex-wrap">
 								${this.staff.map((member) => html`
