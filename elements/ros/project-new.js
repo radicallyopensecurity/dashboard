@@ -190,40 +190,58 @@ class NewRosProject extends LitSync(GitlabProject) {
 	render() {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		<link rel="stylesheet" href="flexboxgrid.css"/>
-		<h2>Create New Project</h2>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" href="dashboard.css"/>
+
 		<form name="new" @submit="${this.onSubmitForm}">
-			<div class="row">
-				<div class="col-xs-3">Namespace</div>
-				<div class="col-xs-9">
-					<gitlab-namespace-chooser .value="${this.sync('namespace_id')}"></gitlab-namespace-chooser>
+			<legend>Create New Project</legend>
+			<div class="row mb-3">
+				<label class="col-3 col-form-label">Namespace</label>
+				<div class="col-9">
+					<gitlab-namespace-chooser label="Namespace" .value="${this.sync('namespace_id')}"></gitlab-namespace-chooser>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-3">Repository</div>
-				<div class="col-xs-9">
-					<select name="topic" @change="${this.onChangeSelection}">
-						<option value="pentest">pen-</option>
-						<option value="offerte">off-</option>
-					</select>
-					<input type="text" name="title" value="${this.title}" @change="${this.onChangeInput}" placeholder="my-new-project" />
+			<div class="row mb-3">
+				<label class="col-3 col-form-label">Project</label>
+				<div class="col-9">
+					<div class="input-group">
+						<span class="input-group-text">off-</span>
+						<select name="topic"
+							class="form-select"
+							@change="${this.onChangeSelection}"
+						>
+							<option value="pentest">pen-</option>
+							<option value="offerte">off-</option>
+						</select>
+						<div class="form-floating">
+							<input type="text" name="title"
+								aria-label="Name"
+								id="repository"
+								class="form-control"
+								value="${this.title}"
+								@change="${this.onChangeInput}"
+								placeholder="my-new-project"
+							/>
+							<label for="repository" class="form-label">Name</label>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-3">Template</div>
-				<div class="col-xs-9">
-					<gitlab-template-chooser .value="${this.sync('import_url')}" .topic="${this.topic}"></gitlab-template-chooser>
+			<div class="row mb-3">
+				<label class="col-3 col-form-label">Template</label>
+				<div class="col-9">
+					<gitlab-template-chooser label="Template" .value="${this.sync('import_url')}" .topic="${this.topic}"></gitlab-template-chooser>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-3">Members</div>
-				<div class="col-xs-9">
-					<ros-project-member-chooser .gitlabProjectId="${this.gitlabProjectId}" .value="${this.sync('next_member')}" .topic="${this.topic}"></ros-project-member-chooser>
+			<div class="row mb-3 d-none">
+				<label class="col-3 col-form-label">Members</label>
+				<div class="col-9">
+					<ros-project-member-chooser label="Members" .gitlabProjectId="${this.gitlabProjectId}" .value="${this.sync('next_member')}" .topic="${this.topic}"></ros-project-member-chooser>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-offset-3 col-xs-9">
-					<button type="submit" .disabled="${!this.valid}">Create</button>
+			<div class="row mb-3">
+				<div class="offset-3">
+					<button class="btn btn-primary mb-3" type="submit" .disabled="${!this.valid}">Create</button>
 				</div>
 			</div>
 		</form>

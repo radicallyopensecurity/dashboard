@@ -6,6 +6,7 @@ export class DropdownInput extends LitNotify(LitElement) {
 	constructor() {
 		super();
 		this.path = undefined;
+		this.label = undefined;
 		this.params = {};
 		this.value = undefined;
 		this._options = [];
@@ -14,6 +15,9 @@ export class DropdownInput extends LitNotify(LitElement) {
 	static get properties() {
 		return {
 			path: {
+				type: String
+			},
+			label: {
 				type: String
 			},
 			params: {
@@ -97,12 +101,22 @@ export class DropdownInput extends LitNotify(LitElement) {
 	render() {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
-		<select @change="${this.onChangeSelection}">
-			${this.options.map((option) => {
-				const label = option.label || option.value;
-				return html`<option value="${option.value}" .selected="${option.value === this.value}">${label}</option>`;
-			})}
-		</select>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" href="dashboard.css"/>
+
+		<div class="form-floating">
+			<select @change="${this.onChangeSelection}"
+				class="form-select"
+				id="userSelection"
+				aria-label="${this.label}"
+			>${this.options.map((option) => html`
+				<option
+					value="${option.value}"
+					.selected="${option.value === this.value}"
+				>${option.label || option.value}</option>
+			`)}</select>
+			${(this.label !== undefined) ? html`<label for="userSelection">${this.label}</label>` : ''}
+		</div>
 		`;
 	}
 
