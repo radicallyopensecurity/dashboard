@@ -77,7 +77,7 @@ class Router extends LitSync(LitElement) {
 
 		let view;
 		if (this.gitlabProjectId === "new") {
-			view = html`<sidebar-view><ros-project-new></ros-project-new></sidebar-view>`;
+			view = html`<ros-project-new></ros-project-new>`;
 		} else if (this.gitlabProjectId !== null) {
 			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"></ros-project>`;
 		} else {
@@ -109,9 +109,7 @@ class Router extends LitSync(LitElement) {
 				</li>
 			</ul>
 		</header>
-		<layout-sidebar>
-			${view}
-		</layout-sidebar`;
+		<sidebar-view>${view}</sidebar-view>`;
 
 
 	}

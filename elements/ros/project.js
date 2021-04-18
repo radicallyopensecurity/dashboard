@@ -207,178 +207,152 @@ export class Project extends GitlabProject {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
-		<div class="container-fluid">
-			<div class="row">
-				<nav id="sidebarMenu" class="col-md-3 col-xl-2 bg-body d-md-block sidebar collapse">
-					<div class="position-sticky pt-3">
-						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-							<span>Cross links</span>
-						</h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com/group/${this.gitlabProjectData.path}" target="_blank">
-									<ui-icon icon="message-square"></ui-icon>
-									Channel
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank">
-									<ui-icon icon="gitlab"></ui-icon>
-									Repository
-								</a>
-							</li>
-						</ul>
+		<div class="row">
+			<main class="col-12 ms-sm-auto px-md-4 bg-light">
+				<header class="my-3 p-3 bg-body rounded shadow-sm bg-body">
+					<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2 mb-3 border-bottom">
+						<div class="flex-grow-1">
+							<div class="w-100 pt-1">
+								<nav aria-label="breadcrumb" class="d-flex">
+									<ol class="breadcrumb">
+										<li class="breadcrumb-item">Projects</li>
+										<li class="breadcrumb-item">${this.gitlabProjectData.namespace.name}</li>
+										<li class="breadcrumb-item active" aria-current="page">${this.gitlabProjectData.name}</li>
+									</ol>
+								</nav>
+							</div>
+							<h1>${this.gitlabProjectData.name}</h1>
+						</div>
+						<img class="avatar me-3" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
 					</div>
-				</nav>
-
-				<main class="col-md-9 col-xl-10 ms-sm-auto px-md-4 bg-light">
-					<header class="my-3 p-3 bg-body rounded shadow-sm bg-body">
-						<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2 mb-3 border-bottom">
-							<div class="flex-grow-1">
-								<div class="w-100 pt-1">
-									<nav aria-label="breadcrumb" class="d-flex">
-										<ol class="breadcrumb">
-											<li class="breadcrumb-item">Projects</li>
-											<li class="breadcrumb-item">${this.gitlabProjectData.namespace.name}</li>
-											<li class="breadcrumb-item active" aria-current="page">${this.gitlabProjectData.name}</li>
-										</ol>
-									</nav>
-								</div>
-								<h1>${this.gitlabProjectData.name}</h1>
-							</div>
-							<img class="avatar me-3" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
+					<div class="d-flex flex-row justify-content-between align-items-end mb-3">
+						<div class="d-flex me-auto">
+							<ul class="list-group list-group-horizontal">
+								<li class="list-group-item active" aria-current="true">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+								<li class="list-group-item bg-secondary text-white">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
+							</ul>
 						</div>
-						<div class="d-flex flex-row justify-content-between align-items-end mb-3">
-							<div class="d-flex me-auto">
-								<ul class="list-group list-group-horizontal">
-									<li class="list-group-item active" aria-current="true">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
-									<li class="list-group-item bg-secondary text-white">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
-								</ul>
+						<div class="d-flex">
+							${channelName !== undefined ? html`
+								<a aria-current="page" href="https://chat.radicallyopensecurity.com/group/${channelName}" target="_blank" role="button" class="btn btn-secondary me-2">
+									<ui-icon icon="message-square"></ui-icon>
+									Chat
+								</a>
+							` : ''}
+							${this.gitlabProjectData.web_url !== undefined ? html`
+								<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
+									<ui-icon icon="gitlab"></ui-icon>
+									Git
+								</a>
+							` : ''}
+						</div>
+						<div class="d-flex btn-toolbar">
+							<div class="input-group flex-nowrap">
+								${!!this.pdfPassword ? html`<span class="input-group-text">
+									<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
+								</span>` : ``}
+								<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
+									Report
+									<ui-icon icon="file-text"></ui-icon>
+								</a>
 							</div>
+						</div>
+					</div>
+					<div class="d-flex flex-row w-100 align-items-start">
+						<div class="me-auto border p-2 rounded">
+							<h5>Staff</h5>
 							<div class="d-flex">
-								${channelName !== undefined ? html`
-									<a aria-current="page" href="https://chat.radicallyopensecurity.com/group/${channelName}" target="_blank" role="button" class="btn btn-secondary me-2">
-										<ui-icon icon="message-square"></ui-icon>
-										Chat
-									</a>
-								` : ''}
-								${this.gitlabProjectData.web_url !== undefined ? html`
-									<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
-										<ui-icon icon="gitlab"></ui-icon>
-										Git
-									</a>
-								` : ''}
-							</div>
-							<div class="d-flex btn-toolbar">
-								<div class="input-group flex-nowrap">
-									${!!this.pdfPassword ? html`<span class="input-group-text">
-										<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
-									</span>` : ``}
-									<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
-										Report
-										<ui-icon icon="file-text"></ui-icon>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="d-flex flex-row w-100 align-items-start">
-							<div class="me-auto border p-2 rounded">
-								<h5>Staff</h5>
-								<div class="d-flex">
-									${this.staff.map((member) => html`
-										<div class="pe-4">
-											<a href="/${member.username}" target="_blank">
-												<gitlab-avatar .user="${member}"></gitlab-avatar>
-												${member.name}
-											</a>
-										</div>
-									`)}
-								</div>
-							</div>
-							<div class="border p-2 rounded">
-								<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
-								<div class="d-flex">
-									${this.customers.map((member) => html`
-										<div class="pe-4">
-											<a href="/${member.username}" target="_blank">
-												<gitlab-avatar .user="${member}"></gitlab-avatar>
-												${member.name}
-											</a>
-										</div>
-									`)}
-								</div>
-							</div>
-						</div>
-					</header>
-					<div class="row">
-						<div class="col-12 col-lg-6">
-							<div class="my-3 p-3 bg-body rounded shadow-sm">
-								<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
-								${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
-									
-									<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
-									<div class="list-group mb-3">
-										${findings.map((finding) => {
-											return html`
-									<div class="list-group-item list-group-item-action">
-										<div class="d-flex w-100 justify-content-between">
-											<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank"><h6 class="mb-1">${finding.title} - #${finding.iid}</h6></a>
-											<small>Updated ${moment(finding.updated_at).fromNow()}</small>
-										</div>
-										<p class="mb-1">${finding.description} </p>
-										<small>Created at: ${moment(finding.created_at).calendar()}</small>
-									</div>
-								`;
-										})}
+								${this.staff.map((member) => html`
+									<div class="pe-4">
+										<a href="/${member.username}" target="_blank">
+											<gitlab-avatar .user="${member}"></gitlab-avatar>
+											${member.name}
+										</a>
 									</div>
 								`)}
-								
-								<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
-								<div class="list-group">
-									${this.nonFindings.map((nonFinding) => html`
-									<div class="list-group-item list-group-item-action">
-										<div class="d-flex w-100 justify-content-between">
-											<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank"><h6 class="mb-1">${nonFinding.title} - #${nonFinding.iid}</h6></a>
-											<small>Updated ${moment(nonFinding.updated_at).fromNow()}</small>
-										</div>
-										<p class="mb-1">${nonFinding.description}</p>
-										<small>Created at: ${moment(nonFinding.created_at).calendar()}</small>
-									</div>`)}
-								</div>
 							</div>
 						</div>
-						<div class="col-12 col-lg-6">
-							<div class="row">
-								<div class="col-12">
-									<div class="my-3 p-3 bg-body rounded shadow-sm">
-										<h3>Recently changed Findings</h3>
-										<div class="list-group mb-3">
-											${this.recentFindings.map((finding) => html`
-												<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
+						<div class="border p-2 rounded">
+							<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
+							<div class="d-flex">
+								${this.customers.map((member) => html`
+									<div class="pe-4">
+										<a href="/${member.username}" target="_blank">
+											<gitlab-avatar .user="${member}"></gitlab-avatar>
+											${member.name}
+										</a>
+									</div>
+								`)}
+							</div>
+						</div>
+					</div>
+				</header>
+				<div class="row">
+					<div class="col-12 col-lg-6">
+						<div class="my-3 p-3 bg-body rounded shadow-sm">
+							<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
+							${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
+								
+								<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
+								<div class="list-group mb-3">
+									${findings.map((finding) => {
+										return html`
+								<div class="list-group-item list-group-item-action">
+									<div class="d-flex w-100 justify-content-between">
+										<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank"><h6 class="mb-1">${finding.title} - #${finding.iid}</h6></a>
+										<small>Updated ${moment(finding.updated_at).fromNow()}</small>
+									</div>
+									<p class="mb-1">${finding.description} </p>
+									<small>Created at: ${moment(finding.created_at).calendar()}</small>
+								</div>
+							`;
+									})}
+								</div>
+							`)}
+							
+							<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
+							<div class="list-group">
+								${this.nonFindings.map((nonFinding) => html`
+								<div class="list-group-item list-group-item-action">
+									<div class="d-flex w-100 justify-content-between">
+										<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank"><h6 class="mb-1">${nonFinding.title} - #${nonFinding.iid}</h6></a>
+										<small>Updated ${moment(nonFinding.updated_at).fromNow()}</small>
+									</div>
+									<p class="mb-1">${nonFinding.description}</p>
+									<small>Created at: ${moment(nonFinding.created_at).calendar()}</small>
+								</div>`)}
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-lg-6">
+						<div class="row">
+							<div class="col-12">
+								<div class="my-3 p-3 bg-body rounded shadow-sm">
+									<h3>Recently changed Findings</h3>
+									<div class="list-group mb-3">
+										${this.recentFindings.map((finding) => html`
+											<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
+										`)}
+									</div>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="my-3 p-3 bg-body rounded shadow-sm">
+									<h3>History</h3>
+									${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
+										<h4>${moment(day).format("dddd, DD.MM.YYYY")}</h4>
+										<div class="mb-3">
+											${events.map((eventData) => html`
+											<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
 											`)}
 										</div>
-									</div>
-								</div>
-								<div class="col-12">
-									<div class="my-3 p-3 bg-body rounded shadow-sm">
-										<h3>History</h3>
-										${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
-											<h4>${moment(day).format("dddd, DD.MM.YYYY")}</h4>
-											<div class="mb-3">
-												${events.map((eventData) => html`
-												<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
-												`)}
-											</div>
-										`;})}
-									</div>
+									`;})}
 								</div>
 							</div>
 						</div>
-
-						
 					</div>
-				</main>
-			</div>
+				</div>
+			</main>
 		</div>
 		`;
 	}
