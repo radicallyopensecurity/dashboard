@@ -209,7 +209,7 @@ export class Project extends GitlabProject {
 
 		<div class="row">
 			<div class="col-12">
-				<div class="w-100 pt-1">
+				<div class="mx-3 mt-3">
 					<nav aria-label="breadcrumb" class="d-flex">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item">Projects</li>
@@ -222,7 +222,7 @@ export class Project extends GitlabProject {
 		</div>
 		<div class="row">
 			<div class="col-12 bg-light">
-				<header class="my-3 p-3 bg-body rounded shadow-sm bg-body">
+				<header class="p-3 bg-body rounded shadow-sm bg-body">
 					<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2 mb-3 border-bottom">
 						<div class="flex-grow-1">
 							<h1>${this.gitlabProjectData.name}</h1>
