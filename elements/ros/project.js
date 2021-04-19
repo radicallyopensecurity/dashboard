@@ -186,8 +186,8 @@ export class Project extends GitlabProject {
 	static get styles() {
 		return css`
 		.avatar {
-			width: 100px;
-			height: 100px;
+			width: 138px;
+			height: 138px;
 		}
 		`;
 	}
@@ -209,61 +209,63 @@ export class Project extends GitlabProject {
 
 		<div class="row">
 			<div class="col-12">
-				<div class="mx-3 mt-3">
-					<nav aria-label="breadcrumb" class="d-flex">
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item">Projects</li>
-							<li class="breadcrumb-item">${this.gitlabProjectData.namespace.name}</li>
-							<li class="breadcrumb-item active" aria-current="page">${this.gitlabProjectData.name}</li>
-						</ol>
-					</nav>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12 bg-light">
-				<header class="p-3 bg-body rounded shadow-sm bg-body">
-					<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2 mb-3 border-bottom">
+				<header class="p-3 bg-body rounded shadow-sm">
+					<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
 						<div class="flex-grow-1">
+							<nav aria-label="breadcrumb" class="d-flex">
+								<ol class="breadcrumb mb-2">
+									<li class="breadcrumb-item">Projects</li>
+									<li class="breadcrumb-item">${this.gitlabProjectData.namespace.name}</li>
+									<li class="breadcrumb-item active" aria-current="page">${this.gitlabProjectData.name}</li>
+								</ol>
+							</nav>
 							<h1>${this.gitlabProjectData.name}</h1>
-						</div>
-						<img class="avatar me-3" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
-					</div>
-					<div class="d-flex flex-row justify-content-between align-items-end mb-3">
-						<div class="d-flex me-auto">
-							<ul class="list-group list-group-horizontal">
-								<li class="list-group-item">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
-								<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
-							</ul>
-						</div>
-						<div class="d-flex">
-							${channelName !== undefined ? html`
-								<a aria-current="page" href="https://chat.radicallyopensecurity.com/group/${channelName}" target="_blank" role="button" class="btn btn-secondary me-2">
-									<ui-icon icon="message-square"></ui-icon>
-									Chat
-								</a>
-							` : ''}
-							${this.gitlabProjectData.web_url !== undefined ? html`
-								<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
-									<ui-icon icon="gitlab"></ui-icon>
-									Git
-								</a>
-							` : ''}
-						</div>
-						<div class="d-flex btn-toolbar">
-							<div class="input-group flex-nowrap">
-								${!!this.pdfPassword ? html`<span class="input-group-text">
-									<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
-								</span>` : ``}
-								<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
-									Report
-									<ui-icon icon="file-text"></ui-icon>
-								</a>
+							<div class="d-flex me-auto d-none">
+								<ul class="list-group list-group-horizontal">
+									<li class="list-group-item">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+									<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
+								</ul>
+							</div>
+							<div class="d-flex flex-row align-items-end mt-3 mb-3">
+								<div class="d-flex">
+									${channelName !== undefined ? html`
+										<a aria-current="page" href="https://chat.radicallyopensecurity.com/group/${channelName}" target="_blank" role="button" class="btn btn-secondary me-2">
+											<ui-icon icon="message-square"></ui-icon>
+											Chat
+										</a>
+									` : ''}
+									${this.gitlabProjectData.web_url !== undefined ? html`
+										<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
+											<ui-icon icon="gitlab"></ui-icon>
+											Git
+										</a>
+									` : ''}
+								</div>
+								<div class="d-flex btn-toolbar">
+									<div class="input-group flex-nowrap">
+										${!!this.pdfPassword ? html`<span class="input-group-text">
+											<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
+										</span>` : ``}
+										<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
+											Report
+											<ui-icon icon="file-text"></ui-icon>
+										</a>
+									</div>
+								</div>
 							</div>
 						</div>
+						<div class="ms-3 align-self-stretch">
+							<img class="avatar" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
+						</div>
 					</div>
+				</div>
+			</header>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="p-3 bg-body rounded shadow-sm mt-3">
 					<div class="d-flex flex-row w-100 align-self-stretch">
-						<div class="border rounded p-2">
+						<div class="border rounded p-2 flex-grow-1">
 							<h5>Staff</h5>
 							<div class="d-flex flex-wrap">
 								${this.staff.map((member) => html`
@@ -277,7 +279,7 @@ export class Project extends GitlabProject {
 								`)}
 							</div>
 						</div>
-						<div class="border rounded p-2 ms-2">
+						<div class="border rounded p-2 ms-2 flex-grow-1">
 							<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
 							<div class="d-flex flex-wrap">
 								${this.customers.map((member) => html`
@@ -292,7 +294,7 @@ export class Project extends GitlabProject {
 							</div>
 						</div>
 					</div>
-				</header>
+				</div>
 				<div class="row">
 					<div class="col-12 col-lg-6">
 						<div class="my-3 p-3 bg-body rounded shadow-sm">
