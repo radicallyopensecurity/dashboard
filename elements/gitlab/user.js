@@ -9,6 +9,7 @@ class GitlabUser extends Gitlab {
 		a {
 			--line-height: 24px;
 			line-height: var(--line-height);
+			text-decoration: none;
 		}
 		`;
 	}
@@ -38,7 +39,10 @@ class GitlabUser extends Gitlab {
 	render() {
 		return html`
 			<link rel="stylesheet" href="style.css"/>
-			<a href="/${this.user.username}" target="_blank"><gitlab-avatar .user="${this.user}"></gitlab-avatar>${this.user.name}</a>`;
+			<a href="/${this.user.username}" target="_blank">
+				<gitlab-avatar .user="${this.user}"></gitlab-avatar>
+				<span class="ms-2">${this.user.name}</span>
+			</a>`;
 	}
 
 }

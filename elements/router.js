@@ -103,7 +103,9 @@ class Router extends LitSync(LitElement) {
 
 			<ul class="navbar-nav px-3">
 				<li class="nav-item text-nowrap">
-					<div class="nav-link" href="#"><gitlab-user></gitlab-user></div>
+					<div class="nav-link" href="#">
+						<gitlab-user></gitlab-user>
+					</div>
 				</li>
 			</ul>
 		</header>
