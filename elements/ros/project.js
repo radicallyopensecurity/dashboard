@@ -232,8 +232,8 @@ export class Project extends GitlabProject {
 					<div class="d-flex flex-row justify-content-between align-items-end mb-3">
 						<div class="d-flex me-auto">
 							<ul class="list-group list-group-horizontal">
-								<li class="list-group-item active" aria-current="true">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
-								<li class="list-group-item bg-secondary text-white">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
+								<li class="list-group-item">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+								<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 							</ul>
 						</div>
 						<div class="d-flex">
