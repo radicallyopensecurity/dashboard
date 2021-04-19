@@ -28,6 +28,13 @@ class SidebarView extends LitSync(LitElement) {
 		}
 	}
 
+	get onChangeSearchInput() {
+		return (e) => {
+			this.search = e.target.value;
+			window.location.hash = '';
+		};
+	}
+
 	render() {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>

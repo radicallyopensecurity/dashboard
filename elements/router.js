@@ -54,23 +54,12 @@ class Router extends LitSync(LitElement) {
 		}
 	}
 
-	clearSearchInput() {
-		this.search = "";
-	}
-
 	updated(changedProperties) {
 		super.updated(changedProperties);
 		const keys = [...changedProperties.keys()];
 		if (keys.includes("gitlabProjectId") && this.gitlabProjectId !== null) {
-			this.clearSearchInput();
+			this.search = "";
 		}
-	}
-
-	get onChangeSearchInput() {
-		return (e) => {
-			this.search = e.target.value;
-			window.location.hash = '';
-		};
 	}
 
 	render() {
