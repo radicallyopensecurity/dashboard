@@ -37,7 +37,8 @@ export class Project extends GitlabProject {
 
 	get members() {
 		return this.gitlabProjectMembers
-			.filter((member) => member.username !== `project_${this.gitlabProjectId}_bot`);
+			.filter((member) => member.username !== `project_${this.gitlabProjectId}_bot`)
+			.filter((member) => ["rosbot", "golem"].indexOf(member.username.toLowerCase()) === -1);
 	}
 
 	get staff() {
