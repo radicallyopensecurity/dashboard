@@ -71,8 +71,7 @@ class Router extends LitSync(LitElement) {
 			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"></ros-project>`;
 		} else {
 			view = html`<ros-overview
-					.params=${{search: "pen-", order_by: "last_activity_at"}}
-					.search="${this.sync('search')}"
+					.params=${{search: this.search, order_by: "last_activity_at"}}
 					perPage="20"
 				></ros-overview>`;
 		}
@@ -98,8 +97,9 @@ class Router extends LitSync(LitElement) {
 				</li>
 			</ul>
 		</header>
-		<sidebar-view>${view}</sidebar-view>`;
-
+		<sidebar-view .search="${this.sync('search')}">
+			${view}
+		</sidebar-view>`;
 
 	}
 

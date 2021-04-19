@@ -1,9 +1,9 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
-import { LitSync } from '../../web_modules/@morbidick/lit-element-notify.js';
+import { LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
 import "../ros/projects.js";
 
-class SidebarView extends LitSync(LitElement) {
+class SidebarView extends LitNotify(LitElement) {
 
 	constructor() {
 		super();
@@ -28,10 +28,11 @@ class SidebarView extends LitSync(LitElement) {
 		}
 	}
 
-	get onChangeSearchInput() {
+	get onSearch() {
 		return (e) => {
-			this.search = e.target.value;
-			window.location.hash = '';
+			this.search = e.target.search.value;
+			e.preventDefault();
+			e.stopPropagation();
 		};
 	}
 
@@ -43,18 +44,22 @@ class SidebarView extends LitSync(LitElement) {
 		<div class="container-fluid">
 			<div class="row">
 				<nav id="sidebarMenu" class="col-md-3 col-xl-2 d-md-block bg-body sidebar collapse">
-					<div class="position-sticky pt-3">
-						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1">
-							<span>Search</span>
-						</h6>
-						<input id="search" name="search"
-							@input=${this.onChangeSearchInput}
-							.value="${this.search}"
-							class="form-control form-control-dark w-100" type="text"
-							placeholder="Search"
-							aria-label="Search" />
-						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-							<span>Actions</span>
+					<div class="position-sticky px-3 mt-4 mb-1">
+						<form @submit="${this.onSearch}">
+							<div class="input-group">
+								<input id="search" name="search" type="search"
+									.value="${this.search}"
+									class="form-control"
+									placeholder="Search"
+									aria-label="Search"
+									aria-describedby="search-button" />
+								<button class="input-group-text btn-primary" id="search-button">
+									<ui-icon icon="search"></ui-icon>
+								</button>
+							</div>
+						</form>
+						<h6 class="sidebar-heading text-muted">
+							<span>Projects</span>
 						</h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
@@ -70,7 +75,8 @@ class SidebarView extends LitSync(LitElement) {
 								</a>
 							</li>
 						</ul>
-						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+
+						<h6 class="sidebar-heading mt-3 text-muted">
 							<span>ROS Services</span>
 						</h6>
 						<ul class="nav flex-column">
