@@ -210,7 +210,7 @@ export class Project extends GitlabProject {
 
 		<div class="row">
 			<div class="col-12">
-				<header class="p-3 bg-body rounded shadow-sm">
+				<header><ui-content-card>
 					<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
 						<div class="flex-grow-1">
 							<ui-breadcrumbs>
@@ -258,7 +258,7 @@ export class Project extends GitlabProject {
 						</div>
 					</div>
 				</div>
-			</header>
+			</ui-content-card></header>
 		</div>
 		<div class="row">
 			<div class="col-12">

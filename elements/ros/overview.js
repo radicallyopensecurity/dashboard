@@ -4,6 +4,7 @@ import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { GitlabProjects } from '../gitlab/index.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
+import '../ui/content-card.js';
 
 class Overview extends GitlabProjects {
 
@@ -36,7 +37,7 @@ class Overview extends GitlabProjects {
 	}
 
 	renderSection(name, projects) {
-		return html`<div class="col-12 col-xl-6">
+		return html`
 			<div class="row">
 				<div class="col-12"><h2>${name}</h2></div>
 			</div>
@@ -65,7 +66,7 @@ class Overview extends GitlabProjects {
 					</div>
 				</div>
 			</div>
-		</div>`;
+		`;
 	}
 
 	render() {
@@ -82,7 +83,7 @@ class Overview extends GitlabProjects {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 
 		<div class="col-12 bg-light">
-			<div class="my-3 p-3 bg-body rounded shadow-sm bg-body">
+			<ui-content-card>
 				<ui-breadcrumbs>
 					<span>Projects</span>
 				</ui-breadcrumbs>
@@ -92,11 +93,15 @@ class Overview extends GitlabProjects {
 						<span class="visually-hidden">Loading...</span>
 					</div>
 				</div>
-			</div>
+			</ui-content-card>
 			${this.projects.length > 0 ? html`
-				<div class="row">
-					${this.renderSection("Pentests", pentests)}
-					${this.renderSection("Offers", offertes)}
+				<div class="row gx-3">
+					<ui-content-card class="col-12 col-xl-6">
+						${this.renderSection("Pentests", pentests)}
+					</ui-content-card>
+					<ui-content-card class="col-12 col-xl-6">
+						${this.renderSection("Offers", offertes)}
+					</ui-content-card>
 				</div>
 			` : (!this.loading) ? html`
 				<p>No projects found</p>
