@@ -8,6 +8,7 @@ class SidebarView extends LitNotify(LitElement) {
 	constructor() {
 		super();
 		this.search = "";
+		this.forceSidebarVisible = false;
 	}
 
 	static get styles() {
@@ -24,6 +25,23 @@ class SidebarView extends LitNotify(LitElement) {
 			search: {
 				type: String,
 				notify: true
+			},
+			forceSidebarVisible: {
+				type: Boolean,
+				notify: false
+			}
+		}
+	}
+
+	updated(changedProperties) {
+		super.updated(changedProperties);
+		const keys = [...changedProperties.keys()];
+
+		if (keys.includes("forceSidebarVisible")) {
+			if (this.forceSidebarVisible === true) {
+				this.shadowRoot.getElementById("sidebar").classList.add("show");
+			} else {
+				this.shadowRoot.getElementById("sidebar").classList.remove("show");
 			}
 		}
 	}
@@ -43,8 +61,8 @@ class SidebarView extends LitNotify(LitElement) {
 
 		<div class="container-fluid">
 			<div class="row">
-				<nav id="sidebarMenu" class="col-md-3 col-xl-2 d-md-block bg-body sidebar collapse">
-					<div class="position-sticky mx-3 mt-4 mb-1">
+				<nav id="sidebar" class="col-md-3 col-xl-2 pt-5 d-md-block bg-body sidebar collapse shadow-md">
+					<div class="position-sticky mx-1 mt-4 mb-1">
 						<form @submit="${this.onSearch}">
 							<div class="input-group">
 								<input id="search" name="search" type="search"

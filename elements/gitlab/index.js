@@ -262,11 +262,13 @@ export class GitlabProjects extends Gitlab {
 		}
 	};
 
-	debouncedSearch = this.debounce(this.fetch, 500);
+	debouncedSearch() {
+		this.debounce(this.fetch, 500);
+	}
 
 	updated(changedProperties) {
 		const keys = [...changedProperties.keys()];
-		if (keys.includes("params") ) {
+		if (keys.includes("params")) {
 			this.debouncedSearch();
 		}
 	}

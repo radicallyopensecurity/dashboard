@@ -12,6 +12,7 @@ class Router extends LitSync(LitElement) {
 	constructor() {
 		super();
 		this.projectId = null;
+		this.forceSidebarVisible = false;
 		this.search = "";
 		this.onHashChange();
 	}
@@ -26,6 +27,9 @@ class Router extends LitSync(LitElement) {
 			search: {
 				type: String,
 				notify: true
+			},
+			forceSidebarVisible: {
+				type: Boolean
 			}
 		}
 	}
@@ -51,6 +55,7 @@ class Router extends LitSync(LitElement) {
 				this.gitlabProjectId = parseInt(hashFragments[0], 10) || null;
 			}
 			this.route = hashFragments[1];
+			this.forceSidebarVisible = false;
 		}
 	}
 
@@ -59,6 +64,12 @@ class Router extends LitSync(LitElement) {
 		const keys = [...changedProperties.keys()];
 		if (keys.includes("gitlabProjectId") && this.gitlabProjectId !== null) {
 			this.search = "";
+		}
+	}
+
+	get onClickSidebarToggle() {
+		return (e) => {
+			this.forceSidebarVisible = !this.forceSidebarVisible;
 		}
 	}
 
@@ -79,13 +90,14 @@ class Router extends LitSync(LitElement) {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
-		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-			<a class="navbar-brand text-center me-0 px-3"
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow">
+
+			<a class="navbar-brand text-center me-auto px-3"
 			   href=".">
 				Radically Open Security
 			</a>
 
-			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+			<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -97,7 +109,7 @@ class Router extends LitSync(LitElement) {
 				</li>
 			</ul>
 		</header>
-		<sidebar-view .search="${this.sync('search')}">
+		<sidebar-view .search="${this.sync('search')}" .forceSidebarVisible="${this.sync('forceSidebarVisible')}">
 			${view}
 		</sidebar-view>`;
 
