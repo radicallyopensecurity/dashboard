@@ -4,6 +4,7 @@ import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import '../ui/icon.js';
+import '../ui/breadcrumbs.js';
 import './project/projectActivity.js';
 import './project/projectRecentIssues.js';
 
@@ -212,13 +213,11 @@ export class Project extends GitlabProject {
 				<header class="p-3 bg-body rounded shadow-sm">
 					<div class="d-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
 						<div class="flex-grow-1">
-							<nav aria-label="breadcrumb" class="d-flex">
-								<ol class="breadcrumb mb-2">
-									<li class="breadcrumb-item">Projects</li>
-									<li class="breadcrumb-item">${this.gitlabProjectData.namespace.name}</li>
-									<li class="breadcrumb-item active" aria-current="page">${this.gitlabProjectData.name}</li>
-								</ol>
-							</nav>
+							<ui-breadcrumbs>
+								<span>Projects</span>
+								<span>${this.gitlabProjectData.namespace.name}</span>
+								<span>${this.gitlabProjectData.name}</span>
+							</ui-breadcrumbs>
 							<h1>${this.gitlabProjectData.name}</h1>
 							<div class="d-flex me-auto d-none">
 								<ul class="list-group list-group-horizontal">
