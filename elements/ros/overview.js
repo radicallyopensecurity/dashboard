@@ -70,7 +70,6 @@ class Overview extends GitlabProjects {
 		const pentests = this.projects.filter((project) => project.name.startsWith("pen-"));
 		const offertes = this.projects.filter((project) => project.name.startsWith("off-"));
 		return html`
-		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 
 		<div class="col-12 bg-light">

@@ -34,7 +34,6 @@ class Projects extends GitlabProjects {
 
 	render() {
 		return html`
-		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 
 		<div class="col-12 bg-light">

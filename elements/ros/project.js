@@ -204,7 +204,6 @@ export class Project extends GitlabProject {
 		const channelName = this.channelName;
 
 		return html`
-		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
