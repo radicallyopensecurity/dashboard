@@ -44,7 +44,7 @@ class SidebarView extends LitNotify(LitElement) {
 		<div class="container-fluid">
 			<div class="row">
 				<nav id="sidebarMenu" class="col-md-3 col-xl-2 d-md-block bg-body sidebar collapse">
-					<div class="position-sticky px-3 mt-4 mb-1">
+					<div class="position-sticky mx-3 mt-4 mb-1">
 						<form @submit="${this.onSearch}">
 							<div class="input-group">
 								<input id="search" name="search" type="search"
@@ -102,7 +102,7 @@ class SidebarView extends LitNotify(LitElement) {
 					</div>
 				</nav>
 
-				<main class="col-md-9 col-xl-10 offset-md-3 offset-xl-2 mt-3">
+				<main class="col-md-9 col-xl-10 offset-md-3 offset-xl-2 mt-3 px-3">
 					<slot></slot>
 				</main>
 			</div>
