@@ -18,6 +18,7 @@
     "install": [
       "moment",
       "lit-element",
+      "lit-html/directives/class-map",
       "bootstrap",
       "@webcomponents/webcomponentsjs",
       "@morbidick/lit-element-notify"

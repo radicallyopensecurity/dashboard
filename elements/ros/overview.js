@@ -1,5 +1,6 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
+import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { GitlabProjects } from '../gitlab/index.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
@@ -70,6 +71,13 @@ class Overview extends GitlabProjects {
 	render() {
 		const pentests = this.projects.filter((project) => project.name.startsWith("pen-"));
 		const offertes = this.projects.filter((project) => project.name.startsWith("off-"));
+
+		const loadingIndicatorClass = classMap({
+			"spinner-border": true,
+			"me-2": true,
+			"d-none": !this.loading
+		});
+
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 
@@ -78,12 +86,12 @@ class Overview extends GitlabProjects {
 				<ui-breadcrumbs>
 					<span>Projects</span>
 				</ui-breadcrumbs>
-				<h1>Overview</h1>
-				${this.loading ? html`
-					<div class="spinner-border mb-2" role="status">
+				<div class="d-flex align-items-center">
+					<h1 class="me-auto">Overview</h1>
+					<div class="${loadingIndicatorClass}" role="status">
 						<span class="visually-hidden">Loading...</span>
 					</div>
-				`: ''}
+				</div>
 			</div>
 			${this.projects.length > 0 ? html`
 				<div class="row">
