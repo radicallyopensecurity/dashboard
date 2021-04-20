@@ -2,6 +2,7 @@ import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { GitlabProjects } from '../gitlab/index.js';
 import '../ui/icon.js';
+import '../ui/breadcrumbs.js';
 
 class Overview extends GitlabProjects {
 
@@ -74,6 +75,9 @@ class Overview extends GitlabProjects {
 
 		<div class="col-12 bg-light">
 			<div class="my-3 p-3 bg-body rounded shadow-sm bg-body">
+				<ui-breadcrumbs>
+					<span>Projects</span>
+				</ui-breadcrumbs>
 				<h1>Overview</h1>
 				${this.loading ? html`
 					<div class="spinner-border mb-2" role="status">
