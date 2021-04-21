@@ -92,9 +92,9 @@ class Router extends LitSync(LitElement) {
 		<link rel="stylesheet" href="dashboard.css"/>
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
 
-			<a class="navbar-brand text-center me-auto"
-			   href=".">
-				Radically Open Security
+			<a class="navbar-brand text-center me-auto" href=".">
+				<span class="d-none d-sm-inline">Radically Open Security</span>
+				<span class="d-sm-none">ROS</span>
 			</a>
 
 			<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
