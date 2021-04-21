@@ -225,8 +225,8 @@ export class Project extends GitlabProject {
 									<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 								</ul>
 							</div>
-							<div class="d-flex flex-row align-items-end mt-3 mb-3 justify-content-center">
-								<div class="d-flex">
+							<div class="d-flex flex-row align-items-end mt-3 justify-content-center">
+								<div class="d-flex text-nowrap mb-3">
 									${channelName !== undefined ? html`
 										<a aria-current="page" href="https://chat.radicallyopensecurity.com/group/${channelName}" target="_blank" role="button" class="btn btn-secondary me-2">
 											<ui-icon icon="message-square"></ui-icon>
@@ -240,7 +240,7 @@ export class Project extends GitlabProject {
 										</a>
 									` : ''}
 								</div>
-								<div class="d-flex btn-toolbar me-sm-auto">
+								<div class="d-flex btn-toolbar text-nowrap me-sm-auto mb-3">
 									<div class="input-group flex-nowrap">
 										${!!this.pdfPassword ? html`<span class="input-group-text">
 											<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
