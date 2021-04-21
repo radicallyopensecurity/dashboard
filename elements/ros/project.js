@@ -262,7 +262,7 @@ export class Project extends GitlabProject {
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<div class="p-3 bg-body rounded shadow-sm mt-3">
+				<div class="p-3 bg-body rounded shadow-sm">
 					<div class="d-flex flex-row w-100 align-self-stretch">
 						<div class="border rounded p-2 flex-grow-1">
 							<h5>Staff</h5>
