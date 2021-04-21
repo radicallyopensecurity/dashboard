@@ -2,6 +2,8 @@ import { LitElement, html } from '../../web_modules/lit-element.js';
 import { LitSync, LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
 import { GitlabProject, gitlabAuth } from '../gitlab/index.js';
 import { DropdownInput } from '../ui/input/dropdown.js';
+import '../ui/breadcrumbs.js';
+import '../ui/content-card.js';
 import '../ros/project/member-chooser.js';
 
 const PM_GROUP_PATH = "pm";
@@ -192,48 +194,54 @@ class NewRosProject extends LitSync(GitlabProject) {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
-		<form name="new" @submit="${this.onSubmitForm}">
-			<legend>Create New Project</legend>
-			<div class="row mb-3">
-				<label class="col-3 col-form-label">Namespace</label>
-				<div class="col-9">
-					<gitlab-namespace-chooser label="Namespace" .value="${this.sync('namespace_id')}"></gitlab-namespace-chooser>
-				</div>
-			</div>
-			<div class="row mb-3">
-				<label class="col-3 col-form-label" for="repository">Project</label>
-				<div class="col-9">
-					<div class="input-group">
-						<span class="input-group-text">off-</span>
-						<input type="text" name="title"
-							aria-label="Name"
-							id="repository"
-							class="form-control"
-							value="${this.title}"
-							@change="${this.onChangeInput}"
-							placeholder="my-new-project"
-						/>
+		<ui-content-card>
+			<ui-breadcrumbs>
+				<span>Projects</span>
+				<span>New</span>
+			</ui-breadcrumbs>
+			<form name="new" @submit="${this.onSubmitForm}">
+				<h1 aria-role="legend">Create New Project</h1>
+				<div class="row mt-3 mb-3">
+					<label class="col-3 col-form-label">Namespace</label>
+					<div class="col-9">
+						<gitlab-namespace-chooser label="Namespace" .value="${this.sync('namespace_id')}"></gitlab-namespace-chooser>
 					</div>
 				</div>
-			</div>
-			<div class="row mb-3">
-				<label class="col-3 col-form-label">Template</label>
-				<div class="col-9">
-					<gitlab-template-chooser label="Template" .value="${this.sync('import_url')}" .topic="${this.topic}"></gitlab-template-chooser>
+				<div class="row mb-3">
+					<label class="col-3 col-form-label" for="repository">Project</label>
+					<div class="col-9">
+						<div class="input-group">
+							<span class="input-group-text">off-</span>
+							<input type="text" name="title"
+								aria-label="Name"
+								id="repository"
+								class="form-control"
+								value="${this.title}"
+								@change="${this.onChangeInput}"
+								placeholder="my-new-project"
+							/>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="row mb-3 d-none">
-				<label class="col-3 col-form-label">Members</label>
-				<div class="col-9">
-					<ros-project-member-chooser label="Members" .gitlabProjectId="${this.gitlabProjectId}" .value="${this.sync('next_member')}" .topic="${this.topic}"></ros-project-member-chooser>
+				<div class="row mb-3">
+					<label class="col-3 col-form-label">Template</label>
+					<div class="col-9">
+						<gitlab-template-chooser label="Template" .value="${this.sync('import_url')}" .topic="${this.topic}"></gitlab-template-chooser>
+					</div>
 				</div>
-			</div>
-			<div class="row mb-3">
-				<div class="offset-3">
-					<button class="btn btn-primary mb-3" type="submit" .disabled="${!this.valid}">Create</button>
+				<div class="row mb-3 d-none">
+					<label class="col-3 col-form-label">Members</label>
+					<div class="col-9">
+						<ros-project-member-chooser label="Members" .gitlabProjectId="${this.gitlabProjectId}" .value="${this.sync('next_member')}" .topic="${this.topic}"></ros-project-member-chooser>
+					</div>
 				</div>
-			</div>
-		</form>
+				<div class="row mb-3">
+					<div class="offset-3">
+						<button class="btn btn-primary mb-3" type="submit" .disabled="${!this.valid}">Create</button>
+					</div>
+				</div>
+			</form>
+		</ui-content-card>
 		`;
 	}
 
