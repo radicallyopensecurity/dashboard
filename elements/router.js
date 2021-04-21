@@ -90,9 +90,9 @@ class Router extends LitSync(LitElement) {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
-		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow">
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
 
-			<a class="navbar-brand text-center me-auto px-3"
+			<a class="navbar-brand text-center me-auto"
 			   href=".">
 				Radically Open Security
 			</a>
@@ -101,7 +101,7 @@ class Router extends LitSync(LitElement) {
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
-			<ul class="navbar-nav px-3">
+			<ul class="navbar-nav ms-3">
 				<li class="nav-item text-nowrap">
 					<div class="nav-link" href="#">
 						<gitlab-user></gitlab-user>
