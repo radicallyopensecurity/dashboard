@@ -159,6 +159,10 @@ export class Project extends GitlabProject {
 		}
 	}
 
+	get chatChannelUrl() {
+		return `https://chat.radicallyopensecurity.com/group/${this.channelName}`;
+	}
+
 	get _artifactDownloadUrl() {
 		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/${this.branchName}/raw/target/${this._assetFileName}?job=${gitlabCiJobName}`;
 	}
@@ -202,8 +206,6 @@ export class Project extends GitlabProject {
 		const findings = this.findings;
 		const nonFindings = this.nonFindings;
 
-		const channelName = this.channelName;
-
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
@@ -227,8 +229,8 @@ export class Project extends GitlabProject {
 							</div>
 							<div class="d-flex flex-row align-items-end mt-3 justify-content-center">
 								<div class="d-flex text-nowrap mb-3">
-									${channelName !== undefined ? html`
-										<a aria-current="page" href="https://chat.radicallyopensecurity.com/group/${channelName}" target="_blank" role="button" class="btn btn-secondary me-2">
+									${this.channelName !== undefined ? html`
+										<a aria-current="page" href="${this.chatChannelUrl}" target="_blank" role="button" class="btn btn-secondary me-2">
 											<ui-icon icon="message-square"></ui-icon>
 											Chat
 										</a>
@@ -259,6 +261,13 @@ export class Project extends GitlabProject {
 					</div>
 				</div>
 			</ui-content-card></header>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<ui-content-card>
+					<iframe id="chat" class="w-100" src="${this.chatChannelUrl}?layout=embedded"></iframe>
+				</ui-content-card>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-12">
