@@ -111,12 +111,19 @@ export class Gitlab extends LitElement {
 		const response = await fetch(_url, options);
 		const data = await response.json();
 
-		if (!(200 <= response.status < 300)) {
+		console.log(response.status);
+		if ((response.status < 200) || (response.status >= 300)) {
 
 			let message = `HTTP Error ${response.status}`;
 			switch (response.status) {
 				case 400:
 					message += `: ${data}`
+					break;
+				case 401:
+					const sign_in_url = "/users/sign_in?redirect_to_referer=yes";
+					message += `Redirecting to ${sign_in_url}`;
+					console.log(message);
+					window.location.href = sign_in_url;
 					break;
 			}
 
