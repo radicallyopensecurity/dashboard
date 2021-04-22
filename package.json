@@ -19,6 +19,7 @@
       "moment",
       "lit-element",
       "lit-html/directives/class-map",
+      "lit-html/directives/style-map",
       "bootstrap",
       "@webcomponents/webcomponentsjs",
       "@morbidick/lit-element-notify"

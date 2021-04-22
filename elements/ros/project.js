@@ -264,14 +264,14 @@ export class Project extends GitlabProject {
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<ui-content-card>
-					<iframe id="chat" class="w-100" src="${this.chatChannelUrl}?layout=embedded"></iframe>
+				<ui-content-card resize="vertical" height="500px">
+					<iframe id="chat" class="w-100 h-100" src="${this.chatChannelUrl}?layout=embedded"></iframe>
 				</ui-content-card>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-12">
-				<div class="p-3 bg-body rounded shadow-sm">
+				<ui-content-card>
 					<div class="d-flex flex-row w-100 align-self-stretch">
 						<div class="border rounded p-2 flex-grow-1">
 							<h5>Staff</h5>
@@ -302,70 +302,70 @@ export class Project extends GitlabProject {
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-12 col-lg-6">
-						<div class="my-3 p-3 bg-body rounded shadow-sm">
-							<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
-							${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
-								
-								<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
-								<div class="list-group mb-3">
-									${findings.map((finding) => {
-										return html`
-								<div class="list-group-item list-group-item-action">
-									<div class="d-flex w-100 justify-content-between">
-										<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank"><h6 class="mb-1">${finding.title} - #${finding.iid}</h6></a>
-										<small>Updated ${moment(finding.updated_at).fromNow()}</small>
-									</div>
-									<p class="mb-1">${finding.description} </p>
-									<small>Created at: ${moment(finding.created_at).calendar()}</small>
-								</div>
-							`;
-									})}
-								</div>
-							`)}
-							
-							<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
-							<div class="list-group">
-								${this.nonFindings.map((nonFinding) => html`
-								<div class="list-group-item list-group-item-action">
-									<div class="d-flex w-100 justify-content-between">
-										<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank"><h6 class="mb-1">${nonFinding.title} - #${nonFinding.iid}</h6></a>
-										<small>Updated ${moment(nonFinding.updated_at).fromNow()}</small>
-									</div>
-									<p class="mb-1">${nonFinding.description}</p>
-									<small>Created at: ${moment(nonFinding.created_at).calendar()}</small>
-								</div>`)}
+				</ui-content-card>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-lg-6">
+				<ui-content-card>
+					<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
+					${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
+						
+						<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
+						<div class="list-group mb-3">
+							${findings.map((finding) => {
+								return html`
+						<div class="list-group-item list-group-item-action">
+							<div class="d-flex w-100 justify-content-between">
+								<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank"><h6 class="mb-1">${finding.title} - #${finding.iid}</h6></a>
+								<small>Updated ${moment(finding.updated_at).fromNow()}</small>
 							</div>
+							<p class="mb-1">${finding.description} </p>
+							<small>Created at: ${moment(finding.created_at).calendar()}</small>
 						</div>
+					`;
+							})}
+						</div>
+					`)}
+					
+					<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
+					<div class="list-group">
+						${this.nonFindings.map((nonFinding) => html`
+						<div class="list-group-item list-group-item-action">
+							<div class="d-flex w-100 justify-content-between">
+								<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank"><h6 class="mb-1">${nonFinding.title} - #${nonFinding.iid}</h6></a>
+								<small>Updated ${moment(nonFinding.updated_at).fromNow()}</small>
+							</div>
+							<p class="mb-1">${nonFinding.description}</p>
+							<small>Created at: ${moment(nonFinding.created_at).calendar()}</small>
+						</div>`)}
 					</div>
-					<div class="col-12 col-lg-6">
-						<div class="row">
-							<div class="col-12">
-								<div class="my-3 p-3 bg-body rounded shadow-sm">
-									<h3>Recently changed Findings</h3>
-									<div class="list-group mb-3">
-										${this.recentFindings.map((finding) => html`
-											<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
-										`)}
-									</div>
-								</div>
+				</ui-content-card>
+			</div>
+			<div class="col-12 col-lg-6">
+				<div class="row">
+					<div class="col-12">
+						<ui-content-card>
+							<h3>Recently changed Findings</h3>
+							<div class="list-group mb-3">
+								${this.recentFindings.map((finding) => html`
+									<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
+								`)}
 							</div>
-							<div class="col-12">
-								<div class="my-3 p-3 bg-body rounded shadow-sm">
-									<h3>History</h3>
-									${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
-										<h4>${moment(day).format("dddd, DD.MM.YYYY")}</h4>
-										<div class="mb-3">
-											${events.map((eventData) => html`
-											<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
-											`)}
-										</div>
-									`;})}
+						</ui-content-card>
+					</div>
+					<div class="col-12">
+						<ui-content-card>
+							<h3>History</h3>
+							${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
+								<h4>${moment(day).format("dddd, DD.MM.YYYY")}</h4>
+								<div class="mb-3">
+									${events.map((eventData) => html`
+									<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
+									`)}
 								</div>
-							</div>
-						</div>
+							`;})}
+						</ui-content-card>
 					</div>
 				</div>
 			</div>
