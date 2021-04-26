@@ -315,15 +315,15 @@ export class Project extends GitlabProject {
 						<div class="list-group mb-3">
 							${findings.map((finding) => {
 								return html`
-						<div class="list-group-item list-group-item-action">
-							<div class="d-flex w-100 justify-content-between">
-								<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank"><h6 class="mb-1">${finding.title} - #${finding.iid}</h6></a>
-								<small>Updated ${moment(finding.updated_at).fromNow()}</small>
-							</div>
-							<p class="mb-1">${finding.description} </p>
-							<small>Created at: ${moment(finding.created_at).calendar()}</small>
-						</div>
-					`;
+									<div class="list-group-item list-group-item-action">
+										<div class="d-flex w-100 justify-content-between">
+											<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank"><h6 class="mb-1">${finding.title} - #${finding.iid}</h6></a>
+											<small>Updated ${moment(finding.updated_at).fromNow()}</small>
+										</div>
+										<p class="mb-1">${finding.description} </p>
+										<small>Created at: ${moment(finding.created_at).calendar()}</small>
+									</div>
+								`;
 							})}
 						</div>
 					`)}
