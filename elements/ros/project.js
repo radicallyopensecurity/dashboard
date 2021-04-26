@@ -310,18 +310,16 @@ export class Project extends GitlabProject {
 				<ui-content-card>
 					<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
 					${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
-						
 						<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
 						<div class="list-group mb-3">
 							${findings.map((finding) => {
 								return html`
 									<div class="list-group-item list-group-item-action">
-										<div class="d-flex w-100 justify-content-between">
-											<a href="${this.gitlabProjectData.web_url}/issues/${finding.iid}" target="_blank"><h6 class="mb-1">${finding.title} - #${finding.iid}</h6></a>
-											<small>Updated ${moment(finding.updated_at).fromNow()}</small>
+										<div class="lead">
+											<span class="small me-1 text-muted">${finding.iid}</span>
+											${finding.title}
 										</div>
-										<p class="mb-1">${finding.description} </p>
-										<small>Created at: ${moment(finding.created_at).calendar()}</small>
+										<div class="mt-1">${finding.description}</div>
 									</div>
 								`;
 							})}
