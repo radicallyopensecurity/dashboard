@@ -1,4 +1,5 @@
 import moment from '../../web_modules/moment.js';
+import marked from '../../web_modules/marked.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
@@ -319,7 +320,12 @@ export class Project extends GitlabProject {
 											<span class="small me-1 text-muted">${finding.iid}</span>
 											${finding.title}
 										</div>
-										<div class="mt-1">${finding.description}</div>
+										<div class="mt-1">
+											<iframe sandbox
+												srcdoc=${marked(finding.description, { gfm: true })}
+												@load=${(e) => { console.log(e); debugger; }}
+											></iframe>
+										</div>
 									</div>
 								`;
 							})}
