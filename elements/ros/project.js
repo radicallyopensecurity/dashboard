@@ -314,20 +314,43 @@ export class Project extends GitlabProject {
 						<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
 						<div class="list-group mb-3">
 							${findings.map((finding) => {
-								return html`
-									<div class="list-group-item list-group-item-action">
-										<div class="lead">
-											<span class="small me-1 text-muted">${finding.iid}</span>
-											${finding.title}
-										</div>
-										<div class="mt-1">
-											<iframe sandbox
-												srcdoc=${marked(finding.description, { gfm: true })}
-												@load=${(e) => { console.log(e); debugger; }}
-											></iframe>
-										</div>
-									</div>
-								`;
+
+								const $group = document.createElement("div");
+								$group.classList.add("list-group-item", "list-group-item-action");
+
+								const $lead = document.createElement("div");
+								$lead.classList.add("lead");
+
+									const $iid = document.createElement("span");
+									$iid.classList.add("small", "me-1", "text-muted");
+									$iid.textContent = finding.iid;
+									$lead.appendChild($iid);
+
+									const $title = document.createElement("span");
+									$title.textContent = finding.title;
+									$lead.appendChild($title);
+
+								const $preview = document.createElement("div");
+								$preview.classList.add("mt-1", "collapse");
+
+									const $iframe = document.createElement("iframe");
+									$iframe.setAttribute("sandbox", "");
+									$iframe.srcdoc = marked(finding.description, { gfm: true });
+									$iframe.addEventListener("load", (e) => {
+										console.log("iframe loaded", $iframe);
+									});
+
+									$preview.appendChild($iframe);
+
+								$group.appendChild($lead);
+								$group.appendChild($preview);
+
+								$group.addEventListener("click", (e) => {
+									debugger;
+									$preview.collapse();
+								});
+
+								return $group;
 							})}
 						</div>
 					`)}
