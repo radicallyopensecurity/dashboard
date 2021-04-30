@@ -338,7 +338,7 @@ export class Project extends GitlabProject {
 									$iframe.setAttribute("sandbox", "allow-same-origin");
 									$iframe.srcdoc = marked(finding.description, { gfm: true });
 									$iframe.updateHeight = () => {
-										$iframe.style.height = $iframe.contentDocument.body.offsetHeight + "px";
+										$iframe.style.height = $iframe.contentDocument.documentElement.offsetHeight + "px";
 									};
 									$iframe.addEventListener("load", (e) => {
 										setTimeout(() => $iframe.updateHeight(), 0);
