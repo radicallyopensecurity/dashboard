@@ -335,7 +335,7 @@ export class Project extends GitlabProject {
 								$preview.classList.add("mt-1", "collapse");
 
 									const $iframe = document.createElement("iframe");
-									$iframe.setAttribute("sandbox", "");
+									$iframe.setAttribute("sandbox", "allow-same-origin");
 									$iframe.srcdoc = marked(finding.description, { gfm: true });
 									$iframe.addEventListener("load", (e) => {
 										console.log("iframe loaded", $iframe);
