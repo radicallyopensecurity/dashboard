@@ -350,8 +350,7 @@ export class Project extends GitlabProject {
 								$group.appendChild($preview);
 
 								$group.addEventListener("click", (e) => {
-									debugger;
-									$preview.collapse();
+									new bootstrap.Collapse($preview);
 								});
 
 								return $group;
