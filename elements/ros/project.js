@@ -351,6 +351,7 @@ export class Project extends GitlabProject {
 
 								$group.addEventListener("click", (e) => {
 									new bootstrap.Collapse($preview);
+									$iframe.updateHeight();
 								});
 
 								return $group;
