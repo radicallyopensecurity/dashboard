@@ -341,7 +341,7 @@ export class Project extends GitlabProject {
 										$iframe.style.height = $iframe.contentDocument.body.offsetHeight + "px";
 									};
 									$iframe.addEventListener("load", (e) => {
-										$iframe.updateHeight();
+										setTimeout(() => $iframe.updateHeight(), 0);
 									});
 
 									$preview.appendChild($iframe);
