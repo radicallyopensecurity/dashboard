@@ -197,6 +197,24 @@ export class Project extends GitlabProject {
 			width: 138px;
 			height: 138px;
 		}
+
+		.preview iframe {
+			width: 100%;
+			transition: max-height 0.3s ease;
+		}
+
+		.preview iframe body {
+			background: red;
+		}
+
+		.preview-hidden .preview iframe {
+			max-height: 0px !important;
+		}
+
+		.list-group-item {
+			cursor: pointer;
+			transition: background-color 0.2 ease;
+		}
 		`;
 	}
 
@@ -317,28 +335,30 @@ export class Project extends GitlabProject {
 							${findings.map((finding) => {
 
 								const $group = document.createElement("div");
-								$group.classList.add("list-group-item", "list-group-item-action");
+								$group.classList.add("list-group-item", "list-group-item-action", "preview-hidden");
 
 								const $lead = document.createElement("div");
 								$lead.classList.add("lead");
 
 									const $iid = document.createElement("span");
-									$iid.classList.add("small", "me-1", "text-muted");
+									$iid.classList.add("small", "me-2", "text-muted");
 									$iid.textContent = finding.iid;
 									$lead.appendChild($iid);
 
 									const $title = document.createElement("span");
+									$title.classList.add("finding-title", "link-secondary");
 									$title.textContent = finding.title;
 									$lead.appendChild($title);
 
 								const $preview = document.createElement("div");
-								$preview.classList.add("mt-1", "collapse");
+								$preview.classList.add("mt-1", "preview");
 
 									const $iframe = document.createElement("iframe");
 									$iframe.setAttribute("sandbox", "allow-same-origin");
 									$iframe.srcdoc = marked(finding.description, { gfm: true });
 									$iframe.updateHeight = () => {
 										$iframe.style.height = $iframe.contentDocument.documentElement.offsetHeight + "px";
+										$iframe.style.maxHeight = $iframe.contentDocument.documentElement.offsetHeight + "px";
 									};
 									$iframe.addEventListener("load", (e) => {
 										setTimeout(() => $iframe.updateHeight(), 0);
@@ -350,8 +370,14 @@ export class Project extends GitlabProject {
 								$group.appendChild($preview);
 
 								$group.addEventListener("click", (e) => {
-									new bootstrap.Collapse($preview);
 									$iframe.updateHeight();
+									if ($group.classList.contains("preview-hidden")) {
+										$group.classList.remove("preview-hidden");
+										$group.classList.remove("list-group-item-action");
+									} else {
+										$group.classList.add("preview-hidden")
+										$group.classList.add("list-group-item-action");
+									}
 								});
 
 								return $group;
