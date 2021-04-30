@@ -161,7 +161,8 @@ export class Project extends GitlabProject {
 	}
 
 	get chatChannelUrl() {
-		return `https://chat.radicallyopensecurity.com/group/${this.channelName}`;
+		const chatHostname = window.location.hostname.replace(/^git\./, "chat.");
+		return `https://${chatHostname}/group/${this.channelName}`;
 	}
 
 	get _artifactDownloadUrl() {
