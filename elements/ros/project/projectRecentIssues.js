@@ -27,13 +27,16 @@ export class ProjectRecentIssues extends LitElement {
 
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-		<div class="d-flex text-muted pt-3 border-bottom">
+		<div class="d-flex pt-3">
 			<div class="d-flex justify-content-between w-100">
-				<p class="pb-3 mb-0">
-					<strong class="d-block text-gray-dark"><a href="${this.project.web_url}/issues/${this.finding.iid}" target="_blank">
-						${this.finding.title} - #${this.finding.iid}</a></strong>
-					${this.finding.description}
-				</p>
+				<span>
+					<span style="width: 3ch;" class="d-inline-block text-center small me-1">${this.finding.iid}</span>
+					<span class="finding-title">
+						<a href="${this.project.web_url}/issues/${this.finding.iid}" target="_blank">
+							${this.finding.title}
+						</a>
+					</span>
+				</span>
 				<small>${moment(this.finding.updated_at).fromNow()}</small>
 			</div>
 		</div>
