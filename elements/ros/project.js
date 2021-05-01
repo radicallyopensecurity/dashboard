@@ -240,19 +240,6 @@ export class Project extends GitlabProject {
 			height: 138px;
 		}
 
-		.preview {
-			overflow: hidden;
-			transition: max-height 0.3s ease;
-		}
-
-		.preview iframe {
-			width: 100%;
-		}
-
-		.preview-hidden .preview {
-			max-height: 0px !important;
-		}
-
 		.list-group-item {
 			cursor: pointer;
 			transition: background-color 0.2 ease;

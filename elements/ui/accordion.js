@@ -23,16 +23,29 @@ class Accordion extends LitElement {
 
 			if ($button.classList.contains("collapsed")) {
 				$button.classList.remove("collapsed");
-				$item.classList.remove("preview-hidden");
+				$item.classList.remove("content-hidden");
 			} else {
 				$button.classList.add("collapsed");
-				$item.classList.add("preview-hidden");
+				$item.classList.add("content-hidden");
 			}
 		};
 	}
 
 	static get styles() {
 		return css`
+		.content {
+			overflow: hidden;
+			transition: max-height 0.3s ease;
+		}
+
+		.content iframe {
+			width: 100%;
+		}
+
+		.content-hidden .content {
+			max-height: 0px !important;
+		}
+
 		.accordion-button * {
 			pointer-events: none;
 		}
@@ -44,21 +57,17 @@ class Accordion extends LitElement {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<div class="accordion mb-3">
 			${this.items.map((item) => html`
-				<div class="accordion-item preview-hidden">
+				<div class="accordion-item content-hidden">
 					<h2 class="accordion-header">
 						<button @click="${this.onClickButton}" class="accordion-button collapsed">${item.title}</button>
 					</h2>
-					<div class="accordion-collapse preview">
+					<div class="accordion-collapse content">
 						<div class="accordion-body pb-0">${item.content}</div>
 					</div>
 				</div>
 			`)}
 		</div>
 		`;
-	}
-
-	createRenderRoot() {
-		return this;
 	}
 
 }
