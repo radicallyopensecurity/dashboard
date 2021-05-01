@@ -313,7 +313,7 @@ export class Project extends GitlabProject {
 		</div>
 		<div class="row">
 			<div class="col-12 px-2 px-sm-3">
-				<ui-content-card resize="vertical" height="500px">
+				<ui-content-card resize="vertical" height="600px" seamless="true">
 					<iframe id="chat" class="w-100 h-100"
 						src="${this.chatChannelUrl}?layout=embedded"
 						sandbox="allow-scripts allow-same-origin allow-forms"

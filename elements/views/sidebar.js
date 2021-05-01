@@ -59,8 +59,8 @@ class SidebarView extends LitNotify(LitElement) {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
-		<div class="container-fluid">
-			<div class="row">
+		<div class="container-fluid h-100 d-block overflow-scroll pb-5">
+			<div class="row mx-0">
 				<nav id="sidebar" class="col-md-3 col-xl-2 pt-5 d-md-block bg-body sidebar collapse shadow-md">
 					<div class="position-sticky mx-1 mt-4 mb-1">
 						<form @submit="${this.onSearch}">
