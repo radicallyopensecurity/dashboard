@@ -401,12 +401,10 @@ export class Project extends GitlabProject {
 						<ui-content-card>
 							<h3>History</h3>
 							${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
-								<h4>${moment(day).format("dddd, DD.MM.YYYY")}</h4>
-								<div class="mb-3">
-									${events.map((eventData) => html`
-									<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
-									`)}
-								</div>
+								<h5>${moment(day).format("dddd, DD.MM.YYYY")}</h5>
+								${events.map((eventData) => html`
+								<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
+								`)}
 							`;})}
 						</ui-content-card>
 					</div>
