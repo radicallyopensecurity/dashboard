@@ -120,7 +120,7 @@ class SidebarView extends LitNotify(LitElement) {
 					</div>
 				</nav>
 
-				<main class="col-md-9 col-xl-10 offset-md-3 offset-xl-2 mt-3 px-3">
+				<main class="col-md-9 col-xl-10 offset-md-3 offset-xl-2 mt-3 px-0 px-sm-3">
 					<slot></slot>
 				</main>
 			</div>

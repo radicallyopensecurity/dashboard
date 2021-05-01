@@ -260,7 +260,7 @@ export class Project extends GitlabProject {
 		<link rel="stylesheet" href="dashboard.css"/>
 
 		<div class="row">
-			<div class="col-12">
+			<div class="col-12 px-2 px-sm-3 px-2 px-sm-3">
 				<header><ui-content-card>
 					<div class="d-block d-sm-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
 						<div class="flex-grow-1">
@@ -312,7 +312,7 @@ export class Project extends GitlabProject {
 			</ui-content-card></header>
 		</div>
 		<div class="row">
-			<div class="col-12">
+			<div class="col-12 px-2 px-sm-3">
 				<ui-content-card resize="vertical" height="500px">
 					<iframe id="chat" class="w-100 h-100"
 						src="${this.chatChannelUrl}?layout=embedded"
@@ -323,7 +323,7 @@ export class Project extends GitlabProject {
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12">
+			<div class="col-12 px-2 px-sm-3">
 				<ui-content-card>
 					<div class="d-flex flex-row w-100 align-self-stretch">
 						<div class="border rounded p-2 flex-grow-1">
