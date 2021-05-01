@@ -76,7 +76,7 @@ export class Project extends GitlabProject {
 		return this.gitlabProjectLabels
 			.filter((label) => {
 				return severities
-					.map((severity) => `${prefix}:${severity}`.toLowerCase())
+					.map((severity) => `${prefix}${severity}`.toLowerCase())
 					.includes(label.name.toLowerCase());
 			})
 			.map((label) => {
@@ -87,7 +87,7 @@ export class Project extends GitlabProject {
 			})
 			.sort((a, b) => severities.indexOf(a.name) - severities.indexOf(b.name))
 			.reduce((curr, next) => {
-				curr[next.name] = next;
+				curr[next.severity] = next;
 				return curr;
 			}, {});
 	}
