@@ -4,12 +4,12 @@ import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
+import '../ui/unsafe-content.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
 import './project/projectActivity.js';
 import './project/projectRecentIssues.js';
 
-const bootstrapCssUrl = "node_modules/bootstrap/dist/css/bootstrap.css";
 const gitlabCiJobName = "build";
 const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?<prefix>pen|off)-(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
@@ -268,7 +268,7 @@ export class Project extends GitlabProject {
 		const nonFindings = this.nonFindings;
 
 		return html`
-		<link rel="stylesheet" href="${bootstrapCssUrl}"/>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
 		<div class="row">
@@ -398,21 +398,11 @@ export class Project extends GitlabProject {
 									const $previewBody = document.createElement("div");
 									$previewBody.classList.add("accordion-body", "pb-0");
 
-										const $iframe = document.createElement("iframe");
-										$iframe.style.boxSizing = "content-box";
-										$iframe.setAttribute("sandbox", "allow-same-origin");
-										$iframe.srcdoc = `
-											<link rel="stylesheet" href="${bootstrapCssUrl}"/>
-											<h3 class="border-bottom border-secondary d-none">Description</h3>
-											${marked(finding.description, { gfm: true })}
+										const $iframe = document.createElement("ui-unsafe-content");
+										$iframe.unsafeHTML = `
+										<h3 class="border-bottom border-secondary d-none">Description</h3>
+										${marked(finding.description, { gfm: true })}
 										`;
-										$iframe.updateHeight = () => {
-											$iframe.style.height = $iframe.contentDocument.documentElement.offsetHeight + "px";
-											$preview.style.maxHeight = $previewBody.clientHeight + "px";
-										};
-										$iframe.addEventListener("load", (e) => {
-											setTimeout(() => $iframe.updateHeight(), 0);
-										});
 
 									$previewBody.appendChild($iframe);
 
@@ -423,6 +413,7 @@ export class Project extends GitlabProject {
 
 								$group.addEventListener("click", (e) => {
 									$iframe.updateHeight();
+									$preview.style.maxHeight = $previewBody.clientHeight + "px";
 									if ($headerButton.classList.contains("collapsed")) {
 										$headerButton.classList.remove("collapsed");
 										$group.classList.remove("preview-hidden");
