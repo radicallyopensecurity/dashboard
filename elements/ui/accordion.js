@@ -1,4 +1,4 @@
-import { LitElement, html } from '../../web_modules/lit-element.js';
+import { LitElement, html, css } from '../../web_modules/lit-element.js';
 
 class Accordion extends LitElement {
 
@@ -29,6 +29,14 @@ class Accordion extends LitElement {
 				$item.classList.add("preview-hidden");
 			}
 		};
+	}
+
+	static get styles() {
+		return css`
+		.accordion-button * {
+			pointer-events: none;
+		}
+		`;
 	}
 
 	render() {
