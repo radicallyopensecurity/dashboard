@@ -61,7 +61,7 @@ export class ProjectActivity extends LitElement {
 					<strong class="d-block text-gray-dark">${this.data.author.name}</strong>
 					${$message}
 				</p>
-				<small>${moment(created_at).fromNow()}</small>
+				<small>${moment(created_at).format("HH:mm")}</small>
 			</div>
 		</div>
 		`;
