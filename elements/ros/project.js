@@ -382,15 +382,15 @@ export class Project extends GitlabProject {
 					
 					<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
 					<div class="list-group">
-						${this.nonFindings.map((nonFinding) => html`
-						<div class="list-group-item list-group-item-action">
-							<div class="d-flex w-100 justify-content-between">
-								<a href="${this.gitlabProjectData.web_url}/issues/${nonFinding.iid}" target="_blank"><h6 class="mb-1">${nonFinding.title} - #${nonFinding.iid}</h6></a>
-								<small>Updated ${moment(nonFinding.updated_at).fromNow()}</small>
-							</div>
-							<p class="mb-1">${nonFinding.description}</p>
-							<small>Created at: ${moment(nonFinding.created_at).calendar()}</small>
-						</div>`)}
+						<ui-accordion .items="${nonFindings.map((nonFinding) => {
+							const title = html`
+								<span class="small me-2 text-muted">${nonFinding.iid}</span>
+								<span class="finding-title">${nonFinding.title}</span>
+							`;
+							const content = document.createElement("ui-unsafe-content");
+							content.unsafeHTML = marked(nonFinding.description, { gfm: true });
+							return { title, content };
+						})}"></ui-accordion>
 					</div>
 				</ui-content-card>
 			</div>
