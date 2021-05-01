@@ -331,29 +331,35 @@ export class Project extends GitlabProject {
 					<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
 					${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
 						<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
-						<div class="list-group mb-3">
+						<div class="accordion mb-3">
 							${findings.map((finding) => {
 
 								const $group = document.createElement("div");
-								$group.classList.add("list-group-item", "list-group-item-action", "preview-hidden");
+								$group.classList.add("accordion-item", "preview-hidden");
 
-								const $lead = document.createElement("div");
-								$lead.classList.add("lead");
+								const $header = document.createElement("h2");
+								$header.classList.add("accordion-header");
 
-									const $iid = document.createElement("span");
-									$iid.classList.add("small", "me-2", "text-muted");
-									$iid.textContent = finding.iid;
-									$lead.appendChild($iid);
+									const $headerButton = document.createElement("button");
+									$headerButton.classList.add("accordion-button", "collapsed");
 
-									const $title = document.createElement("span");
-									$title.classList.add("finding-title", "link-secondary");
-									$title.textContent = finding.title;
-									$lead.appendChild($title);
+										const $iid = document.createElement("span");
+										$iid.classList.add("small", "me-2", "text-muted");
+										$iid.textContent = finding.iid;
+										$headerButton.appendChild($iid);
+
+										const $title = document.createElement("span");
+										$title.classList.add("finding-title");
+										$title.textContent = finding.title;
+										$headerButton.appendChild($title);
+
+									$header.appendChild($headerButton);
 
 								const $preview = document.createElement("div");
-								$preview.classList.add("mt-1", "preview");
+								$preview.classList.add("mt-1", "accordion-collapse", "preview");
 
 									const $iframe = document.createElement("iframe");
+									$iframe.classList.add("accordion-body", "p-0");
 									$iframe.setAttribute("sandbox", "allow-same-origin");
 									$iframe.srcdoc = marked(finding.description, { gfm: true });
 									$iframe.updateHeight = () => {
@@ -366,17 +372,17 @@ export class Project extends GitlabProject {
 
 									$preview.appendChild($iframe);
 
-								$group.appendChild($lead);
+								$group.appendChild($header);
 								$group.appendChild($preview);
 
 								$group.addEventListener("click", (e) => {
 									$iframe.updateHeight();
-									if ($group.classList.contains("preview-hidden")) {
+									if ($headerButton.classList.contains("collapsed")) {
+										$headerButton.classList.remove("collapsed");
 										$group.classList.remove("preview-hidden");
-										$group.classList.remove("list-group-item-action");
 									} else {
+										$headerButton.classList.add("collapsed");
 										$group.classList.add("preview-hidden")
-										$group.classList.add("list-group-item-action");
 									}
 								});
 
