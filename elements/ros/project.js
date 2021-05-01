@@ -9,6 +9,7 @@ import '../ui/breadcrumbs.js';
 import './project/projectActivity.js';
 import './project/projectRecentIssues.js';
 
+const bootstrapCssUrl = "node_modules/bootstrap/dist/css/bootstrap.css";
 const gitlabCiJobName = "build";
 const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?<prefix>pen|off)-(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
@@ -227,7 +228,7 @@ export class Project extends GitlabProject {
 		const nonFindings = this.nonFindings;
 
 		return html`
-		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+		<link rel="stylesheet" href="${bootstrapCssUrl}"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
 		<div class="row">
@@ -362,6 +363,7 @@ export class Project extends GitlabProject {
 									$iframe.classList.add("accordion-body", "p-0");
 									$iframe.setAttribute("sandbox", "allow-same-origin");
 									$iframe.srcdoc = `
+										<link rel="stylesheet" href="${bootstrapCssUrl}"/>
 										<h3>Description</h3>
 										${marked(finding.description, { gfm: true })}
 									`;
