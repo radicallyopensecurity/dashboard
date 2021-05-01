@@ -4,6 +4,7 @@ import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
+import '../ui/accordion.js';
 import '../ui/unsafe-content.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
@@ -368,64 +369,15 @@ export class Project extends GitlabProject {
 					<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
 					${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
 						<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
-						<div class="accordion mb-3">
-							${findings.map((finding) => {
-
-								const $group = document.createElement("div");
-								$group.classList.add("accordion-item", "preview-hidden");
-
-								const $header = document.createElement("h2");
-								$header.classList.add("accordion-header");
-
-									const $headerButton = document.createElement("button");
-									$headerButton.classList.add("accordion-button", "collapsed");
-
-										const $iid = document.createElement("span");
-										$iid.classList.add("small", "me-2", "text-muted");
-										$iid.textContent = finding.iid;
-										$headerButton.appendChild($iid);
-
-										const $title = document.createElement("span");
-										$title.classList.add("finding-title");
-										$title.textContent = finding.title;
-										$headerButton.appendChild($title);
-
-									$header.appendChild($headerButton);
-
-								const $preview = document.createElement("div");
-								$preview.classList.add("accordion-collapse", "preview");
-
-									const $previewBody = document.createElement("div");
-									$previewBody.classList.add("accordion-body", "pb-0");
-
-										const $iframe = document.createElement("ui-unsafe-content");
-										$iframe.unsafeHTML = `
-										<h3 class="border-bottom border-secondary d-none">Description</h3>
-										${marked(finding.description, { gfm: true })}
-										`;
-
-									$previewBody.appendChild($iframe);
-
-									$preview.appendChild($previewBody);
-
-								$group.appendChild($header);
-								$group.appendChild($preview);
-
-								$group.addEventListener("click", (e) => {
-									$iframe.updateHeight();
-									$preview.style.maxHeight = $previewBody.clientHeight + "px";
-									if ($headerButton.classList.contains("collapsed")) {
-										$headerButton.classList.remove("collapsed");
-										$group.classList.remove("preview-hidden");
-									} else {
-										$headerButton.classList.add("collapsed");
-										$group.classList.add("preview-hidden")
-									}
-								});
-
-								return $group;
-							})}
-						</div>
+						<ui-accordion .items="${findings.map((finding) => {
+							const title = html`
+								<span class="small me-2 text-muted">${finding.iid}</span>
+								<span class="finding-title">${finding.title}</span>
+							`;
+							const content = document.createElement("ui-unsafe-content");
+							content.unsafeHTML = marked(finding.description, { gfm: true });
+							return { title, content };
+						})}"></ui-accordion>
 					`)}
 					
 					<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
