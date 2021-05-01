@@ -199,16 +199,16 @@ export class Project extends GitlabProject {
 			height: 138px;
 		}
 
-		.preview iframe {
-			width: 100%;
+		.preview {
+			overflow: hidden;
 			transition: max-height 0.3s ease;
 		}
 
-		.preview iframe body {
-			background: red;
+		.preview iframe {
+			width: 100%;
 		}
 
-		.preview-hidden .preview iframe {
+		.preview-hidden .preview {
 			max-height: 0px !important;
 		}
 
@@ -357,25 +357,30 @@ export class Project extends GitlabProject {
 									$header.appendChild($headerButton);
 
 								const $preview = document.createElement("div");
-								$preview.classList.add("mt-1", "accordion-collapse", "preview");
+								$preview.classList.add("accordion-collapse", "preview");
 
-									const $iframe = document.createElement("iframe");
-									$iframe.classList.add("accordion-body", "p-0");
-									$iframe.setAttribute("sandbox", "allow-same-origin");
-									$iframe.srcdoc = `
-										<link rel="stylesheet" href="${bootstrapCssUrl}"/>
-										<h3>Description</h3>
-										${marked(finding.description, { gfm: true })}
-									`;
-									$iframe.updateHeight = () => {
-										$iframe.style.height = $iframe.contentDocument.documentElement.offsetHeight + "px";
-										$iframe.style.maxHeight = $iframe.contentDocument.documentElement.offsetHeight + "px";
-									};
-									$iframe.addEventListener("load", (e) => {
-										setTimeout(() => $iframe.updateHeight(), 0);
-									});
+									const $previewBody = document.createElement("div");
+									$previewBody.classList.add("accordion-body", "pb-0");
 
-									$preview.appendChild($iframe);
+										const $iframe = document.createElement("iframe");
+										$iframe.style.boxSizing = "content-box";
+										$iframe.setAttribute("sandbox", "allow-same-origin");
+										$iframe.srcdoc = `
+											<link rel="stylesheet" href="${bootstrapCssUrl}"/>
+											<h3>Description</h3>
+											${marked(finding.description, { gfm: true })}
+										`;
+										$iframe.updateHeight = () => {
+											$iframe.style.height = $iframe.contentDocument.documentElement.offsetHeight + "px";
+											$preview.style.maxHeight = $previewBody.clientHeight + "px";
+										};
+										$iframe.addEventListener("load", (e) => {
+											setTimeout(() => $iframe.updateHeight(), 0);
+										});
+
+									$previewBody.appendChild($iframe);
+
+									$preview.appendChild($previewBody);
 
 								$group.appendChild($header);
 								$group.appendChild($preview);
