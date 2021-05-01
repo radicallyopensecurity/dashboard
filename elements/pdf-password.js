@@ -72,11 +72,10 @@ class PDFPassword extends LitElement {
 			this.visible = !this.visible;
 		}
 		return html`
-		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 		<code @click="${this.copyToClipboard}">${this.preview}</code>
-		<button @click="${toggleVisible}">
+		<button class="p-0 ms-1 link-dark border-0" @click="${toggleVisible}">
 			
 		${this.visible ? html`<ui-icon icon="eye-off"></ui-icon>` : html`<ui-icon icon="eye"></ui-icon>`}</button>
 		`;
