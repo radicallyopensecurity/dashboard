@@ -316,7 +316,7 @@ export class Project extends GitlabProject {
 				<ui-content-card resize="vertical" height="500px">
 					<iframe id="chat" class="w-100 h-100"
 						src="${this.chatChannelUrl}?layout=embedded"
-						sandbox="allow-scripts allow-same-origin"
+						sandbox="allow-scripts allow-same-origin allow-forms"
 						referrerpolicy="origin"
 					></iframe>
 				</ui-content-card>
