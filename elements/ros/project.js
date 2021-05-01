@@ -367,7 +367,7 @@ export class Project extends GitlabProject {
 										$iframe.setAttribute("sandbox", "allow-same-origin");
 										$iframe.srcdoc = `
 											<link rel="stylesheet" href="${bootstrapCssUrl}"/>
-											<h3>Description</h3>
+											<h3 class="border-bottom border-secondary">Description</h3>
 											${marked(finding.description, { gfm: true })}
 										`;
 										$iframe.updateHeight = () => {
