@@ -389,7 +389,7 @@ export class Project extends GitlabProject {
 				<div class="row">
 					<div class="col-12">
 						<ui-content-card>
-							<h3>Recently changed Findings</h3>
+							<h3>Recent Changes</h3>
 							<div class="list-group mb-3">
 								${this.recentFindings.map((finding) => html`
 									<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
