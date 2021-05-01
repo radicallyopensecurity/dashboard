@@ -361,7 +361,10 @@ export class Project extends GitlabProject {
 									const $iframe = document.createElement("iframe");
 									$iframe.classList.add("accordion-body", "p-0");
 									$iframe.setAttribute("sandbox", "allow-same-origin");
-									$iframe.srcdoc = marked(finding.description, { gfm: true });
+									$iframe.srcdoc = `
+										<h3>Description</h3>
+										${marked(finding.description, { gfm: true })}
+									`;
 									$iframe.updateHeight = () => {
 										$iframe.style.height = $iframe.contentDocument.documentElement.offsetHeight + "px";
 										$iframe.style.maxHeight = $iframe.contentDocument.documentElement.offsetHeight + "px";
