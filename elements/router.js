@@ -15,6 +15,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.forceSidebarVisible = false;
 		this.search = "";
 		this.initialized = false;
+		this.subroute = undefined;
 		this.onHashChange();
 		this.fetch();
 	}
@@ -44,6 +45,9 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			},
 			initialized: {
 				type: Boolean
+			},
+			subroute: {
+				type: String
 			}
 		}
 	}
@@ -61,14 +65,14 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 	get onHashChange() {
 		return () => {
 			const hash = window.location.hash.substring(1);
-			const hashFragments = hash.split("/", 1);
+			const hashFragments = hash.split("/", 2);
 
 			if (hashFragments[0] === "new") {
 				this.gitlabProjectId = "new";
 			} else {
 				this.gitlabProjectId = parseInt(hashFragments[0], 10) || null;
 			}
-			this.route = hashFragments[1];
+			this.subroute = hashFragments[1];
 			this.forceSidebarVisible = false;
 		}
 	}
@@ -151,7 +155,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		} else if (this.gitlabProjectId === "new") {
 			view = html`<ros-project-new></ros-project-new>`;
 		} else if (this.gitlabProjectId !== null) {
-			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"></ros-project>`;
+			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}" .subroute="${this.subroute}"></ros-project>`;
 		} else {
 			view = html`<ros-overview
 					.params=${{search: this.search, order_by: "last_activity_at"}}

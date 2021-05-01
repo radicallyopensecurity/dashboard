@@ -56,6 +56,36 @@ marked.use({
 
 export class Project extends GitlabProject {
 
+	static get properties() {
+		return {
+			...GitlabProject.properties,
+			subroute: {
+				type: String
+			}
+		}
+	}
+
+	static get subroutes() {
+		return {
+			overview: {
+				title: "Overview",
+				icon: ""
+			},
+			chat: {
+				title: "Chat",
+				icon: ""
+			},
+			findings: {
+				title: "Findings",
+				icon: ""
+			},
+			history: {
+				title: "History",
+				icon: ""
+			}
+		};
+	}
+
 	get title() {
 		// if (this.gitlabProjectData.name.startsWith("pen-")) {
 		// 	return this.gitlabProjectData.name.substr(4);
@@ -411,6 +441,31 @@ export class Project extends GitlabProject {
 				</div>
 			</div>
 		</div>
+		<nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark">
+			<div class="container-fluid">
+				<ul class="navbar-nav">
+					${Object.entries(this.constructor.subroutes).map(([subroute, subrouteOptions]) => {
+						const $li = document.createElement("li");
+						$li.classList.add("nav-item");
+
+						const $a = document.createElement("a");
+						$a.classList.add("nav-link");
+						$a.href = `#${this.gitlabProjectId}/${subroute}`;
+						$a.innerText = subrouteOptions.title;
+
+						if (subroute === this.subroute) {
+							$a.setAttribute("aria-current", "page");
+							$a.classList.add("active");
+						} else {
+							$a.classList.remove("active");
+						}
+
+						$li.appendChild($a);
+						return $li;
+					})}
+				</ul>
+			</div>
+		</nav>
 		`;
 	}
 };
