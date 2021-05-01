@@ -340,9 +340,7 @@ export class Project extends GitlabProject {
 								${this.staff.map((member) => html`
 									<div class="p-2 flex-fill flex-nowrap text-nowrap text-center">
 										<a href="/${member.username}" target="_blank">
-											<gitlab-avatar .user="${member}"></gitlab-avatar>
-											<br/>
-											${member.name}
+											<gitlab-avatar .user="${member}" class="me-1"></gitlab-avatar>${member.name}
 										</a>
 									</div>
 								`)}
@@ -354,9 +352,7 @@ export class Project extends GitlabProject {
 								${this.customers.map((member) => html`
 									<div class="p-2 flex-fill flex-nowrap text-nowrap text-center">
 										<a href="/${member.username}" target="_blank">
-											<gitlab-avatar .user="${member}"></gitlab-avatar>
-											<br/>
-											${member.name}
+											<gitlab-avatar .user="${member}" class="me-1"></gitlab-avatar>${member.name}
 										</a>
 									</div>
 								`)}
