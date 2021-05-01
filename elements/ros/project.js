@@ -13,6 +13,17 @@ const bootstrapCssUrl = "node_modules/bootstrap/dist/css/bootstrap.css";
 const gitlabCiJobName = "build";
 const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?<prefix>pen|off)-(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
+// tweak marked renderer
+const headingLevelOffset = 2;
+marked.use({
+	renderer: {
+		heading(text, level) {
+			level += headingLevelOffset;
+			return `<h${level}>${text}</h${level}>`;
+		}
+	}
+});
+
 export class Project extends GitlabProject {
 
 	get title() {
