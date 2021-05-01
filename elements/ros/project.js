@@ -362,8 +362,8 @@ export class Project extends GitlabProject {
 						<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
 						<ui-accordion .items="${findings.map((finding) => {
 							const title = html`
-								<span class="small me-2 text-muted">${finding.iid}</span>
-								<span class="finding-title">${finding.title}</span>
+								<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
+								<span>${finding.title}</span>
 							`;
 							const content = document.createElement("ui-unsafe-content");
 							content.unsafeHTML = marked(finding.description, { gfm: true });
@@ -376,7 +376,7 @@ export class Project extends GitlabProject {
 						<ui-accordion .items="${nonFindings.map((nonFinding) => {
 							const title = html`
 								<span class="small me-2 text-muted">${nonFinding.iid}</span>
-								<span class="finding-title">${nonFinding.title}</span>
+								<span>${nonFinding.title}</span>
 							`;
 							const content = document.createElement("ui-unsafe-content");
 							content.unsafeHTML = marked(nonFinding.description, { gfm: true });
