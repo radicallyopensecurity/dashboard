@@ -276,7 +276,7 @@ export class Project extends GitlabProject {
 									<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 								</ul>
 							</div>
-							<div class="d-flex flex-row align-items-end mt-3 justify-content-center flex-wrap">
+							<div class="d-flex flex-row align-items-end mt-3 justify-content-center">
 								<div class="d-flex text-nowrap mb-3">
 									${this.channelName !== undefined ? html`
 										<a aria-current="page" href="${this.chatChannelUrl}" target="_blank" role="button" class="btn btn-secondary me-2">
@@ -324,9 +324,9 @@ export class Project extends GitlabProject {
 		</div>
 		<div class="row">
 			<div class="col-12 px-2 px-sm-3">
-				<ui-content-card>
-					<div class="d-flex flex-row w-100 align-self-stretch">
-						<div class="border rounded p-2 flex-grow-1">
+				<ui-content-card seamless="true">
+					<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-1">
+						<div class="border rounded p-2 m-1 flex-grow-1">
 							<h5>Staff</h5>
 							<div class="d-flex flex-wrap">
 								${this.staff.map((member) => html`
@@ -338,7 +338,7 @@ export class Project extends GitlabProject {
 								`)}
 							</div>
 						</div>
-						<div class="border rounded p-2 ms-2 flex-grow-1">
+						<div class="border rounded p-2 m-1 flex-grow-1">
 							<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
 							<div class="d-flex flex-wrap">
 								${this.customers.map((member) => html`
