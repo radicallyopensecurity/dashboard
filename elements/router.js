@@ -1,34 +1,48 @@
 import { LitElement, html, css } from '../web_modules/lit-element.js';
 import { LitSync } from '../web_modules/@morbidick/lit-element-notify.js';
+import { Gitlab } from "./gitlab/index.js";
 import "./ros/project.js";
 import "./ros/project-new.js";
 import "./ros/projects.js";
 import "./ros/overview.js";
 import "./views/sidebar.js";
-import "./gitlab/user.js";
 
-class Router extends LitSync(LitElement) {
+class AuthenticatedRouter extends LitSync(Gitlab) {
 
 	constructor() {
 		super();
 		this.projectId = null;
 		this.forceSidebarVisible = false;
 		this.search = "";
+		this.initialized = false;
 		this.onHashChange();
+		this.fetch();
 	}
 
 	static get properties() {
 		return {
+			...super.properties,
 			gitlabProjectId: {
 				type: String,
 				notify: true,
 				reflect: true
+			},
+			authenticated: {
+				type: Boolean,
+				notify: true
+			},
+			gitlabUser: {
+				type: Object,
+				notify: true
 			},
 			search: {
 				type: String,
 				notify: true
 			},
 			forceSidebarVisible: {
+				type: Boolean
+			},
+			initialized: {
 				type: Boolean
 			}
 		}
@@ -73,10 +87,68 @@ class Router extends LitSync(LitElement) {
 		}
 	}
 
+	get baseUrl() {
+		return super.baseUrl + `user`;
+	}
+
+	async fetch() {
+		await super.fetch(this.baseUrl, undefined, {
+			redirect: "error"
+		}).then((data) => {
+			this.gitlabUser = data;
+		}).catch((e) => {
+			this.gitlabUser = null;
+		}).finally(() => {
+			this.initialized = true;
+		})
+	}
+
+	static get styles() {
+		return css`
+		a.gitlab-user {
+			--line-height: 24px;
+			line-height: var(--line-height);
+			text-decoration: none;
+		}
+		`;
+	}
+
 	render() {
 
-		let view;
-		if (this.gitlabProjectId === "new") {
+		let view, layout = "sidebar";
+
+		if (!this.initialized) {
+			view = html`
+			<div class="d-none px-4 py-5 my-5 text-center">
+				<img class="d-block mx-auto mb-4" src="images/favicon-180x180.png" alt="ROS Logo" width="180" height="180">
+				<h1 class="display-5 fw-bold">Dashboard</h1>
+				<div class="col-lg-6 mx-auto mt-4">
+					<div class="spinner-border" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
+			</div>
+			`;
+			layout = "plain";
+		} else if (!this.gitlabUser) {
+			const loginUrl = `https://login.${window.location.host.split(".").splice(1).join(".")}/users/sign_in?redirect_to=${encodeURIComponent(window.location.href)}`;
+			view = html`
+			<div class="px-4 py-5 my-5 text-center">
+				<img class="d-block mx-auto mb-4" src="images/favicon-180x180.png" alt="ROS Logo" width="180" height="180">
+				<h1 class="display-5 fw-bold">Dashboard</h1>
+				<div class="col-lg-6 mx-auto">
+					<p class="lead mb-4">
+						Welcome to Radically Open Security! Please authenticate to proceed to your project dashboard or get in touch with us to get started.
+					</p>
+					<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+						<a href="${loginUrl}" role="button" class="btn btn-primary btn-lg px-4 me-sm-3">Login</a>
+						<a href="https://www.radicallyopensecurity.com" role="button" class="btn btn-outline-secondary btn-lg px-4">Get in touch</a>
+					</div>
+				</div>
+			</div>
+			`;
+			layout = "plain";
+		} else if (this.gitlabProjectId === "new") {
 			view = html`<ros-project-new></ros-project-new>`;
 		} else if (this.gitlabProjectId !== null) {
 			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"></ros-project>`;
@@ -87,7 +159,7 @@ class Router extends LitSync(LitElement) {
 				></ros-overview>`;
 		}
 
-		return html`
+		const header = html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
@@ -97,23 +169,35 @@ class Router extends LitSync(LitElement) {
 				<span class="d-sm-none">R\u2661S</span>
 			</a>
 
-			<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+			${(this.initialized && this.gitlabUser) ? html`
+				<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
+					<span class="navbar-toggler-icon"></span>
+				</button>
 
-			<ul class="navbar-nav ms-3">
-				<li class="nav-item text-nowrap">
-					<div class="nav-link" href="#">
-						<gitlab-user></gitlab-user>
-					</div>
-				</li>
-			</ul>
-		</header>
-		<sidebar-view .search="${this.sync('search')}" .forceSidebarVisible="${this.sync('forceSidebarVisible')}">
-			${view}
-		</sidebar-view>`;
+				<ul class="navbar-nav ms-3">
+					<li class="nav-item text-nowrap">
+						<div class="nav-link" href="#">
+							<a class="gitlab-user" href="/${this.gitlabUser.username}" target="_blank">
+								<gitlab-avatar .user="${this.gitlabUser}"></gitlab-avatar>
+								<span class="ms-2">${this.gitlabUser.name}</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			` : ''}
+		</header>`;
+
+		switch (layout) {
+			case "plain":
+				return html`${header}${view}`;
+			default: // sidebar
+				return html`${header}
+				<sidebar-view .search="${this.sync('search')}" .forceSidebarVisible="${this.sync('forceSidebarVisible')}">
+					${view}
+				</sidebar-view>`;
+		}
 
 	}
 
 }
-customElements.define("app-router", Router);
+customElements.define("app-router", AuthenticatedRouter);
