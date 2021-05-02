@@ -325,7 +325,7 @@ export class Project extends GitlabProject {
 		<div class="row">
 			<div class="col-12 px-2 px-sm-3">
 				<ui-content-card seamless="true">
-					<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-1">
+					<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-2">
 						<div class="border rounded p-2 m-1 flex-grow-1">
 							<h5>Staff</h5>
 							<div class="d-flex flex-wrap">
