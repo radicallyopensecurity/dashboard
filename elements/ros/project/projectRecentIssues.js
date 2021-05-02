@@ -37,7 +37,7 @@ export class ProjectRecentIssues extends LitElement {
 						</a>
 					</span>
 				</span>
-				<small>${moment(this.finding.updated_at).fromNow()}</small>
+				<small class="text-nowrap">${moment(this.finding.updated_at).fromNow()}</small>
 			</div>
 		</div>
 		`;
