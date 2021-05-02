@@ -276,7 +276,7 @@ export class Project extends GitlabProject {
 									<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 								</ul>
 							</div>
-							<div class="d-flex flex-row align-items-end mt-3 justify-content-center">
+							<div class="d-flex flex-row align-items-end mt-3 justify-content-center flex-wrap">
 								<div class="d-flex text-nowrap mb-3">
 									${this.channelName !== undefined ? html`
 										<a aria-current="page" href="${this.chatChannelUrl}" target="_blank" role="button" class="btn btn-secondary me-2">
