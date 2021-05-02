@@ -54,7 +54,7 @@ export class ProjectActivity extends LitElement {
 		return html`
 		<link rel="stylesheet" href="style.css"/>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-		<div class="d-flex mb-3 mt-2">
+		<div class="d-flex mb-1 mt-3">
 			<a href="/${this.data.author.username}" target="_blank"><gitlab-avatar class="me-2" .user="${this.data.author}"></gitlab-avatar></a>
 			<div class="d-flex justify-content-between w-100">
 				<p class="mb-0 small lh-sm">
