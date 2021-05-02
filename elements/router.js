@@ -94,7 +94,7 @@ class Router extends LitSync(LitElement) {
 
 			<a class="navbar-brand text-center me-auto" href=".">
 				<span class="d-none d-sm-inline">Radically Open Security</span>
-				<span class="d-sm-none">ROS</span>
+				<span class="d-sm-none">R\u2661S</span>
 			</a>
 
 			<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
