@@ -168,27 +168,29 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		<link rel="stylesheet" href="dashboard.css"/>
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
 
-			<a class="navbar-brand text-center me-auto" href=".">
+			<a class="navbar-brand text-center me-auto safe-offset-left" href=".">
 				<span class="d-none d-sm-inline">Radically Open Security</span>
 				<span class="d-sm-none">R\u2661S</span>
 			</a>
 
-			${(this.initialized && this.gitlabUser) ? html`
-				<ul class="navbar-nav ms-3">
-					<li class="nav-item text-nowrap">
-						<div class="nav-link" href="#">
-							<a class="gitlab-user" href="/${this.gitlabUser.username}" target="_blank">
-								<gitlab-avatar .user="${this.gitlabUser}"></gitlab-avatar>
-								<span class="ms-2">${this.gitlabUser.name}</span>
-							</a>
-						</div>
-					</li>
-				</ul>
+			<div class="safe-offset-right">
+				${(this.initialized && this.gitlabUser) ? html`
+					<ul class="navbar-nav ms-3">
+						<li class="nav-item text-nowrap">
+							<div class="nav-link" href="#">
+								<a class="gitlab-user" href="/${this.gitlabUser.username}" target="_blank">
+									<gitlab-avatar .user="${this.gitlabUser}"></gitlab-avatar>
+									<span class="ms-2">${this.gitlabUser.name}</span>
+								</a>
+							</div>
+						</li>
+					</ul>
 
-				<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-			` : ''}
+					<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				` : ''}
+			</div>
 		</header>`;
 
 		switch (layout) {
