@@ -1,9 +1,11 @@
 import moment from '../../web_modules/moment.js';
 import marked from '../../web_modules/marked.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
+import { LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
+import { ContentCard } from '../ui/content-card.js';
 import '../ui/accordion.js';
 import '../ui/unsafe-content.js';
 import '../ui/icon.js';
@@ -54,13 +56,53 @@ marked.use({
 	}
 });
 
-export class Project extends GitlabProject {
+class ChatContentCard extends ContentCard {
+	static get styles() {
+		return css`
+		${super.styles}
+
+		#card {
+			height: auto;
+		}
+
+		@media (min-width: 576px) {
+			#card {
+				height: 300px;
+			}
+		}
+		`;
+	}
+}
+customElements.define("project-ui-content-card-chat", ChatContentCard);
+
+export class Project extends LitNotify(GitlabProject) {
+
+	constructor() {
+		super();
+		this.fullscreen = true;
+		console.log(this.availableSubroutes);
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this.availableSubroutes = this.constructor.subroutes;
+	}
 
 	static get properties() {
 		return {
 			...GitlabProject.properties,
 			subroute: {
-				type: String
+				type: String,
+				reflect: true
+			},
+			availableSubroutes: {
+				type: Object,
+				notify: true
+			},
+			fullscreen: {
+				type: Boolean,
+				notify: true,
+				reflect: true
 			}
 		}
 	}
@@ -84,6 +126,17 @@ export class Project extends GitlabProject {
 				icon: ""
 			}
 		};
+	}
+
+	get activeSubroute() {
+		if (this.subroute == undefined) {
+			return Object.entries(this.constructor.subroutes)
+				.filter(([name, options]) => options.default === true)
+				.map(([name, options]) => name)
+				.pop();
+		} else {
+			return this.subroute;
+		}
 	}
 
 	get title() {
@@ -274,6 +327,24 @@ export class Project extends GitlabProject {
 			cursor: pointer;
 			transition: background-color 0.2 ease;
 		}
+
+		#chat-card {
+			position: relative;
+		}
+
+		:host-context(:host:not([subroute])) [subroute="overview"] {
+			display: block !important;
+		}
+		:host(:not([subroute])) [subroute="overview"] {
+			display: block !important;
+		}
+
+		:host([subroute="overview"]) [subroute="overview"],
+		:host([subroute="chat"]) [subroute="chat"],
+		:host([subroute="findings"]) [subroute="findings"],
+		:host([subroute="history"]) [subroute="history"] {
+			display: block !important;
+		}
 		`;
 	}
 
@@ -289,8 +360,8 @@ export class Project extends GitlabProject {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
-		<div class="row">
-			<div class="col-12 px-2 px-sm-3 px-2 px-sm-3">
+		<div class="row d-none d-sm-block" subroute="overview">
+			<div class="col-12 px-0 px-sm-3">
 				<header><ui-content-card>
 					<div class="d-block d-sm-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
 						<div class="flex-grow-1">
@@ -341,19 +412,19 @@ export class Project extends GitlabProject {
 				</div>
 			</ui-content-card></header>
 		</div>
-		<div class="row">
-			<div class="col-12 px-2 px-sm-3">
-				<ui-content-card resize="vertical" height="600px" seamless="true">
+		<div class="row d-none d-sm-block" subroute="chat">
+			<div class="col-12 px-0 px-sm-3">
+				<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
 					<iframe id="chat" class="w-100 h-100"
 						src="${this.chatChannelUrl}?layout=embedded"
 						sandbox="allow-scripts allow-same-origin allow-forms"
 						referrerpolicy="origin"
 					></iframe>
-				</ui-content-card>
+				</project-ui-content-card-chat>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-12 px-2 px-sm-3">
+		<div class="row d-none d-sm-block" subroute="overview">
+			<div class="col-12 px-0 px-sm-3">
 				<ui-content-card seamless="true">
 					<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-2">
 						<div class="border rounded p-2 m-1 flex-grow-1">
@@ -385,7 +456,7 @@ export class Project extends GitlabProject {
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12 col-lg-6">
+			<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3" subroute="findings">
 				<ui-content-card>
 					<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
 					${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
@@ -400,7 +471,6 @@ export class Project extends GitlabProject {
 							return { title, content };
 						})}"></ui-accordion>
 					`)}
-					
 					<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
 					<div class="list-group">
 						<ui-accordion .items="${nonFindings.map((nonFinding) => {
@@ -415,8 +485,10 @@ export class Project extends GitlabProject {
 					</div>
 				</ui-content-card>
 			</div>
-			<div class="col-12 col-lg-6">
-				<div class="row">
+		</div>
+		<div class="row">
+			<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3" subroute="history">
+				<div>
 					<div class="col-12">
 						<ui-content-card>
 							<h3>Recent Changes</h3>
@@ -441,31 +513,6 @@ export class Project extends GitlabProject {
 				</div>
 			</div>
 		</div>
-		<nav class="navbar fixed-bottom navbar-expand navbar-dark bg-dark">
-			<div class="container-fluid">
-				<ul class="navbar-nav">
-					${Object.entries(this.constructor.subroutes).map(([subroute, subrouteOptions]) => {
-						const $li = document.createElement("li");
-						$li.classList.add("nav-item");
-
-						const $a = document.createElement("a");
-						$a.classList.add("nav-link");
-						$a.href = `#${this.gitlabProjectId}/${subroute}`;
-						$a.innerText = subrouteOptions.title;
-
-						if (subroute === this.subroute) {
-							$a.setAttribute("aria-current", "page");
-							$a.classList.add("active");
-						} else {
-							$a.classList.remove("active");
-						}
-
-						$li.appendChild($a);
-						return $li;
-					})}
-				</ul>
-			</div>
-		</nav>
 		`;
 	}
 };

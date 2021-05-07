@@ -48,6 +48,9 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			},
 			subroute: {
 				type: String
+			},
+			availableSubroutes: {
+				type: Object
 			}
 		}
 	}
@@ -155,7 +158,11 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		} else if (this.gitlabProjectId === "new") {
 			view = html`<ros-project-new></ros-project-new>`;
 		} else if (this.gitlabProjectId !== null) {
-			view = html`<ros-project .gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}" .subroute="${this.subroute}"></ros-project>`;
+			view = html`<ros-project
+				.gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"
+				.subroute="${this.subroute}"
+				.availableSubroutes="${this.sync('availableSubroutes')}"
+			></ros-project>`;
 		} else {
 			view = html`<ros-overview
 					.params=${{search: this.search, order_by: "last_activity_at"}}
@@ -163,17 +170,19 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				></ros-overview>`;
 		}
 
-		const header = html`
+		const stylesheetIncludes = html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-		<link rel="stylesheet" href="dashboard.css"/>
+		<link rel="stylesheet" href="dashboard.css"/>`;
+
+		const header = html`
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
 
-			<a class="navbar-brand text-center me-auto safe-offset-left" href=".">
+			<a class="navbar-brand text-center me-auto safe-margin-left" href=".">
 				<span class="d-none d-sm-inline">Radically Open Security</span>
 				<span class="d-sm-none">R\u2661S</span>
 			</a>
 
-			<div class="safe-offset-right d-flex flex-row">
+			<div class="safe-margin-right d-flex flex-row">
 				${(this.initialized && this.gitlabUser) ? html`
 					<ul class="navbar-nav ms-3">
 						<li class="nav-item text-nowrap">
@@ -193,14 +202,52 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			</div>
 		</header>`;
 
+		const footer = (!this.availableSubroutes) ? '' : html`
+		<nav class="navbar navbar-expand navbar-dark bg-dark d-sm-none">
+			<div class="container-fluid">
+				<ul class="navbar-nav">
+					${Object.entries(this.availableSubroutes).map(([subroute, subrouteOptions], i) => {
+						const $li = document.createElement("li");
+						$li.classList.add("nav-item");
+
+						const $a = document.createElement("a");
+						$a.classList.add("nav-link");
+						$a.href = `#${this.gitlabProjectId}/${subroute}`;
+						$a.innerText = subrouteOptions.title;
+
+						const isActiveRoute = (subroute === this.subroute);
+						const isDefaultActiveRoute = (this.subroute == undefined) && (i === 0);
+
+						if (isActiveRoute || isDefaultActiveRoute) {
+							$a.setAttribute("aria-current", "page");
+							$a.classList.add("active");
+						} else {
+							$a.classList.remove("active");
+						}
+
+						$li.appendChild($a);
+						return $li;
+					})}
+				</ul>
+			</div>
+		</nav>`;
+
 		switch (layout) {
 			case "plain":
-				return html`${header}${view}`;
+				return html`${stylesheetIncludes}
+				<div class="d-flex flex-column h-100">
+					${header}
+					<div class="flex-grow-1">${view}</div>
+					${footer}
+				</div>`;
 			default: // sidebar
-				return html`${header}
-				<sidebar-view .search="${this.sync('search')}" .forceSidebarVisible="${this.sync('forceSidebarVisible')}">
-					${view}
-				</sidebar-view>`;
+				return html`${stylesheetIncludes}<div class="d-flex flex-column h-100">
+					${header}
+					<sidebar-view .search="${this.sync('search')}" .forceSidebarVisible="${this.sync('forceSidebarVisible')}" class="flex-grow-1 position-relative">
+						${view}
+					</sidebar-view>
+					${footer}
+				</div>`;
 		}
 
 	}

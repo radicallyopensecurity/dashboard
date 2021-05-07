@@ -16,6 +16,28 @@ class SidebarView extends LitNotify(LitElement) {
 		.small {
 			font-size: 0.75em;
 		}
+
+		main {
+			overflow-y: scroll;
+		}
+
+		#sidebar {
+			position: absolute;
+			z-index: 999;
+			width: 100%;
+		}
+
+		@media (min-width: 576px) {
+			#sidebar {
+				width: auto !important;
+			}
+		}
+
+		@media (min-width: 768px) {
+			#sidebar{
+				position: relative !important;
+			}
+		}
 		`;
 	}
 
@@ -59,10 +81,10 @@ class SidebarView extends LitNotify(LitElement) {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
-		<div class="container-fluid h-100 d-block overflow-scroll pb-5 pe-3">
-			<div class="row mx-0">
-				<nav id="sidebar" class="col-md-3 col-xl-2 pt-5 d-md-block bg-body sidebar collapse shadow-md">
-					<div class="position-sticky mx-1 mt-4 mb-1 safe-offset-left">
+		<div class="position-absolute h-100 w-100 d-block overflow-hidden">
+			<div class="position-absolute w-100 h-100 mx-0 d-flex flex-row align-items-stretch">
+				<nav id="sidebar" class="col-md-3 col-xl-2 d-md-block bg-body sidebar collapse shadow px-3 h-100 w-100">
+					<div class="position-sticky mx-1 mt-4 mb-1 safe-padding-left">
 						<form @submit="${this.onSearch}">
 							<div class="input-group">
 								<input id="search" name="search" type="search"
@@ -120,7 +142,7 @@ class SidebarView extends LitNotify(LitElement) {
 					</div>
 				</nav>
 
-				<main class="col-md-9 col-xl-10 offset-md-3 offset-xl-2 mt-3 ps-0 safe-offset-right">
+				<main class="position-relative flex-grow-1 mt-0 p-0 p-sm-3 safe-margin-right">
 					<slot></slot>
 				</main>
 			</div>
