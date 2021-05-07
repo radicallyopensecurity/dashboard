@@ -89,7 +89,7 @@ class SidebarView extends LitNotify(LitElement) {
 							<li class="nav-item">
 								<a class="nav-link" aria-current="page" href="#new">
 									<ui-icon icon="plus-square"></ui-icon>
-									Start New Project
+									New Project
 								</a>
 							</li>
 						</ul>
