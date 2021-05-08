@@ -180,7 +180,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 							<div class="nav-link" href="#">
 								<a class="gitlab-user" href="/${this.gitlabUser.username}" target="_blank">
 									<gitlab-avatar .user="${this.gitlabUser}"></gitlab-avatar>
-									<span class="ms-2">${this.gitlabUser.name}</span>
+									<span class="ms-1 text-white">${this.gitlabUser.name}</span>
 								</a>
 							</div>
 						</li>
