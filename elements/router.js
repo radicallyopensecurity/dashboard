@@ -173,7 +173,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				<span class="d-sm-none">R\u2661S</span>
 			</a>
 
-			<div class="safe-offset-right">
+			<div class="safe-offset-right d-flex flex-row">
 				${(this.initialized && this.gitlabUser) ? html`
 					<ul class="navbar-nav ms-3">
 						<li class="nav-item text-nowrap">
@@ -186,7 +186,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 						</li>
 					</ul>
 
-					<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
+					<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none ms-2" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
 						<span class="navbar-toggler-icon"></span>
 					</button>
 				` : ''}
