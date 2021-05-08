@@ -205,15 +205,22 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		const footer = (!this.availableSubroutes) ? '' : html`
 		<nav class="navbar navbar-expand navbar-dark bg-dark d-sm-none">
 			<div class="container-fluid">
-				<ul class="navbar-nav">
+				<ul class="navbar-nav d-flex justify-content-between w-100 px-2">
 					${Object.entries(this.availableSubroutes).map(([subroute, subrouteOptions], i) => {
 						const $li = document.createElement("li");
-						$li.classList.add("nav-item");
+						$li.classList.add("nav-item", "text-nowrap");
 
 						const $a = document.createElement("a");
 						$a.classList.add("nav-link");
 						$a.href = `#${this.gitlabProjectId}/${subroute}`;
-						$a.innerText = subrouteOptions.title;
+
+							const $icon = document.createElement("ui-icon");
+							$icon.setAttribute("icon", subrouteOptions.icon);
+							$a.appendChild($icon);
+
+							const $text = document.createElement("span");
+							$text.innerText = subrouteOptions.title;
+							$a.appendChild($text);
 
 						const isActiveRoute = (subroute === this.subroute);
 						const isDefaultActiveRoute = (this.subroute == undefined) && (i === 0);

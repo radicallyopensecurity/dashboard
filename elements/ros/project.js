@@ -111,19 +111,19 @@ export class Project extends LitNotify(GitlabProject) {
 		return {
 			overview: {
 				title: "Overview",
-				icon: ""
+				icon: "pie-chart"
 			},
 			chat: {
 				title: "Chat",
-				icon: ""
+				icon: "message-square"
 			},
 			findings: {
 				title: "Findings",
-				icon: ""
+				icon: "gitlab"
 			},
 			history: {
 				title: "History",
-				icon: ""
+				icon: "archive"
 			}
 		};
 	}
