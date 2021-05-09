@@ -375,7 +375,7 @@ export class Project extends LitNotify(GitlabProject) {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
-		<div class="container-fluid px-sm-0">
+		<div class="container-fluid px-sm-0 p-md-2">
 			<div class="row d-none d-sm-block" subroute="overview">
 				<div class="col-12 px-0 px-sm-3">
 					<header><ui-content-card>
