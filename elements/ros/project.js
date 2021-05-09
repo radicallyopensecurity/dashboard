@@ -434,7 +434,7 @@ export class Project extends LitNotify(GitlabProject) {
 									</div>
 								</div>
 							</div>
-							<div class="ms-3 d-block text-center">
+							<div class="ms-0 ms-md-3 d-block text-center">
 								<img class="avatar" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
 							</div>
 						</div>
