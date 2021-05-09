@@ -457,7 +457,7 @@ export class Project extends LitNotify(GitlabProject) {
 					<ui-content-card seamless="true">
 						<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-2">
 							<div class="border rounded p-2 m-1 flex-grow-1">
-								<h5>Staff</h5>
+								<h5>Crew</h5>
 								<div class="d-flex flex-wrap">
 									${this.staff.map((member) => html`
 										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
@@ -470,7 +470,7 @@ export class Project extends LitNotify(GitlabProject) {
 								</div>
 							</div>
 							<div class="border rounded p-2 m-1 flex-grow-1">
-								<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
+								<h5>Stakeholder${this.customers.length > 1 ? "s" : ""}</h5>
 								<div class="d-flex flex-wrap">
 									${this.customers.map((member) => html`
 										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
