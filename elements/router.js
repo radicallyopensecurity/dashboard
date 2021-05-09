@@ -1,5 +1,6 @@
 import { LitElement, html, css } from '../web_modules/lit-element.js';
 import { LitSync } from '../web_modules/@morbidick/lit-element-notify.js';
+import { styleMap } from '../web_modules/lit-html/directives/style-map.js';
 import { Gitlab } from "./gitlab/index.js";
 import "./ros/project.js";
 import "./ros/project-new.js";
@@ -16,6 +17,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.search = "";
 		this.initialized = false;
 		this.subroute = undefined;
+		this.availableSubroutes = {};
 		this.onHashChange();
 		this.fetch();
 	}
@@ -206,42 +208,50 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			</div>
 		</header>`;
 
-		const footer = (!this.availableSubroutes) ? '' : html`
-		<nav class="navbar navbar-expand navbar-dark bg-dark d-sm-none">
-			<div class="container-fluid">
-				<ul class="navbar-nav d-flex justify-content-between w-100 px-2">
-					${Object.entries(this.availableSubroutes).map(([subroute, subrouteOptions], i) => {
-						const $li = document.createElement("li");
-						$li.classList.add("nav-item", "text-nowrap");
+		const footerHeight = "55px";
+		const footerStyles = styleMap({
+			height: footerHeight,
+			maxHeight: Object.keys(this.availableSubroutes).length ? footerHeight : 0,
+			transition: 'max-height 0.4s ease-out'
+		});
+		const footer = html`
+		<footer style="${footerStyles}">
+			<nav class="navbar navbar-expand navbar-dark bg-dark d-sm-none p-0 h-100">
+				<div class="container-fluid">
+					<ul class="navbar-nav d-flex justify-content-between w-100 px-2">
+						${Object.entries(this.availableSubroutes).map(([subroute, subrouteOptions], i) => {
+							const $li = document.createElement("li");
+							$li.classList.add("nav-item", "text-nowrap");
 
-						const $a = document.createElement("a");
-						$a.classList.add("nav-link", "pb-3");
-						$a.href = `#${this.gitlabProjectId}/${subroute}`;
+							const $a = document.createElement("a");
+							$a.classList.add("nav-link", "py-3");
+							$a.href = `#${this.gitlabProjectId}/${subroute}`;
 
-							const $icon = document.createElement("ui-icon");
-							$icon.setAttribute("icon", subrouteOptions.icon);
-							$a.appendChild($icon);
+								const $icon = document.createElement("ui-icon");
+								$icon.setAttribute("icon", subrouteOptions.icon);
+								$a.appendChild($icon);
 
-							const $text = document.createElement("span");
-							$text.innerText = subrouteOptions.title;
-							$a.appendChild($text);
+								const $text = document.createElement("span");
+								$text.innerText = subrouteOptions.title;
+								$a.appendChild($text);
 
-						const isActiveRoute = (subroute === this.subroute);
-						const isDefaultActiveRoute = (this.subroute == undefined) && (i === 0);
+							const isActiveRoute = (subroute === this.subroute);
+							const isDefaultActiveRoute = (this.subroute == undefined) && (i === 0);
 
-						if (isActiveRoute || isDefaultActiveRoute) {
-							$a.setAttribute("aria-current", "page");
-							$a.classList.add("active");
-						} else {
-							$a.classList.remove("active");
-						}
+							if (isActiveRoute || isDefaultActiveRoute) {
+								$a.setAttribute("aria-current", "page");
+								$a.classList.add("active");
+							} else {
+								$a.classList.remove("active");
+							}
 
-						$li.appendChild($a);
-						return $li;
-					})}
-				</ul>
-			</div>
-		</nav>`;
+							$li.appendChild($a);
+							return $li;
+						})}
+					</ul>
+				</div>
+			</nav>
+		</footer>`;
 
 		switch (layout) {
 			case "plain":
