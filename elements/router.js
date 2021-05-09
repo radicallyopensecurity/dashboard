@@ -186,7 +186,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		const header = html`
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
 
-			<a class="navbar-brand text-center me-auto safe-margin-left" href=".">
+			<a class="navbar-brand text-center me-auto safe-margin-left" href="#">
 				<span class="d-none d-sm-inline">Radically Open Security</span>
 				<span class="d-sm-none">R\u2661S</span>
 			</a>
