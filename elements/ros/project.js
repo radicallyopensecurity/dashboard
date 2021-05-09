@@ -462,7 +462,8 @@ export class Project extends LitNotify(GitlabProject) {
 									${this.staff.map((member) => html`
 										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
 											<a href="/${member.username}" target="_blank">
-												<gitlab-avatar .user="${member}" class="me-1"></gitlab-avatar>${member.name}
+												<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
+												<div>${member.name}</div>
 											</a>
 										</div>
 									`)}
@@ -474,7 +475,8 @@ export class Project extends LitNotify(GitlabProject) {
 									${this.customers.map((member) => html`
 										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
 											<a href="/${member.username}" target="_blank">
-												<gitlab-avatar .user="${member}" class="me-1"></gitlab-avatar>${member.name}
+												<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
+												<div>${member.name}</div>
 											</a>
 										</div>
 									`)}
