@@ -187,8 +187,8 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
 
 			<a class="navbar-brand text-center me-auto safe-margin-left" href="#">
-				<span class="d-none d-sm-inline">Radically Open Security</span>
-				<span class="d-sm-none">R\u2661S</span>
+				<span class="d-none d-md-inline">Radically Open Security</span>
+				<span class="d-md-none">R\u2661S</span>
 			</a>
 
 			<div class="safe-margin-right d-flex flex-row">
@@ -198,7 +198,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 							<div class="nav-link" href="#">
 								<a class="gitlab-user" href="/${this.gitlabUser.username}" target="_blank">
 									<gitlab-avatar .user="${this.gitlabUser}"></gitlab-avatar>
-									<span class="ms-1 text-white">${this.gitlabUser.name}</span>
+									<span class="ms-1 text-white d-none d-sm-inline">${this.gitlabUser.name}</span>
 								</a>
 							</div>
 						</li>
