@@ -379,7 +379,7 @@ export class Project extends LitNotify(GitlabProject) {
 			<div class="row d-none d-sm-block" subroute="overview">
 				<div class="col-12 px-0 px-sm-3">
 					<header><ui-content-card>
-						<div class="d-block d-md-flex flex-row flex-wrap flex-md-nowrap align-items-start pb-2">
+						<div class="d-block d-md-flex flex-row flex-wrap flex-md-nowrap align-items-start pb-2 align-items-center">
 							<div class="flex-grow-1">
 								<div>
 									<div id="namespace" class="lead d-block d-md-inline text-center">${this.gitlabProjectData.namespace.name}</div>
