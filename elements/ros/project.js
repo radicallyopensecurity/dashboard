@@ -339,6 +339,13 @@ export class Project extends LitNotify(GitlabProject) {
 			height: 138px;
 		}
 
+		@media (max-width: 767px) {
+			.avatar {
+				width: 192px;
+				height: 192px;
+			}
+		}
+
 		.list-group-item {
 			cursor: pointer;
 			transition: background-color 0.2 ease;
