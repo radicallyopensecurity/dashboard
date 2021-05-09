@@ -99,7 +99,9 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		if (keys.includes("pageTitle")) {
 			let pageTitle = "R\u2661S";
 			if (this.pageTitle !== undefined) {
-				pageTitle += `: ${this.pageTitle}`;
+				pageTitle += ` _ ${this.pageTitle}`;
+			} else {
+				pageTitle += ' _board';
 			}
 			document.title = pageTitle;
 		}
