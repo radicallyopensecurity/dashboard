@@ -133,7 +133,6 @@ export class AutocompleteInput extends LitNotify(LitElement) {
 
 	render() {
 		return html`
-		<link rel="stylesheet" href="style.css"/>
 		<input type="search" name="search" @change="${this.onChangeInput}"/>
 		${this.options !== null ? html`
 			<ul id="suggestions">
