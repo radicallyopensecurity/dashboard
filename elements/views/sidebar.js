@@ -24,12 +24,17 @@ class SidebarView extends LitNotify(LitElement) {
 		#sidebar {
 			position: absolute;
 			z-index: 999;
-			width: 100%;
 		}
 
-		@media (min-width: 768px) {
+		@media (max-width: 575px) {
 			#sidebar {
-				width: auto !important;
+				width: 100%;
+			}
+		}
+
+		@media (min-width: 576px) and (max-width: 991px) {
+			#sidebar {
+				width: auto;
 			}
 		}
 
@@ -83,7 +88,7 @@ class SidebarView extends LitNotify(LitElement) {
 
 		<div class="position-absolute h-100 w-100 d-block overflow-hidden">
 			<div class="position-absolute w-100 h-100 mx-0 d-flex flex-row align-items-stretch">
-				<nav id="sidebar" class="col-md-3 col-xl-2 d-lg-block bg-body sidebar collapse shadow px-3 h-100 w-100">
+				<nav id="sidebar" class="col-md-3 col-xl-2 d-lg-block bg-body sidebar collapse shadow px-3 h-100">
 					<div class="position-sticky mx-1 mt-4 mb-1 safe-padding-left">
 						<form @submit="${this.onSearch}">
 							<div class="input-group">
@@ -98,47 +103,52 @@ class SidebarView extends LitNotify(LitElement) {
 								</button>
 							</div>
 						</form>
-						<h6 class="sidebar-heading text-muted">
-							<span>Projects</span>
-						</h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="#">
-									<ui-icon icon="bookmark"></ui-icon>
-									My Projects
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="#new">
-									<ui-icon icon="plus-square"></ui-icon>
-									New Project
-								</a>
-							</li>
-						</ul>
-
-						<h6 class="sidebar-heading mt-3 text-muted">
-							<span>ROS Services</span>
-						</h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
-									<ui-icon icon="message-square"></ui-icon>
-									Rocket.Chat
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
-									<ui-icon icon="gitlab"></ui-icon>
-									Gitlab
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" aria-current="page" href="https://codimd.radicallyopensecurity.com" target="_blank">
-									<ui-icon icon="file-text"></ui-icon>
-									CodiMD
-								</a>
-							</li>
-						</ul>
+						<div class="row">
+							<div class="col-12 col-sm-6 col-lg-12">
+								<h6 class="sidebar-heading mt-3 text-muted">
+									<span>Projects</span>
+								</h6>
+								<ul class="nav flex-column">
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="#">
+											<ui-icon icon="bookmark"></ui-icon>
+											My Projects
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="#new">
+											<ui-icon icon="plus-square"></ui-icon>
+											New Project
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="col-12 col-sm-6 col-lg-12">
+								<h6 class="sidebar-heading mt-3 text-muted">
+									<span>ROS Services</span>
+								</h6>
+								<ul class="nav flex-column">
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
+											<ui-icon icon="message-square"></ui-icon>
+											Rocket.Chat
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
+											<ui-icon icon="gitlab"></ui-icon>
+											Gitlab
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="https://codimd.radicallyopensecurity.com" target="_blank">
+											<ui-icon icon="file-text"></ui-icon>
+											CodiMD
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</nav>
 
