@@ -219,13 +219,13 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		const footerStyles = styleMap({
 			height: footerHeight,
 			maxHeight: (footerNavigationItemCount > 0) ? footerHeight : 0,
-			transition: 'max-height 0s ease-in',
+			transition: 'max-height 0s ease-out',
 			transitionDelay: '0.2s'
 		});
 		const footerAnimationStyles = styleMap({
 			height: footerHeight,
 			maxHeight: (footerNavigationItemCount > 0) ? footerHeight : 0,
-			transition: 'max-height 0.2s ease-in',
+			transition: 'max-height 0.2s ease-out',
 			position: 'absolute',
 			right: 0,
 			bottom: 0,
