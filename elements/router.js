@@ -15,6 +15,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.projectId = null;
 		this.forceSidebarVisible = false;
 		this.search = "";
+		this.pageTitle = undefined;
 		this.initialized = false;
 		this.subroute = undefined;
 		this.availableSubroutes = {};
@@ -53,6 +54,10 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			},
 			availableSubroutes: {
 				type: Object
+			},
+			pageTitle: {
+				type: String,
+				notify: true
 			}
 		}
 	}
@@ -90,6 +95,13 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		}
 		if (keys.includes("gitlabProjectId")) {
 			this.availableSubroutes = {};
+		}
+		if (keys.includes("pageTitle")) {
+			let pageTitle = "R\u2661S";
+			if (this.pageTitle !== undefined) {
+				pageTitle += `: ${this.pageTitle}`;
+			}
+			document.title = pageTitle;
 		}
 	}
 
@@ -171,8 +183,10 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				.gitlabProjectId="${parseInt(this.gitlabProjectId, 10)}"
 				.subroute="${this.subroute}"
 				.availableSubroutes="${this.sync('availableSubroutes')}"
+				.pageTitle="${this.sync('pageTitle')}"
 			></ros-project>`;
 		} else {
+			this.pageTitle = undefined;
 			view = html`<ros-overview
 					.params=${{search: this.search, order_by: "last_activity_at"}}
 					perPage="20"
@@ -186,10 +200,13 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		const header = html`
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
 
-			<a class="navbar-brand text-center me-auto safe-margin-left" href="#">
-				<span class="d-none d-md-inline">Radically Open Security</span>
-				<span class="d-md-none">R\u2661S</span>
-			</a>
+			<span class="me-auto">
+				<a class="navbar-brand text-center safe-margin-left me-2" href="#">
+					<span class="d-none d-md-inline">Radically Open Security</span>
+					<span class="d-md-none">R\u2661S</span>
+				</a>
+				<span class="text-secondary">${this.pageTitle}</span>
+			</span>
 
 			<div class="safe-margin-right d-flex flex-row">
 				${(this.initialized && this.gitlabUser) ? html`

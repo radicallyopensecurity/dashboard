@@ -103,6 +103,27 @@ export class Project extends LitNotify(GitlabProject) {
 				type: Boolean,
 				notify: true,
 				reflect: true
+			},
+			pageTitle: {
+				type: String,
+				notify: true
+			}
+		}
+	}
+
+	updated(changedProperties) {
+		super.updated(changedProperties);
+		const keys = [...changedProperties.keys()];
+		if (keys.includes("gitlabProjectData")) {
+			console.log(this.gitlabProjectData);
+			if (this.gitlabProjectData instanceof Object) {
+				if (this.gitlabProjectData.namespace.path === "ros") {
+					this.pageTitle = this.gitlabProjectData.name;
+				} else {
+					this.pageTitle = this.gitlabProjectData.name_with_namespace;
+				}
+			} else {
+				this.pageTitle = undefined;
 			}
 		}
 	}
