@@ -367,6 +367,12 @@ export class Project extends LitNotify(GitlabProject) {
 		:host([subroute="findings"]) [subroute="findings"] {
 			display: block !important;
 		}
+
+		.flex-item {
+			flex-grow: 1;
+			flex-shrink: 1;
+			flex-base: 0;
+		}
 		`;
 	}
 
@@ -454,7 +460,7 @@ export class Project extends LitNotify(GitlabProject) {
 								<h5>Staff</h5>
 								<div class="d-flex flex-wrap">
 									${this.staff.map((member) => html`
-										<div class="p-2 flex-fill flex-nowrap text-nowrap text-center">
+										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
 											<a href="/${member.username}" target="_blank">
 												<gitlab-avatar .user="${member}" class="me-1"></gitlab-avatar>${member.name}
 											</a>
@@ -466,7 +472,7 @@ export class Project extends LitNotify(GitlabProject) {
 								<h5>Customer${this.customers.length > 1 ? "s" : ""}</h5>
 								<div class="d-flex flex-wrap">
 									${this.customers.map((member) => html`
-										<div class="p-2 flex-fill flex-nowrap text-nowrap text-center">
+										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
 											<a href="/${member.username}" target="_blank">
 												<gitlab-avatar .user="${member}" class="me-1"></gitlab-avatar>${member.name}
 											</a>
