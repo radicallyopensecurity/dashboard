@@ -219,7 +219,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		});
 		const footer = html`
 		<footer style="${footerStyles}">
-			<nav class="navbar navbar-expand navbar-dark bg-dark d-sm-none p-0 h-100">
+			<nav class="navbar navbar-expand navbar-dark bg-dark d-sm-none p-0" style="${styleMap({ height: footerHeight })}">
 				<div class="container-fluid">
 					<ul class="navbar-nav d-flex justify-content-between w-100 px-2">
 						${Object.entries(this.availableSubroutes).map(([subroute, subrouteOptions], i) => {
