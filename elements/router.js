@@ -117,6 +117,10 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			line-height: var(--line-height);
 			text-decoration: none;
 		}
+
+		main {
+			overflow-y: scroll;
+		}
 		`;
 	}
 
@@ -244,7 +248,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				return html`${stylesheetIncludes}
 				<div class="d-flex flex-column h-100">
 					${header}
-					<div class="flex-grow-1">${view}</div>
+					<main class="flex-grow-1">${view}</main>
 					${footer}
 				</div>`;
 			default: // sidebar
