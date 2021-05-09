@@ -113,17 +113,17 @@ export class Project extends LitNotify(GitlabProject) {
 				title: "Overview",
 				icon: "pie-chart"
 			},
-			chat: {
-				title: "Chat",
-				icon: "message-square"
+			history: {
+				title: "History",
+				icon: "archive"
 			},
 			findings: {
 				title: "Findings",
 				icon: "gitlab"
 			},
-			history: {
-				title: "History",
-				icon: "archive"
+			chat: {
+				title: "Chat",
+				icon: "message-square"
 			}
 		};
 	}

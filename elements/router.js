@@ -231,6 +231,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			bottom: 0,
 			left: 0
 		});
+
 		const footer = html`
 		<footer style="${footerStyles}" count="${footerNavigationItemCount}" class="d-sm-none">
 			<div style="${footerAnimationStyles}">
