@@ -9,7 +9,6 @@ import { ContentCard } from '../ui/content-card.js';
 import '../ui/accordion.js';
 import '../ui/unsafe-content.js';
 import '../ui/icon.js';
-import '../ui/breadcrumbs.js';
 import './project/projectActivity.js';
 import './project/projectRecentIssues.js';
 
@@ -382,11 +381,7 @@ export class Project extends LitNotify(GitlabProject) {
 					<header><ui-content-card>
 						<div class="d-block d-sm-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
 							<div class="flex-grow-1">
-								<ui-breadcrumbs>
-									<span>Projects</span>
-									<span>${this.gitlabProjectData.namespace.name}</span>
-									<span>${this.gitlabProjectData.name}</span>
-								</ui-breadcrumbs>
+								<div id="namespace" class="lead">${this.gitlabProjectData.namespace.name}</div>
 								<h1 class="d-block d-sm-inline text-center">${this.gitlabProjectData.name}</h1>
 								<div class="d-flex me-auto d-none">
 									<ul class="list-group list-group-horizontal">
