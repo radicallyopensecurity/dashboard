@@ -489,9 +489,9 @@ export class Project extends LitNotify(GitlabProject) {
 			<div class="row">
 				<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
 					<ui-content-card>
-						<h3>Findings <span class="badge bg-primary">${findings.length}</span></h3>
+						<h3 class="pb-1">Findings <span class="badge bg-primary">${findings.length}</span></h3>
 						${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
-							<h5>${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
+							<h5 class="py-1">${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
 							<ui-accordion .items="${findings.map((finding) => {
 								const title = html`
 									<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
@@ -502,7 +502,7 @@ export class Project extends LitNotify(GitlabProject) {
 								return { title, content };
 							})}"></ui-accordion>
 						`)}
-						<h3>Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
+						<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
 						<div class="list-group">
 							<ui-accordion .items="${nonFindings.map((nonFinding) => {
 								const title = html`
