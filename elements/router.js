@@ -215,7 +215,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		const footerStyles = styleMap({
 			height: footerHeight,
 			maxHeight: Object.keys(this.availableSubroutes).length ? footerHeight : 0,
-			transition: 'max-height 0.4s ease-out'
+			transition: 'max-height 0.2s ease-in'
 		});
 		const footer = html`
 		<footer style="${footerStyles}">
