@@ -88,6 +88,9 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		if (keys.includes("gitlabProjectId") && this.gitlabProjectId !== null) {
 			this.search = "";
 		}
+		if (keys.includes("gitlabProjectId")) {
+			this.availableSubroutes = {};
+		}
 	}
 
 	get onClickSidebarToggle() {
