@@ -19,6 +19,7 @@ class SidebarView extends LitNotify(LitElement) {
 
 		main {
 			overflow-y: scroll;
+			overflow-x: hidden;
 		}
 
 		#sidebar {
