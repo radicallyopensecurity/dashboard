@@ -152,7 +152,7 @@ class SidebarView extends LitNotify(LitElement) {
 					</div>
 				</nav>
 
-				<main class="position-relative flex-grow-1 mt-0 p-0 p-sm-3 safe-margin-right safe-margin-left ms-lg-0">
+				<main class="position-relative flex-grow-1 mt-0 p-0 p-sm-3 p-md-1 safe-margin-right safe-margin-left ms-lg-0">
 					<slot></slot>
 				</main>
 			</div>
