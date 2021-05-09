@@ -379,13 +379,13 @@ export class Project extends LitNotify(GitlabProject) {
 			<div class="row d-none d-sm-block" subroute="overview">
 				<div class="col-12 px-0 px-sm-3">
 					<header><ui-content-card>
-						<div class="d-block d-sm-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
+						<div class="d-block d-md-flex flex-row flex-wrap flex-md-nowrap align-items-start pb-2">
 							<div class="flex-grow-1">
 								<div>
-									<div id="namespace" class="lead d-block d-sm-inline text-center">${this.gitlabProjectData.namespace.name}</div>
+									<div id="namespace" class="lead d-block d-md-inline text-center">${this.gitlabProjectData.namespace.name}</div>
 								</div>
 								<div>
-									<h1 class="d-block d-sm-inline text-center">${this.gitlabProjectData.name}</h1>
+									<h1 class="d-block d-md-inline text-center">${this.gitlabProjectData.name}</h1>
 								</div>
 								<div class="d-flex me-auto d-none">
 									<ul class="list-group list-group-horizontal">
@@ -393,8 +393,8 @@ export class Project extends LitNotify(GitlabProject) {
 										<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
 									</ul>
 								</div>
-								<div class="d-flex flex-row align-items-end mt-3 justify-content-center">
-									<div class="d-flex text-nowrap mb-3">
+								<div class="d-flex d-md-inline-flex flex-column flex-sm-row align-items-center mt-3 justify-content-center">
+									<div class="d-flex text-nowrap mb-2 mb-sm-4">
 										${this.channelName !== undefined ? html`
 											<a aria-current="page" href="${this.chatChannelUrl}" target="_blank" role="button" class="btn btn-secondary me-2">
 												<ui-icon icon="message-square"></ui-icon>
@@ -408,7 +408,7 @@ export class Project extends LitNotify(GitlabProject) {
 											</a>
 										` : ''}
 									</div>
-									<div class="d-flex btn-toolbar text-nowrap me-sm-auto mb-3">
+									<div class="d-flex btn-toolbar text-nowrap mb-4">
 										<div class="input-group flex-nowrap">
 											${!!this.pdfPassword ? html`<span class="input-group-text">
 												<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
