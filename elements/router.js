@@ -211,7 +211,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 						$li.classList.add("nav-item", "text-nowrap");
 
 						const $a = document.createElement("a");
-						$a.classList.add("nav-link");
+						$a.classList.add("nav-link", "pb-3");
 						$a.href = `#${this.gitlabProjectId}/${subroute}`;
 
 							const $icon = document.createElement("ui-icon");
