@@ -204,7 +204,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 						</li>
 					</ul>
 
-					<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-md-none ms-2" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
+					<button @click="${this.onClickSidebarToggle}" class="navbar-toggler collapsed d-lg-none ms-2" type="button" aria-expanded="false" aria-label="Toggle Sidebar">
 						<span class="navbar-toggler-icon"></span>
 					</button>
 				` : ''}

@@ -27,13 +27,13 @@ class SidebarView extends LitNotify(LitElement) {
 			width: 100%;
 		}
 
-		@media (min-width: 576px) {
+		@media (min-width: 768px) {
 			#sidebar {
 				width: auto !important;
 			}
 		}
 
-		@media (min-width: 768px) {
+		@media (min-width: 992px) {
 			#sidebar{
 				position: relative !important;
 			}
@@ -83,7 +83,7 @@ class SidebarView extends LitNotify(LitElement) {
 
 		<div class="position-absolute h-100 w-100 d-block overflow-hidden">
 			<div class="position-absolute w-100 h-100 mx-0 d-flex flex-row align-items-stretch">
-				<nav id="sidebar" class="col-md-3 col-xl-2 d-md-block bg-body sidebar collapse shadow px-3 h-100 w-100">
+				<nav id="sidebar" class="col-md-3 col-xl-2 d-lg-block bg-body sidebar collapse shadow px-3 h-100 w-100">
 					<div class="position-sticky mx-1 mt-4 mb-1 safe-padding-left">
 						<form @submit="${this.onSearch}">
 							<div class="input-group">
