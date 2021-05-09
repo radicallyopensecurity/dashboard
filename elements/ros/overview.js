@@ -82,30 +82,34 @@ class Overview extends GitlabProjects {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 
-		<div class="col-12 bg-light">
-			<ui-content-card>
-				<ui-breadcrumbs>
-					<span>Projects</span>
-				</ui-breadcrumbs>
-				<div class="d-flex align-items-center">
-					<h1 class="me-auto">Overview</h1>
-					<div class="${loadingIndicatorClass}" role="status">
-						<span class="visually-hidden">Loading...</span>
-					</div>
-				</div>
-			</ui-content-card>
-			${this.projects.length > 0 ? html`
-				<div class="row gx-3">
-					<ui-content-card class="col-12 col-xl-6">
-						${this.renderSection("Pentests", pentests)}
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12 bg-light">
+					<ui-content-card>
+						<ui-breadcrumbs>
+							<span>Projects</span>
+						</ui-breadcrumbs>
+						<div class="d-flex align-items-center">
+							<h1 class="me-auto">Overview</h1>
+							<div class="${loadingIndicatorClass}" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+						</div>
 					</ui-content-card>
-					<ui-content-card class="col-12 col-xl-6">
-						${this.renderSection("Offers", offertes)}
-					</ui-content-card>
+					${this.projects.length > 0 ? html`
+						<div class="row gx-3">
+							<ui-content-card class="col-12 col-xl-6">
+								${this.renderSection("Pentests", pentests)}
+							</ui-content-card>
+							<ui-content-card class="col-12 col-xl-6">
+								${this.renderSection("Offers", offertes)}
+							</ui-content-card>
+						</div>
+					` : (!this.loading) ? html`
+						<p>No projects found</p>
+					` : ''}
 				</div>
-			` : (!this.loading) ? html`
-				<p>No projects found</p>
-			` : ''}
+			</div>
 		</div>`;
 	}
 
