@@ -134,10 +134,6 @@ export class Project extends LitNotify(GitlabProject) {
 				title: "Overview",
 				icon: "pie-chart"
 			},
-			history: {
-				title: "History",
-				icon: "archive"
-			},
 			findings: {
 				title: "Findings",
 				icon: "gitlab"
@@ -362,8 +358,7 @@ export class Project extends LitNotify(GitlabProject) {
 
 		:host([subroute="overview"]) [subroute="overview"],
 		:host([subroute="chat"]) [subroute="chat"],
-		:host([subroute="findings"]) [subroute="findings"],
-		:host([subroute="history"]) [subroute="history"] {
+		:host([subroute="findings"]) [subroute="findings"] {
 			display: block !important;
 		}
 		`;
@@ -507,7 +502,7 @@ export class Project extends LitNotify(GitlabProject) {
 						</div>
 					</ui-content-card>
 				</div>
-				<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="history">
+				<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="overview">
 					<div>
 						<div class="col-12">
 							<ui-content-card>
