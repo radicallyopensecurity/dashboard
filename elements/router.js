@@ -257,10 +257,12 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			height: footerHeight
 		});
 		const footerStyles = styleMap({
-			height: footerHeight,
-			maxHeight: (footerNavigationItemCount > 0) ? footerHeight : 0,
+			height: `calc(${footerHeight} + env(safe-area-inset-bottom))`,
+			maxHeight: (footerNavigationItemCount > 0) ? `calc(${footerHeight} + env(safe-area-inset-bottom))` : 0,
 			transition: 'max-height 0s ease-out',
-			transitionDelay: '0.2s'
+			transitionDelay: '0.2s',
+			position: 'relative',
+			display: 'block'
 		});
 		const footerAnimationStyles = styleMap({
 			height: footerHeight,
@@ -268,12 +270,12 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			transition: 'max-height 0.2s ease-out',
 			position: 'absolute',
 			right: 0,
-			bottom: 0,
+			top: 0,
 			left: 0
 		});
 
 		const footer = html`
-		<footer style="${footerStyles}" count="${footerNavigationItemCount}" class="d-sm-none">
+		<footer style="${footerStyles}" count="${footerNavigationItemCount}" class="d-sm-none bg-dark">
 			<div style="${footerAnimationStyles}">
 				<nav class="navbar navbar-expand navbar-dark bg-dark p-0" style="${footerHeightStyles}">
 					<div class="container-fluid">
