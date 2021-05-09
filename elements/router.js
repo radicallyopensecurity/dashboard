@@ -16,6 +16,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.forceSidebarVisible = false;
 		this.search = "";
 		this.pageTitle = undefined;
+		this.gitlabProjectData = null;
 		this.initialized = false;
 		this.subroute = undefined;
 		this.availableSubroutes = {};
@@ -30,6 +31,9 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				type: String,
 				notify: true,
 				reflect: true
+			},
+			gitlabProjectData: {
+				type: Object
 			},
 			authenticated: {
 				type: Boolean,
@@ -90,10 +94,12 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 	updated(changedProperties) {
 		super.updated(changedProperties);
 		const keys = [...changedProperties.keys()];
-		if (keys.includes("gitlabProjectId") && this.gitlabProjectId !== null) {
-			this.search = "";
-		}
 		if (keys.includes("gitlabProjectId")) {
+			if (this.gitlabProjectId !== null) {
+				this.search = "";
+			} else {
+				this.gitlabProjectData = null;
+			}
 			this.availableSubroutes = {};
 		}
 		if (keys.includes("pageTitle")) {
@@ -186,6 +192,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				.subroute="${this.subroute}"
 				.availableSubroutes="${this.sync('availableSubroutes')}"
 				.pageTitle="${this.sync('pageTitle')}"
+				.gitlabProjectData="${this.sync('gitlabProjectData')}"
 			></ros-project>`;
 		} else {
 			this.pageTitle = undefined;
@@ -203,11 +210,17 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3 flex-nowrap">
 
 			<span class="me-auto">
+			${this.gitlabProjectData != null ? html`
+				<span class="small text-secondary">${this.gitlabProjectData.namespace.name}</span>
+				<br/>
+				<span class="text-white">${this.gitlabProjectData.name}</span>
+			` : html`
 				<a class="navbar-brand text-center safe-margin-left me-2" href="#">
 					<span class="d-none d-md-inline">Radically Open Security</span>
 					<span class="d-md-none">R\u2661S</span>
 				</a>
 				<span class="text-secondary text-nowrap" style="text-overflow: ellipsis;">${this.pageTitle}</span>
+			`}
 			</span>
 
 			<div class="safe-margin-right d-flex flex-row">
