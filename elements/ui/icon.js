@@ -1,10 +1,12 @@
-import { LitElement, svg } from '../../web_modules/lit-element.js';
+import { LitElement, svg, css } from '../../web_modules/lit-element.js';
 
 class FeatherIcon extends LitElement {
 
 	constructor() {
 		super();
 		this.icon = undefined;
+		this.width = 16;
+		this.height = 16;
 	}
 
 	static get properties() {
@@ -12,15 +14,28 @@ class FeatherIcon extends LitElement {
 			icon: {
 				type: String,
 				notify: true
+			},
+			width: {
+				type: Number
+			},
+			height: {
+				type: Number
 			}
 		}
+	}
+
+	static get styles() {
+		return css`
+		.feather {
+			vertical-align: text-bottom;
+		}`;
 	}
 
 	render() {
 		return svg`
 		<svg class="feather"
-			width="24px"
-			height="24px"
+			width="${`${this.width}px`}"
+			height="${`${this.height}px`}"
 			stroke="currentColor"
 			stroke-width="2"
 			stroke-linecap="round"

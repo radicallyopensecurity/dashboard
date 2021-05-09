@@ -218,8 +218,8 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 
 			${this.gitlabProjectData != null ? html`
 			<span class="navbar-nav">
-				<a href="#" class="nav-link pe-2">
-					<ui-icon icon="chevron-left"></ui-icon>
+				<a href="#" class="nav-link pe-1">
+					<ui-icon icon="chevron-left" width="30" height="30"></ui-icon>
 				</a>
 			</span>
 			<span class="me-auto" style="line-height: 1.4;">
