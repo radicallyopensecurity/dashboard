@@ -146,6 +146,13 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		main {
 			overflow-y: scroll;
 		}
+
+		footer .nav-item {
+			flex-grow: 1;
+			flex-shrink: 1;
+			flex-basis: 0;
+			text-align: center;
+		}
 		`;
 	}
 
@@ -279,7 +286,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			<div style="${footerAnimationStyles}">
 				<nav class="navbar navbar-expand navbar-dark bg-dark p-0" style="${footerHeightStyles}">
 					<div class="container-fluid">
-						<ul class="navbar-nav d-flex justify-content-between w-100 px-2">
+						<ul class="navbar-nav d-flex justify-content-evenly w-100 px-2">
 							${Object.entries(this.availableSubroutes).map(([subroute, subrouteOptions], i) => {
 								const $li = document.createElement("li");
 								$li.classList.add("nav-item", "text-nowrap");
