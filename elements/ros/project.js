@@ -381,8 +381,12 @@ export class Project extends LitNotify(GitlabProject) {
 					<header><ui-content-card>
 						<div class="d-block d-sm-flex flex-row flex-wrap flex-md-nowrap align-items-end pb-2">
 							<div class="flex-grow-1">
-								<div id="namespace" class="lead">${this.gitlabProjectData.namespace.name}</div>
-								<h1 class="d-block d-sm-inline text-center">${this.gitlabProjectData.name}</h1>
+								<div>
+									<div id="namespace" class="lead d-block d-sm-inline text-center">${this.gitlabProjectData.namespace.name}</div>
+								</div>
+								<div>
+									<h1 class="d-block d-sm-inline text-center">${this.gitlabProjectData.name}</h1>
+								</div>
 								<div class="d-flex me-auto d-none">
 									<ul class="list-group list-group-horizontal">
 										<li class="list-group-item">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
