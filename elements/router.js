@@ -207,19 +207,27 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		<link rel="stylesheet" href="dashboard.css"/>`;
 
 		const header = html`
-		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3 flex-nowrap">
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-2 px-sm-3 flex-nowrap">
 
-			<span class="me-auto">
 			${this.gitlabProjectData != null ? html`
+			<span class="navbar-nav">
+				<a href="#" class="nav-link pe-2">
+					<ui-icon icon="chevron-left"></ui-icon>
+				</a>
+			</span>
+			<span class="me-auto" style="line-height: 1.4;">
 				<span class="small text-secondary">${this.gitlabProjectData.namespace.name}</span>
 				<br/>
 				<span class="text-white">${this.gitlabProjectData.name}</span>
+			</span>
 			` : html`
-				<a class="navbar-brand text-center safe-margin-left me-2" href="#">
+			<span class="me-auto">
+				<a class="navbar-brand text-center safe-margin-left ms-2 me-2" href="#">
 					<span class="d-none d-md-inline">Radically Open Security</span>
 					<span class="d-md-none">R\u2661S</span>
 				</a>
 				<span class="text-secondary text-nowrap" style="text-overflow: ellipsis;">${this.pageTitle}</span>
+			</span>
 			`}
 			</span>
 
