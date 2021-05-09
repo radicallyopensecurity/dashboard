@@ -200,14 +200,14 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		<link rel="stylesheet" href="dashboard.css"/>`;
 
 		const header = html`
-		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3">
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-3 flex-nowrap">
 
 			<span class="me-auto">
 				<a class="navbar-brand text-center safe-margin-left me-2" href="#">
 					<span class="d-none d-md-inline">Radically Open Security</span>
 					<span class="d-md-none">R\u2661S</span>
 				</a>
-				<span class="text-secondary">${this.pageTitle}</span>
+				<span class="text-secondary text-nowrap" style="text-overflow: ellipsis;">${this.pageTitle}</span>
 			</span>
 
 			<div class="safe-margin-right d-flex flex-row">
