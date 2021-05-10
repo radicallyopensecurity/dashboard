@@ -103,7 +103,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			this.availableSubroutes = {};
 		}
 		if (keys.includes("pageTitle")) {
-			let pageTitle = "R\u2661S";
+			let pageTitle = "R♡S";
 			if (this.pageTitle !== undefined) {
 				pageTitle += ` _ ${this.pageTitle}`;
 			} else {
