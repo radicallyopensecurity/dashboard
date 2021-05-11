@@ -102,7 +102,7 @@ class Overview extends GitlabProjects {
 								${this.renderSection("Pentests", pentests)}
 							</ui-content-card>
 							<ui-content-card class="col-12 col-xl-6">
-								${this.renderSection("Offers", offertes)}
+								${this.renderSection("Quotes", offertes)}
 							</ui-content-card>
 						</div>
 					` : (!this.loading) ? html`
