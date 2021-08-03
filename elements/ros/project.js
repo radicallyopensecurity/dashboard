@@ -502,37 +502,37 @@ export class Project extends LitNotify(GitlabProject) {
 			</div>
 			<div class="row d-none d-sm-block" subroute="chat">
 				<div class="col-12 px-0 px-sm-3">
-					<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
-
-						<ul class="nav nav-tabs">
-							${Object.entries(this.enabledStates)
-								.map(([name, options]) => {
-									const classes = {
-										"nav-link": true
-									};
-									if (name === this.selectedChatTabState) {
-										classes.active = true;
-									}
-									return html`
-										<li class="nav-item">
-											<a class="${classMap(classes)}"
-												style="text-transform: capitalize;"
-												name="${name}"
-												aria-current="page"
-												@click="${this.onClickChatTab}"
-											>${name}</a>
-										</li>
-									`;
-								})
-							}
-						</ul>
-
-						<iframe id="chat" class="w-100 h-100"
-							src="${this.chatChannelUrl}?layout=embedded"
-							sandbox="allow-scripts allow-same-origin allow-forms"
-							referrerpolicy="origin"
-						></iframe>
-					</project-ui-content-card-chat>
+					<ul class="nav nav-tabs">
+						${Object.entries(this.enabledStates)
+							.map(([name, options]) => {
+								const classes = {
+									"nav-link": true
+								};
+								if (name === this.selectedChatTabState) {
+									classes.active = true;
+								}
+								return html`
+									<li class="nav-item">
+										<a class="${classMap(classes)}"
+											style="text-transform: capitalize;"
+											name="${name}"
+											aria-current="page"
+											@click="${this.onClickChatTab}"
+										>${name}</a>
+									</li>
+								`;
+							})
+						}
+					</ul>
+					<div class="chat-frame">
+						<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
+							<iframe id="chat" class="w-100 h-100"
+								src="${this.chatChannelUrl}?layout=embedded"
+								sandbox="allow-scripts allow-same-origin allow-forms"
+								referrerpolicy="origin"
+							></iframe>
+						</project-ui-content-card-chat>
+					</div>
 				</div>
 			</div>
 			<div class="row d-none d-sm-block" subroute="overview">
