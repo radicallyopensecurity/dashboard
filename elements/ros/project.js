@@ -516,6 +516,7 @@ export class Project extends LitNotify(GitlabProject) {
 									return html`
 										<li class="nav-item">
 											<a class="${classMap(classes)}"
+												style="text-transform: capitalize;"
 												name="${name}"
 												aria-current="page"
 												@click="${this.onClickChatTab}"
