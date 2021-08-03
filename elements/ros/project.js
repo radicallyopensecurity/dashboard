@@ -216,6 +216,17 @@ export class Project extends LitNotify(GitlabProject) {
 
 	}
 
+	get onClickChatTab() {
+		return (e) => {
+
+			const chatFrame = this.shadowRoot.getElementById("chat");
+			const target = e.target;
+
+			console.log(e);
+			debugger;
+		}
+	}
+
 	static get severities() {
 		return [
 			"ToDo",
@@ -473,7 +484,7 @@ export class Project extends LitNotify(GitlabProject) {
 								.map(([name, options]) => {
 								return html`
 									<li class="nav-item">
-										<a class="nav-link active" aria-current="page" href="#">${name}</a>
+										<a class="nav-link active" aria-current="page" @click="${this.onClickChatTab}" href="#">${name}</a>
 									</li>
 								`;
 							})}
