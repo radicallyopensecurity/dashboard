@@ -70,8 +70,12 @@ class Overview extends GitlabProjects {
 	}
 
 	render() {
-		const pentests = this.projects.filter((project) => project.name.startsWith("pen-"));
-		const offertes = this.projects.filter((project) => project.name.startsWith("off-"));
+		const pentests = this.projects.filter((project) => {
+			return project.name.startsWith("pen-") || project.tag_list.includes("pentest");
+		});
+		const offertes = this.projects.filter((project) => {
+			return project.name.startsWith("off-") || project.tag_list.includes("offerte");
+		});
 
 		const loadingIndicatorClass = classMap({
 			"spinner-border": true,
