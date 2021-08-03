@@ -468,7 +468,9 @@ export class Project extends LitNotify(GitlabProject) {
 					<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
 
 						<ul class="nav nav-tabs">
-							${Object.entries(this.state).map(([name, options]) => {
+							${Object.entries(this.state)
+								.filter(([name, options]) => !!options.enabled)
+								.map(([name, options]) => {
 								return html`
 									<li class="nav-item">
 										<a class="nav-link active" aria-current="page" href="#">${name}</a>
