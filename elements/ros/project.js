@@ -199,34 +199,46 @@ export class Project extends LitNotify(GitlabProject) {
 			.filter((member) => member.access_level < 40);
 	}
 
-	get state() {
+	get states() {
 
-		const state = {
-			pentest: {
-				enabled: false,
-				prefix: "pen"
-			},
+		const states = {
 			offerte: {
 				enabled: true,
 				prefix: "off"
+			},
+			pentest: {
+				enabled: false,
+				prefix: "pen"
 			}
 		};
 
 		this.gitlabProjectData.tag_list
 			.forEach((tag) => {
-				state[tag].enabled = true;
+				states[tag].enabled = true;
 			});
 
-		return state;
+		return states;
 
+	}
+
+	get enabledStates() {
+		const enabledStates = {};
+		Object.entries(this.states)
+			.filter(([name, options]) => !!options.enabled)
+			.forEach(([name, options]) => enabledStates[name] = options);
+		return enabledStates;
 	}
 
 	get selectedChatTabState() {
-		return this._selectedChatTabState || "offerte";
+		const states = this.enabledStates;
+		if (states.length === 0) {
+			return "offerte";
+		}
+		return this._selectedChatTabState || Object.keys(states).pop();
 	}
 
 	set selectedChatTabState(value) {
-		if (!Object.keys(this.state).includes(value)) {
+		if (!Object.keys(this.states).includes(value)) {
 			throw new Error("Invalid chat tab state");
 		}
 		this._selectedChatTabState = value;
@@ -339,7 +351,7 @@ export class Project extends LitNotify(GitlabProject) {
 			return;
 		}
 
-		const prefix = match.groups.prefix || this.state[this.selectedChatTabState].prefix;
+		const prefix = match.groups.prefix || this.states[this.selectedChatTabState].prefix;
 
 		if (namespace === "ros") {
 			return `${prefix}-${match.groups.name}`;
@@ -493,8 +505,7 @@ export class Project extends LitNotify(GitlabProject) {
 					<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
 
 						<ul class="nav nav-tabs">
-							${Object.entries(this.state)
-								.filter(([name, options]) => !!options.enabled)
+							${Object.entries(this.enabledStates)
 								.map(([name, options]) => {
 									const classes = {
 										"nav-link": true
