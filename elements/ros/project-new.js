@@ -1,6 +1,7 @@
 import { LitElement, html } from '../../web_modules/lit-element.js';
 import { LitSync, LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
-import { GitlabProject, gitlabAuth } from '../gitlab/index.js';
+import { gitlabAuth } from '../gitlab/index.js';
+import { GitlabProject} from '../gitlab/project.js';
 import { DropdownInput } from '../ui/input/dropdown.js';
 import '../ui/breadcrumbs.js';
 import '../ui/content-card.js';

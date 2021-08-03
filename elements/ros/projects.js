@@ -1,6 +1,6 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
-import { GitlabProjects } from '../gitlab/index.js';
+import { GitlabProjects } from '../gitlab/projects.js';
 
 class Projects extends GitlabProjects {
 

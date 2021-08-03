@@ -3,7 +3,7 @@ import marked from '../../web_modules/marked.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
-import { GitlabProject } from '../gitlab/index.js';
+import { GitlabProject } from '../gitlab/project.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import { ContentCard } from '../ui/content-card.js';
