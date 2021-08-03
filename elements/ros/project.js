@@ -1,9 +1,10 @@
 import moment from '../../web_modules/moment.js';
-import marked from '../../web_modules/marked.js';
+import marked from '../../lib/marked.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/project.js';
+import { Finding } from '../ros/finding.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import { ContentCard } from '../ui/content-card.js';
@@ -15,46 +16,6 @@ import './project/projectRecentIssues.js';
 
 const gitlabCiJobName = "build";
 const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
-
-// tweak marked renderer
-const headingLevelOffset = 2;
-marked.use({
-	renderer: {
-		heading(text, level) {
-			level += headingLevelOffset;
-			return `<h${level}>${text}</h${level}>`;
-		},
-		code(code, infostring, escaped) {
-			const lang = (infostring || '').match(/\S*/)[0];
-			if (this.options.highlight) {
-				const out = this.options.highlight(code, lang);
-				if (out != null && out !== code) {
-					escaped = true;
-					code = out;
-				}
-			}
-
-			code = code.replace(/\n$/, '') + '\n';
-
-			const $pre = document.createElement("pre");
-			const $code = document.createElement("code");
-			$pre.appendChild($code);
-			$pre.classList.add("bg-light", "p-3");
-
-			if (escaped) {
-				$code.innerHTML = code;
-			} else {
-				$code.innerText = code;
-			}
-
-			if (lang) {
-				$code.classList.add(`${this.options.langPrefix}${escape(lang, true)}`);
-			}
-
-			return $pre.outerHTML;
-		}
-	}
-});
 
 class ChatContentCard extends ContentCard {
 	static get styles() {
@@ -80,7 +41,6 @@ export class Project extends LitNotify(GitlabProject) {
 	constructor() {
 		super();
 		this.fullscreen = true;
-		console.log(this.availableSubroutes);
 	}
 
 	connectedCallback() {
@@ -119,7 +79,6 @@ export class Project extends LitNotify(GitlabProject) {
 		super.updated(changedProperties);
 		const keys = [...changedProperties.keys()];
 		if (keys.includes("gitlabProjectData")) {
-			console.log(this.gitlabProjectData);
 			if (this.gitlabProjectData instanceof Object) {
 				if (this.gitlabProjectData.namespace.path === "ros") {
 					this.pageTitle = this.gitlabProjectData.name;
@@ -176,11 +135,26 @@ export class Project extends LitNotify(GitlabProject) {
 	}
 
 	get findings() {
-		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding"));
+		return this.gitlabProjectIssues
+			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding"))
+			.map((gitlabIssue) => {
+				const $finding = document.createElement("ros-finding");
+				$finding.gitlabProjectId = this.gitlabProjectId;
+				$finding.gitlabIssueData = gitlabIssue;
+				$finding.gitlabIssueIid = gitlabIssue.iid;
+				return $finding;
+			});
 	}
 
 	get nonFindings() {
-		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "non-finding"));
+		return this.gitlabProjectIssues
+			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "non-finding"))
+			// .map((gitlabIssue) => html`
+			// 	<ros-non-finding
+			// 		.gitlabProjectId="${this.gitlabProjectId}"
+			// 		.gitlabIssueId="${this.gitlabIssueIid}"
+			// 	></ros-non-finding>
+			// `);
 	}
 
 	get members() {
@@ -583,9 +557,7 @@ export class Project extends LitNotify(GitlabProject) {
 									<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
 									<span>${finding.title}</span>
 								`;
-								const content = document.createElement("ui-unsafe-content");
-								content.unsafeHTML = marked(finding.description, { gfm: true });
-								return { title, content };
+								return { title, content: finding };
 							})}"></ui-accordion>
 						`)}
 						<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>

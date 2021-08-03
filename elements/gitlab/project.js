@@ -37,17 +37,15 @@ export class GitlabProject extends Gitlab {
 				type: Array,
 				notify: true
 			},
-
 			gitlabProjectIssues: {
 				type: Array,
 				notify: true
 			}
-		}
+		};
 	}
 
 	async updated(changedProperties) {
-		const keys = [...changedProperties.keys()];
-		if (keys.includes("gitlabProjectId")) {
+		if (changedProperties.has("gitlabProjectId")) {
 			await this.fetch();
 		}
 	}
