@@ -511,7 +511,8 @@ export class Project extends LitNotify(GitlabProject) {
 									"nav-link": true
 								};
 								if (name === this.selectedChatTabState) {
-									classes.active = true;
+									classes["active"] = true;
+									classes["bg-white"] = true;
 								}
 								return html`
 									<li class="nav-item" @click="${this.onClickChatTab}">
