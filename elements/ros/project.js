@@ -194,6 +194,28 @@ export class Project extends LitNotify(GitlabProject) {
 			.filter((member) => member.access_level < 40);
 	}
 
+	get state() {
+
+		const state = {
+			pentest: {
+				enabled: false,
+				prefix: "pen"
+			},
+			offerte: {
+				enabled: true,
+				prefix: "off"
+			}
+		};
+
+		this.gitlabProjectData.tag_list
+			.forEach((tag) => {
+				state[tag].enabled = true;
+			});
+
+		return state;
+
+	}
+
 	static get severities() {
 		return [
 			"ToDo",
@@ -444,6 +466,17 @@ export class Project extends LitNotify(GitlabProject) {
 			<div class="row d-none d-sm-block" subroute="chat">
 				<div class="col-12 px-0 px-sm-3">
 					<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
+
+						<ul class="nav nav-tabs">
+							${Object.entries(this.state).map(([name, options]) => {
+								return html`
+									<li class="nav-item">
+										<a class="nav-link active" aria-current="page" href="#">${name}</a>
+									</li>
+								`;
+							})}
+						</ul>
+
 						<iframe id="chat" class="w-100 h-100"
 							src="${this.chatChannelUrl}?layout=embedded"
 							sandbox="allow-scripts allow-same-origin allow-forms"
