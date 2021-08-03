@@ -1,6 +1,7 @@
 import moment from '../../web_modules/moment.js';
 import marked from '../../web_modules/marked.js';
 import { LitElement, html, css } from '../../web_modules/lit-element.js';
+import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
@@ -13,7 +14,7 @@ import './project/projectActivity.js';
 import './project/projectRecentIssues.js';
 
 const gitlabCiJobName = "build";
-const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?<prefix>pen|off)-(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
+const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
 // tweak marked renderer
 const headingLevelOffset = 2;
@@ -106,6 +107,10 @@ export class Project extends LitNotify(GitlabProject) {
 			pageTitle: {
 				type: String,
 				notify: true
+			},
+
+			_selectedChatTabState: {
+				type: Boolean
 			}
 		}
 	}
@@ -216,14 +221,21 @@ export class Project extends LitNotify(GitlabProject) {
 
 	}
 
+	get selectedChatTabState() {
+		return this._selectedChatTabState || "offerte";
+	}
+
+	set selectedChatTabState(value) {
+		if (!Object.keys(this.state).includes(value)) {
+			throw new Error("Invalid chat tab state");
+		}
+		this._selectedChatTabState = value;
+	}
+
 	get onClickChatTab() {
 		return (e) => {
-
-			const chatFrame = this.shadowRoot.getElementById("chat");
 			const target = e.target;
-
-			console.log(e);
-			debugger;
+			this._selectedChatTabState = target.getAttribute("name");
 		}
 	}
 
@@ -327,10 +339,12 @@ export class Project extends LitNotify(GitlabProject) {
 			return;
 		}
 
+		const prefix = match.groups.prefix || this.state[this.selectedChatTabState].prefix;
+
 		if (namespace === "ros") {
-			return `${match.groups.prefix}-${match.groups.name}`;
+			return `${prefix}-${match.groups.name}`;
 		} else {
-			return `${namespace}-${match.groups.prefix}-${match.groups.name}`;
+			return `${namespace}-${prefix}-${match.groups.name}`;
 		}
 	}
 
@@ -482,12 +496,23 @@ export class Project extends LitNotify(GitlabProject) {
 							${Object.entries(this.state)
 								.filter(([name, options]) => !!options.enabled)
 								.map(([name, options]) => {
-								return html`
-									<li class="nav-item">
-										<a class="nav-link active" aria-current="page" @click="${this.onClickChatTab}" href="#">${name}</a>
-									</li>
-								`;
-							})}
+									const classes = {
+										"nav-link": true
+									};
+									if (name === this.selectedChatTabState) {
+										classes.active = true;
+									}
+									return html`
+										<li class="nav-item">
+											<a class="${classMap(classes)}"
+												name="${name}"
+												aria-current="page"
+												@click="${this.onClickChatTab}"
+											>${name}</a>
+										</li>
+									`;
+								})
+							}
 						</ul>
 
 						<iframe id="chat" class="w-100 h-100"
