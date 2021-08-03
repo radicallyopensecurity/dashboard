@@ -246,6 +246,8 @@ export class Project extends LitNotify(GitlabProject) {
 
 	get onClickChatTab() {
 		return (e) => {
+			e.preventDefault();
+			e.stopPropagation();
 			const target = e.target;
 			this._selectedChatTabState = target.getAttribute("name");
 		}
@@ -512,12 +514,12 @@ export class Project extends LitNotify(GitlabProject) {
 									classes.active = true;
 								}
 								return html`
-									<li class="nav-item">
+									<li class="nav-item" @click="${this.onClickChatTab}">
 										<a class="${classMap(classes)}"
 											style="text-transform: capitalize;"
 											name="${name}"
 											aria-current="page"
-											@click="${this.onClickChatTab}"
+											href="#"
 										>${name}</a>
 									</li>
 								`;
