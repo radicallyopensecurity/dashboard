@@ -2,11 +2,10 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default [
     {
-        input: "node_modules/moment/moment.js",
+        input: "node_modules/moment/src/moment.js",
         output: {
             file: "web_modules/moment.js"
-        },
-        plugins: [nodeResolve()]
+        }
     },{
         input: "node_modules/marked/src/marked.js",
         output: {
