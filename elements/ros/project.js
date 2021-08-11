@@ -137,13 +137,13 @@ export class Project extends LitNotify(GitlabProject) {
 	get findings() {
 		return this.gitlabProjectIssues
 			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding"))
-			.map((gitlabIssue) => {
-				const $finding = document.createElement("ros-finding");
-				$finding.gitlabProjectId = this.gitlabProjectId;
-				$finding.gitlabIssueData = gitlabIssue;
-				$finding.gitlabIssueIid = gitlabIssue.iid;
-				return $finding;
-			});
+			.map((gitlabIssue) => html`
+				<ros-finding
+					.gitlabProjectId="${this.gitlabProjectId}"
+					.gitlabIssueData="${gitlabIssue}"
+					.gitlabIssueIid="${gitlabIssue.iid}"
+				></ros-finding>
+			`);
 	}
 
 	get nonFindings() {
