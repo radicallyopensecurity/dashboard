@@ -136,14 +136,7 @@ export class Project extends LitNotify(GitlabProject) {
 
 	get findings() {
 		return this.gitlabProjectIssues
-			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding"))
-			.map((gitlabIssue) => html`
-				<ros-finding
-					.gitlabProjectId="${this.gitlabProjectId}"
-					.gitlabIssueData="${gitlabIssue}"
-					.gitlabIssueIid="${gitlabIssue.iid}"
-				></ros-finding>
-			`);
+			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding"));
 	}
 
 	get nonFindings() {
@@ -557,7 +550,11 @@ export class Project extends LitNotify(GitlabProject) {
 									<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
 									<span>${finding.title}</span>
 								`;
-								return { title, content: finding };
+								return { title, content: html`<ros-finding
+									.gitlabProjectId="${this.gitlabProjectId}"
+									.gitlabIssueData="${finding}"
+									.gitlabIssueIid="${finding.iid}"
+								></ros-finding>` };
 							})}"></ui-accordion>
 						`)}
 						<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
