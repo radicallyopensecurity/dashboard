@@ -22,7 +22,7 @@ export class GitlabIssue extends Gitlab {
 			},
 			gitlabIssueData: {
 				type: Object,
-				reflect: true
+				reflect: false
 			},
 			gitlabIssueDiscussion: {
 				type: Object,
@@ -31,11 +31,16 @@ export class GitlabIssue extends Gitlab {
 		};
 	}
 
+	get gitlabIssueComments() {
+		return this.gitlabIssueDiscussion
+			.filter((item) => item.notes[0].system === false);
+	}
+
 	get labels() {
 		return this.gitlabProjectData ? this.gitlabProjectData.labels : [];
 	}
 
-	async willUpdate(changedProperties) {
+	async updated(changedProperties) {
 		if (changedProperties.has("gitlabProjectId")) {
 			await this.fetch();
 		}
@@ -56,7 +61,7 @@ export class GitlabIssue extends Gitlab {
 			// load gitlabIssueData
 			this.gitlabIssueData = await super.fetch();
 		}
-		await this.fetchPaginated("gitlabProjectDiscussion", `${this.baseUrl}/discussions`);
+		await this.fetchPaginated("gitlabIssueDiscussion", `${this.baseUrl}/discussions`);
 	}
 
 }

@@ -552,6 +552,7 @@ export class Project extends LitNotify(GitlabProject) {
 								`;
 								return { title, content: html`<ros-finding
 									.gitlabProjectId="${this.gitlabProjectId}"
+									.gitlabProjectFullPath="${this.gitlabProjectData.web_url}"
 									.gitlabIssueData="${finding}"
 									.gitlabIssueIid="${finding.iid}"
 								></ros-finding>` };

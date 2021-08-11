@@ -5,6 +5,15 @@ import '../ui/unsafe-content.js';
 
 export class Finding extends GitlabIssue {
 
+	static get properties() {
+		return {
+			...super.properties,
+			gitlabProjectFullPath: {
+				type: String
+			}
+		};
+	}
+
 	get title() {
 		this.gitlabIssueData.title;
 	}
@@ -18,7 +27,35 @@ export class Finding extends GitlabIssue {
 	}
 
 	get technicalDescription() {
-		this.gitlabIssueDiscussion[0].description;
+		const issueDiscussionComments = this.gitlabIssueComments;
+		if (!issueDiscussionComments || !issueDiscussionComments.length) {
+			return "ToDo";
+		}
+		return issueDiscussionComments[0].notes[0].body;
+	}
+
+	_findIssueComment(topic) {
+		const issueDiscussionComments = this.gitlabIssueComments
+			.filter((comment) => comment.notes[0].body.toLowerCase().startsWith(topic.toLowerCase()));
+
+		if (!issueDiscussionComments || !issueDiscussionComments.length) {
+			return "ToDo";
+		}
+
+		const lines = issueDiscussionComments[0].notes[0].body
+			.split("\n")
+			.filter((line) => !line.match(/^\s*$/)); // remove empty lines
+
+		lines.shift();
+		return lines.join("\n");
+	}
+
+	get recommendation() {
+		return this._findIssueComment("recommendation");
+	}
+
+	get impact() {
+		return this._findIssueComment("impact");
 	}
 
 	render() {
@@ -27,18 +64,35 @@ export class Finding extends GitlabIssue {
 			return html`Loading`;
 		}
 
-		const $description = document.createElement("ui-unsafe-content");
-		$description.unsafeHTML = marked(this.description, { gfm: true });
+		const description = marked(this.description, { gfm: true });
+		const technicalDescription = marked(this.technicalDescription, { gfm: true });
+		const impact = marked(this.impact, { gfm: true });
+		const recommendation = marked(this.recommendation, { gfm: true });
 
-		const technicalDescription = document.createElement("ui-unsafe-content");
-		technicalDescription.unsafeHTML = marked(this.technicalDescription, { gfm: true });
+		const body = `
+			${description}
 
-		return html`
-			${$description}
+			<hr/>
 
 			<h2>Technical Description</h2>
-			${$technicalDescription}
-		`
+			${technicalDescription}
+
+			<hr/>
+
+			<h2>Impact</h2>
+			${impact}
+
+			<hr/>
+
+			<h2>Recommendation</h2>
+			${recommendation}
+		`;
+
+		const finding = document.createElement("ui-unsafe-content");
+		finding.baseUrl = this.gitlabProjectFullPath;
+		finding.unsafeHTML = body;
+
+		return html`${finding}`;
 	}
 
 }

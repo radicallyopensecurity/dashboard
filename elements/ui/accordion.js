@@ -23,7 +23,6 @@ class Accordion extends LitElement {
 
 			const $content = $item.querySelector(".content");
 			const $body = $content.querySelector(".accordion-body");
-			$content.style.maxHeight = `${$body.offsetHeight}px`;
 
 			if ($button.classList.contains("collapsed")) {
 				$button.classList.remove("collapsed");

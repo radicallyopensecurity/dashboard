@@ -1,10 +1,11 @@
-import { LitElement, html } from '../../web_modules/lit-element.js';
+import { LitElement, html, css } from '../../web_modules/lit-element.js';
 
 class UnsafeContent extends LitElement {
 
 	constructor() {
 		super();
 		this.unsafeHTML = "";
+		this.baseUrl = "";
 		this.$iframe = null;
 	}
 
@@ -18,9 +19,17 @@ class UnsafeContent extends LitElement {
 	}
 
 	update(changedProperties) {
+		const unsafeHTML = this.unsafeHTML
+			.replaceAll(/<img src="\/uploads\//gi, `<img src="${this.baseUrl}/uploads/`);
+
 		this.$iframe.srcdoc = `
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-		${this.unsafeHTML}
+		<style>
+			img {
+				width: 100%;
+			}
+		</style>
+		${unsafeHTML}
 		`;
 	}
 
@@ -37,11 +46,20 @@ class UnsafeContent extends LitElement {
 		const $iframe = document.createElement("iframe");
 		this.$iframe = $iframe;
 		$iframe.style.boxSizing = "content-box";
+		$iframe.style.width = "100%";
+		$iframe.style.border = "none";
 		$iframe.setAttribute("sandbox", "allow-same-origin");
 		this.renderRoot.appendChild($iframe);
 		$iframe.addEventListener("load", () => {
-			setTimeout(() => this.updateHeight(), 0);
-		})
+			this.updateHeightInterval = setInterval(() => this.updateHeight(), 250);
+		});
+	}
+
+	disconnectedCallback() {
+		if (this.updateHeightInterval !== undefined) {
+			clearInterval(this.updateHeightInterval);
+			delete this.updateHeightInterval;
+		}
 	}
 
 }
