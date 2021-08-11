@@ -46,7 +46,11 @@ export class UnsafeContent extends LitElement {
 	}
 
 	updateHeight = () => {
-		this.$iframe.style.height = this.$iframe.contentDocument.documentElement.offsetHeight + "px";
+		if (!this.visible) {
+			this.$iframe.style.height = 0;
+		} else {
+			this.$iframe.style.height = this.$iframe.contentDocument.documentElement.offsetHeight + "px";
+		}
 	}
 
 	createRenderRoot() {
@@ -68,7 +72,6 @@ export class UnsafeContent extends LitElement {
 	get onResize() {
 		if (!this._onResize) {
 			this._onResize = () => {
-				console.log("RESIZE", this);
 				setTimeout(() => this.updateHeight(), 0);
 			}
 		}
