@@ -150,6 +150,7 @@ export class Gitlab extends LitElement {
 		this.loading = true;
 		while (!Number.isNaN(nextPage) && this.maxPages !== numberOfPagesFetched && this.batch === currentBatch) {
 			_url.searchParams.set("page", nextPage);
+			const oldValue = this[key];
 			response = await fetch(_url);
 			nextPage = parseInt(response.headers.get("x-next-page"), 10);
 			numberOfPagesFetched = parseInt(response.headers.get("x-page"), 10);
@@ -157,8 +158,10 @@ export class Gitlab extends LitElement {
 				return;
 			}
 			this[key] = this[key].concat(await response.json());
+			this.requestUpdate(key, oldValue);
 		}
 		this.loading = false;
+
 	}
 
 }
