@@ -36,8 +36,7 @@ export class GitlabIssue extends Gitlab {
 	}
 
 	async willUpdate(changedProperties) {
-		const keys = [...changedProperties.keys()];
-		if (keys.includes("gitlabProjectId")) {
+		if (changedProperties.has("gitlabProjectId")) {
 			await this.fetch();
 		}
 	}
