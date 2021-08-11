@@ -60,7 +60,7 @@ export class Finding extends GitlabIssue {
 
 	render() {
 
-		if (!this.gitlabIssueData || !this.gitlabIssueDiscussion) {
+		if (!this.fetched || !this.gitlabIssueData) {
 			return html`
 				<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 				<div class="d-flex justify-content-center">

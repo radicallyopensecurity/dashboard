@@ -4,11 +4,12 @@ export class GitlabIssue extends Gitlab {
 
 	constructor() {
 		super();
+		this.autoload = true;
+		this.fetched = false;
 		this.gitlabProjectId = null;
 		this.gitlabIssueIid = null;
 		this.gitlabIssueData = null;
 		this.gitlabIssueDiscussion = null;
-		this.autoload = true;
 	}
 
 	static get properties() {
@@ -30,6 +31,9 @@ export class GitlabIssue extends Gitlab {
 				notify: true
 			},
 			autoload: {
+				type: Boolean
+			},
+			fetched: {
 				type: Boolean
 			}
 		};
@@ -59,6 +63,7 @@ export class GitlabIssue extends Gitlab {
 	}
 
 	async fetch() {
+		this.fetched = false;
 		if (this.gitlabProjectId == null) {
 			return;
 		}
@@ -67,6 +72,7 @@ export class GitlabIssue extends Gitlab {
 			this.gitlabIssueData = await super.fetch();
 		}
 		await this.fetchPaginated("gitlabIssueDiscussion", `${this.baseUrl}/discussions`);
+		this.fetched = true;
 	}
 
 }
