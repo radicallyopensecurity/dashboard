@@ -1,5 +1,5 @@
-import { LitElement, html, css } from '../web_modules/lit-element.js';
-import { LitSync } from '../web_modules/@morbidick/lit-element-notify.js';
+import { LitElement, html, css } from '../web_modules/lit.js';
+import { LitSync } from '../lib/lit-element-notify.js';
 import { styleMap } from '../web_modules/lit-html/directives/style-map.js';
 import { Gitlab } from "./gitlab/index.js";
 import "./ros/project.js";

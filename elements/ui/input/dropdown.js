@@ -1,5 +1,5 @@
-import { LitElement, html } from '../../../web_modules/lit-element.js';
-import { LitNotify } from '../../../web_modules/@morbidick/lit-element-notify.js';
+import { LitElement, html } from '../../../web_modules/lit.js';
+import { LitNotify } from '../../../lib/lit-element-notify.js';
 
 export class DropdownInput extends LitNotify(LitElement) {
 

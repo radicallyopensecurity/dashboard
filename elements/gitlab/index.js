@@ -1,5 +1,5 @@
 import moment from '../../web_modules/moment.js';
-import { LitElement } from '../../web_modules/lit-element.js';
+import { LitElement } from '../../web_modules/lit.js';
 
 class GitlabAuth {
 

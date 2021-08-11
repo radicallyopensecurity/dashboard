@@ -1,4 +1,4 @@
-import { LitElement, html, css } from '../../web_modules/lit-element.js';
+import { LitElement, html, css } from '../../web_modules/lit.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { styleMap } from '../../web_modules/lit-html/directives/style-map.js';
 

@@ -1,5 +1,5 @@
 import marked from '../../lib/marked.js';
-import { LitElement, html } from '../../web_modules/lit-element.js';
+import { LitElement, html } from '../../web_modules/lit.js';
 import { GitlabIssue } from '../gitlab/issue.js';
 import '../ros/ui/unsafe-finding-content.js';
 

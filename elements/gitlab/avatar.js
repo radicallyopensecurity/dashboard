@@ -1,4 +1,4 @@
-import { LitElement, css } from '../../web_modules/lit-element.js';
+import { LitElement, css } from '../../web_modules/lit.js';
 
 class GitlabAvatar extends LitElement {
 

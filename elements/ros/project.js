@@ -1,8 +1,8 @@
 import moment from '../../web_modules/moment.js';
 import marked from '../../lib/marked.js';
-import { LitElement, html, css } from '../../web_modules/lit-element.js';
+import { LitElement, html, css } from '../../web_modules/lit.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
-import { LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
+import { LitNotify } from '../../lib/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/project.js';
 import { Finding } from '../ros/finding.js';
 import '../gitlab/avatar.js';

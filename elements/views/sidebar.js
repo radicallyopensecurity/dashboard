@@ -1,6 +1,6 @@
 import moment from '../../web_modules/moment.js';
-import { LitElement, html, css } from '../../web_modules/lit-element.js';
-import { LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
+import { LitElement, html, css } from '../../web_modules/lit.js';
+import { LitNotify } from '../../lib/lit-element-notify.js';
 import "../ros/projects.js";
 
 class SidebarView extends LitNotify(LitElement) {

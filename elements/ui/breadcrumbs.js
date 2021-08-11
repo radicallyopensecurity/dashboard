@@ -1,4 +1,4 @@
-import { LitElement, html } from '../../web_modules/lit-element.js';
+import { LitElement, html } from '../../web_modules/lit.js';
 
 class Breadcrumbs extends LitElement {
 

@@ -1,4 +1,4 @@
-import { LitElement, svg, css } from '../../web_modules/lit-element.js';
+import { LitElement, svg, css } from '../../web_modules/lit.js';
 
 class FeatherIcon extends LitElement {
 

@@ -1,5 +1,5 @@
-import { LitElement, html } from '../../web_modules/lit-element.js';
-import { LitSync, LitNotify } from '../../web_modules/@morbidick/lit-element-notify.js';
+import { LitElement, html } from '../../web_modules/lit.js';
+import { LitSync, LitNotify } from '../../lib/lit-element-notify.js';
 import { gitlabAuth } from '../gitlab/index.js';
 import { GitlabProject} from '../gitlab/project.js';
 import { DropdownInput } from '../ui/input/dropdown.js';
