@@ -9,7 +9,7 @@ import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import { ContentCard } from '../ui/content-card.js';
 import '../ui/accordion.js';
-import '../ui/unsafe-content.js';
+import '../ros/ui/unsafe-finding-content.js';
 import '../ui/icon.js';
 import './project/projectActivity.js';
 import './project/projectRecentIssues.js';
@@ -565,7 +565,7 @@ export class Project extends LitNotify(GitlabProject) {
 									<span class="small me-2 text-muted">${nonFinding.iid}</span>
 									<span>${nonFinding.title}</span>
 								`;
-								const content = document.createElement("ui-unsafe-content");
+								const content = document.createElement("ros-ui-unsafe-finding-content");
 								content.unsafeHTML = marked(nonFinding.description, { gfm: true });
 								return { title, content };
 							})}"></ui-accordion>

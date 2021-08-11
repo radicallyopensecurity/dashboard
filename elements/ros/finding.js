@@ -1,7 +1,7 @@
 import marked from '../../lib/marked.js';
 import { LitElement, html } from '../../web_modules/lit-element.js';
 import { GitlabIssue } from '../gitlab/issue.js';
-import '../ui/unsafe-content.js';
+import '../ros/ui/unsafe-finding-content.js';
 
 export class Finding extends GitlabIssue {
 
@@ -72,23 +72,17 @@ export class Finding extends GitlabIssue {
 		const body = `
 			${description}
 
-			<hr/>
-
 			<h2>Technical Description</h2>
 			${technicalDescription}
 
-			<hr/>
-
 			<h2>Impact</h2>
 			${impact}
-
-			<hr/>
 
 			<h2>Recommendation</h2>
 			${recommendation}
 		`;
 
-		const finding = document.createElement("ui-unsafe-content");
+		const finding = document.createElement("ros-ui-unsafe-finding-content");
 		finding.baseUrl = this.gitlabProjectFullPath;
 		finding.unsafeHTML = body;
 
