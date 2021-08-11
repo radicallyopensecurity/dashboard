@@ -31,6 +31,11 @@ class Accordion extends LitElement {
 				$button.classList.add("collapsed");
 				$item.classList.add("content-hidden");
 			}
+
+			const $contentElement = $item.querySelector(".content > .accordion-body > *");
+			if ($contentElement.onBecomeVisible) {
+				$contentElement.onBecomeVisible();
+			}
 		};
 	}
 

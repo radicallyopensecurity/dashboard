@@ -550,12 +550,16 @@ export class Project extends LitNotify(GitlabProject) {
 									<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
 									<span>${finding.title}</span>
 								`;
-								return { title, content: html`<ros-finding
-									.gitlabProjectId="${this.gitlabProjectId}"
-									.gitlabProjectFullPath="${this.gitlabProjectData.web_url}"
-									.gitlabIssueData="${finding}"
-									.gitlabIssueIid="${finding.iid}"
-								></ros-finding>` };
+								const $rosFinding = document.createElement('ros-finding');
+								$rosFinding.autoload = false;
+								$rosFinding.gitlabProjectId = this.gitlabProjectId;
+								$rosFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
+								$rosFinding.gitlabIssueData = finding;
+								$rosFinding.gitlabIssueIid = finding.iid;
+								$rosFinding.onBecomeVisible = function() {
+									$rosFinding.fetch();
+								};
+								return { title, content: $rosFinding };
 							})}"></ui-accordion>
 						`)}
 						<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>

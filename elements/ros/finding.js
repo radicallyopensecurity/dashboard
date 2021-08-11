@@ -60,7 +60,7 @@ export class Finding extends GitlabIssue {
 
 	render() {
 
-		if (!this.gitlabIssueData || !this.gitlabIssueDiscussion) {
+		if (!this.gitlabIssueData || !this.gitlabIssueDiscussion.length) {
 			return html`Loading`;
 		}
 

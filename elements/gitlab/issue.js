@@ -8,6 +8,7 @@ export class GitlabIssue extends Gitlab {
 		this.gitlabIssueIid = null;
 		this.gitlabIssueData = null;
 		this.gitlabIssueDiscussion = [];
+		this.autoload = true;
 	}
 
 	static get properties() {
@@ -27,6 +28,9 @@ export class GitlabIssue extends Gitlab {
 			gitlabIssueDiscussion: {
 				type: Object,
 				notify: true
+			},
+			autoload: {
+				type: Boolean
 			}
 		};
 	}
@@ -42,7 +46,7 @@ export class GitlabIssue extends Gitlab {
 
 	async updated(changedProperties) {
 		super.updated(changedProperties);
-		if (changedProperties.has("gitlabProjectId")) {
+		if (this.autoload && changedProperties.has("gitlabProjectId")) {
 			await this.fetch();
 		}
 	}
