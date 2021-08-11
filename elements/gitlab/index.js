@@ -110,7 +110,6 @@ export class Gitlab extends LitElement {
 		const response = await fetch(_url, options);
 		const data = await response.json();
 
-		console.log(url, response.status);
 		if ((response.status < 200) || (response.status >= 300)) {
 
 			let message = `HTTP Error ${response.status}`;
@@ -136,7 +135,6 @@ export class Gitlab extends LitElement {
 
 	async fetchPaginated(key, url) {
 		const _url = this.getUrl(url, this.params);
-
 		let nextPage = 1;
 		this[key] = [];
 

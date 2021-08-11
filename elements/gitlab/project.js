@@ -66,7 +66,6 @@ export class GitlabProject extends Gitlab {
 		await this.fetchPaginated("gitlabProjectLabels", `${this.baseUrl}/labels`);
 		await this.fetchPaginated("gitlabProjectIssues", `${this.baseUrl}/issues`);
 		await this.fetchPaginated("gitlabProjectEvents", `${this.baseUrl}/events?target=issue`);
-
 		await this.fetchPaginated("gitlabProjectVariables", `${this.baseUrl}/variables`);
 	}
 
