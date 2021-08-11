@@ -10,6 +10,7 @@
     "feather-icons": "4.28.0",
     "flexboxgrid": "^6.3.1",
     "lit": "^2.0.0-rc.2",
+    "lit-html": "^2.0.0-rc.3",
     "marked": "^2.0.3",
     "moment": "^2.29.1",
     "snowpack": "^2.18.5"
