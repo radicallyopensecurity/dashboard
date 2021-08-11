@@ -7,7 +7,7 @@ export class GitlabIssue extends Gitlab {
 		this.gitlabProjectId = null;
 		this.gitlabIssueIid = null;
 		this.gitlabIssueData = null;
-		this.gitlabIssueDiscussion = [];
+		this.gitlabIssueDiscussion = null;
 		this.autoload = true;
 	}
 

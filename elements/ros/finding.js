@@ -60,8 +60,15 @@ export class Finding extends GitlabIssue {
 
 	render() {
 
-		if (!this.gitlabIssueData || !this.gitlabIssueDiscussion.length) {
-			return html`Loading`;
+		if (!this.gitlabIssueData || !this.gitlabIssueDiscussion) {
+			return html`
+				<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+				<div class="d-flex justify-content-center">
+					<div class="spinner-border" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
+			`;
 		}
 
 		const description = marked(this.description, { gfm: true });
