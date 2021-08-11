@@ -4,7 +4,8 @@ export class UnsafeContent extends LitElement {
 
 	constructor() {
 		super();
-		this.unsafeHTML = "";
+		this.visible = false;
+		this.unsafeHTML = null;
 		this.baseUrl = "";
 	}
 
@@ -13,6 +14,10 @@ export class UnsafeContent extends LitElement {
 			unsafeHTML: {
 				type: String,
 				notify: true
+			},
+			visible: {
+				type: Boolean,
+				reflect: true
 			}
 		}
 	}
@@ -26,16 +31,17 @@ export class UnsafeContent extends LitElement {
 	}
 
 	update(changedProperties) {
-		this.$iframe.srcdoc = `
-		<html>
-			<head>
-				<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-				<style>${this.contentStyle}</style>
-			</head>
-			<body>
-				${this.renderedUnsafeHTML}
-			</body>
-		</html>
+		this.visible = !!this.unsafeHTML;
+		this.$iframe.srcdoc = !this.visible ? '' : `
+			<html>
+				<head>
+					<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+					<style>${this.contentStyle}</style>
+				</head>
+				<body>
+					${this.renderedUnsafeHTML}
+				</body>
+			</html>
 		`;
 	}
 
@@ -73,13 +79,13 @@ export class UnsafeContent extends LitElement {
 		super.connectedCallback();
 		this.renderRoot.appendChild(this.$iframe);
 		this.$iframe.addEventListener("load", this.onResize);
-		this.$iframe.addEventListener("resize", this.onResize);
+		window.addEventListener("resize", this.onResize);
 	}
 
 	disconnectedCallback() {
 		super.disconnectedCallback();
 		this.$iframe.removeEventListener("load", this.onResize);
-		this.$iframe.removeEventListener("resize", this.onResize);
+		window.removeEventListener("resize", this.onResize);
 	}
 
 }
