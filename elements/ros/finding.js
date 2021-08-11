@@ -64,7 +64,7 @@ export class Finding extends GitlabIssue {
 			return html`
 				<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 				<div class="d-flex justify-content-center">
-					<div class="spinner-border" role="status">
+					<div class="spinner-border mb-3" role="status">
 						<span class="visually-hidden">Loading...</span>
 					</div>
 				</div>
