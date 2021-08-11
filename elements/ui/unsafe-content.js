@@ -59,19 +59,27 @@ export class UnsafeContent extends LitElement {
 		return this._$iframe;
 	}
 
+	get onResize() {
+		if (!this._onResize) {
+			this._onResize = () => {
+				console.log("RESIZE", this);
+				setTimeout(() => this.updateHeight(), 0);
+			}
+		}
+		return this._onResize;
+	}
+
 	connectedCallback() {
 		super.connectedCallback();
 		this.renderRoot.appendChild(this.$iframe);
-		this.$iframe.addEventListener("load", () => {
-			this.updateHeightInterval = setInterval(() => this.updateHeight(), 250);
-		});
+		this.$iframe.addEventListener("load", this.onResize);
+		this.$iframe.addEventListener("resize", this.onResize);
 	}
 
 	disconnectedCallback() {
-		if (this.updateHeightInterval !== undefined) {
-			clearInterval(this.updateHeightInterval);
-			delete this.updateHeightInterval;
-		}
+		super.disconnectedCallback();
+		this.$iframe.removeEventListener("load", this.onResize);
+		this.$iframe.removeEventListener("resize", this.onResize);
 	}
 
 }
