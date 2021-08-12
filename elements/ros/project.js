@@ -407,7 +407,15 @@ export class Project extends LitNotify(GitlabProject) {
 
 	render() {
 		if (this.gitlabProjectData === null) {
-			return html`loading ${this.gitlabProjectId}...`;
+			return html`
+				<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
+				<div class="d-flex justify-content-center">
+					<div class="spinner-border mb-3 mt-3" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
+				<h1 class="text-center">loading ${this.gitlabProjectId}...<h1>
+			`;
 		}
 
 		const findings = this.findings;
