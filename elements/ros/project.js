@@ -44,11 +44,6 @@ export class Project extends LitNotify(GitlabProject) {
 		this.fullscreen = true;
 	}
 
-	connectedCallback() {
-		super.connectedCallback();
-		this.availableSubroutes = this.constructor.subroutes;
-	}
-
 	static get properties() {
 		return {
 			...GitlabProject.properties,
@@ -74,6 +69,11 @@ export class Project extends LitNotify(GitlabProject) {
 				type: Boolean
 			}
 		}
+	}
+
+	willUpdate(changedProperties) {
+		this.availableSubroutes = this.constructor.subroutes;
+		super.willUpdate(changedProperties);
 	}
 
 	updated(changedProperties) {

@@ -91,10 +91,9 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		}
 	}
 
-	updated(changedProperties) {
-		super.updated(changedProperties);
-		const keys = [...changedProperties.keys()];
-		if (keys.includes("gitlabProjectId")) {
+	willUpdate(changedProperties) {
+		super.willUpdate(changedProperties);
+		if (changedProperties.has("gitlabProjectId")) {
 			if (this.gitlabProjectId !== null) {
 				this.search = "";
 			} else {
@@ -102,7 +101,11 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			}
 			this.availableSubroutes = {};
 		}
-		if (keys.includes("pageTitle")) {
+	}
+
+	updated(changedProperties) {
+		super.updated(changedProperties);
+		if (changedProperties.has("pageTitle")) {
 			let pageTitle = "R♡S";
 			if (this.pageTitle !== undefined) {
 				pageTitle += ` _ ${this.pageTitle}`;
