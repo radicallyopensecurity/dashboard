@@ -1,4 +1,5 @@
 import { LitElement, html, css } from '../../web_modules/lit.js';
+import { repeat } from '../../web_modules/lit-html/directives/repeat.js';
 
 class Accordion extends LitElement {
 
@@ -64,7 +65,7 @@ class Accordion extends LitElement {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<div class="accordion mb-3">
-			${this.items.map((item) => html`
+			${repeat(this.items, (item) => (item.id || item), (item) => html`
 				<div class="accordion-item content-hidden">
 					<h2 class="accordion-header">
 						<button @click="${this.onClickButton}" class="accordion-button collapsed">${item.title}</button>

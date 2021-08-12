@@ -2,6 +2,7 @@ import moment from '../../web_modules/moment.js';
 import marked from '../../lib/marked.js';
 import { LitElement, html, css } from '../../web_modules/lit.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
+import { repeat } from '../../web_modules/lit-html/directives/repeat.js';
 import { LitNotify } from '../../lib/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/project.js';
 import { Finding } from '../ros/finding.js';
@@ -543,7 +544,7 @@ export class Project extends LitNotify(GitlabProject) {
 				<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
 					<ui-content-card>
 						<h3 class="pb-1">Findings <span class="badge bg-primary">${findings.length}</span></h3>
-						${Object.entries(this.findingsBySeverity).map(([severity, findings]) => html`
+						${repeat(Object.entries(this.findingsBySeverity), ([severity, findings]) => severity, ([severity, findings]) => html`
 							<h5 class="py-1">${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
 							<ui-accordion .items="${findings.map((finding) => {
 								const title = html`
@@ -561,7 +562,7 @@ export class Project extends LitNotify(GitlabProject) {
 									console.log("FETCHED")
 									$rosFinding.performUpdate();
 								};
-								return { title, content: $rosFinding };
+								return { title, content: $rosFinding, id: `${this.gitlabProjectId}::${finding.iid}` };
 							})}"></ui-accordion>
 						`)}
 						<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
