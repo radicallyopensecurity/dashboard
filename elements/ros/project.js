@@ -549,7 +549,7 @@ export class Project extends LitNotify(GitlabProject) {
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
+				<div class="col-12 col-xl-6 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
 					<ui-content-card>
 						<h3 class="pb-1">Findings <span class="badge bg-primary">${findings.length}</span></h3>
 						${repeat(Object.entries(this.findingsBySeverity), ([severity, findings]) => severity, ([severity, findings]) => html`
@@ -587,7 +587,7 @@ export class Project extends LitNotify(GitlabProject) {
 						</div>
 					</ui-content-card>
 				</div>
-				<div class="col-12 col-lg-6 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="overview">
+				<div class="col-12 col-xl-6 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="overview">
 					<div>
 						<div class="col-12">
 							<ui-content-card>
