@@ -568,7 +568,7 @@ export class Project extends LitNotify(GitlabProject) {
 								$rosFinding.onBecomeVisible = async function() {
 									await $rosFinding.fetch();
 									console.log("FETCHED")
-									$rosFinding.performUpdate();
+									$rosFinding.requestUpdate("gitlabIssueData");
 								};
 								return { title, content: $rosFinding, id: `${this.gitlabProjectId}::${finding.iid}` };
 							})}"></ui-accordion>
