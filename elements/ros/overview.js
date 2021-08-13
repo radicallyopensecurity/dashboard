@@ -2,6 +2,7 @@ import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { GitlabProjects } from '../gitlab/projects.js';
+import '../rocketchat/subscriptions.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
 import '../ui/content-card.js';
@@ -97,6 +98,12 @@ class Overview extends GitlabProjects {
 							<h1 class="me-auto">Overview</h1>
 							<div class="${loadingIndicatorClass}" role="status">
 								<span class="visually-hidden">Loading...</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<h2>Unread Messages in:</h2>
+								<rocketchat-subscriptions></rocketchat-subscriptions>
 							</div>
 						</div>
 					</ui-content-card>
