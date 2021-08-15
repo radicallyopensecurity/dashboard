@@ -2,6 +2,7 @@ import { LitElement, html, css } from '../web_modules/lit.js';
 import { LitSync } from '../lib/lit-element-notify.js';
 import { styleMap } from '../web_modules/lit-html/directives/style-map.js';
 import { Gitlab } from "./gitlab/index.js";
+import "./rocketchat/iframe.js";
 import "./ros/project.js";
 import "./ros/project-new.js";
 import "./ros/projects.js";

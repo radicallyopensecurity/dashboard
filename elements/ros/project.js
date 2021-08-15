@@ -6,6 +6,7 @@ import { repeat } from '../../web_modules/lit-html/directives/repeat.js';
 import { LitNotify } from '../../lib/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/project.js';
 import { Finding } from '../ros/finding.js';
+import '../rocketchat/iframe.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import { ContentCard } from '../ui/content-card.js';
@@ -330,11 +331,6 @@ export class Project extends LitNotify(GitlabProject) {
 		}
 	}
 
-	get chatChannelUrl() {
-		const chatHostname = window.location.hostname.replace(/^git\./, "chat.");
-		return `https://${chatHostname}/group/${this.channelName}`;
-	}
-
 	get _artifactDownloadUrl() {
 		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/${this.branchName}/raw/target/${this._assetFileName}?job=${gitlabCiJobName}`;
 	}
@@ -505,11 +501,7 @@ export class Project extends LitNotify(GitlabProject) {
 					</ul>
 					<div class="chat-frame">
 						<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
-							<iframe id="chat" class="w-100 h-100"
-								src="${this.chatChannelUrl}?layout=embedded"
-								sandbox="allow-scripts allow-same-origin allow-forms"
-								referrerpolicy="origin"
-							></iframe>
+							<ros-rocketchat-frame channel="${this.channelName}"></ros-rocketchat-frame>
 						</project-ui-content-card-chat>
 					</div>
 				</div>
