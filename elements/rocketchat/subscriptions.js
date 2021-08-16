@@ -24,6 +24,25 @@ class RocketchatSubscriptions extends Rocketchat {
 		this.query();
 	}
 
+	static get queryInterval() {
+		return 30 * 1000; // milliseconds
+	}
+
+	get cronEvent() {
+		return (e) => {
+			this.query();
+		};
+	}
+
+	connectedCallback() {
+		super.connectedCallback();
+		this._interval = setInterval(this.cronEvent, this.constructor.queryInterval);
+	}
+
+	disconnectedCallback() {
+		clearInterval(this._interval);
+	}
+
 	static get properties() {
 		return {
 			unread: {
