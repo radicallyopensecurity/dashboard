@@ -120,10 +120,10 @@ class Overview extends GitlabProjects {
 
 
 		const pentests = this.projects.filter((project) => {
-			return project.name.startsWith("pen-") || project.tag_list.includes("pentest");
+			return project.namespace.path !== "pentext" && (project.name.startsWith("pen-") || project.tag_list.includes("pentest"));
 		}).map(getRocketchatProjectMap("pen"));
 		const offertes = this.projects.filter((project) => {
-			return project.name.startsWith("off-") || project.tag_list.includes("offerte");
+			return project.namespace.path !== "pentext" && (project.name.startsWith("off-") || project.tag_list.includes("offerte"));
 		}).map(getRocketchatProjectMap("off"));
 
 		const loadingIndicatorClass = classMap({
