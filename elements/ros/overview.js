@@ -3,6 +3,7 @@ import { LitElement, html, css } from '../../web_modules/lit.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { GitlabProjects } from '../gitlab/projects.js';
 import '../rocketchat/subscriptions.js';
+import '../rocketchat/iframe.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
 import '../ui/content-card.js';
@@ -33,6 +34,14 @@ class Overview extends GitlabProjects {
 		.avatar {
 			width: 48px;
 			height: 48px;
+		}
+
+		#hiddenIframe {
+			position: absolute;
+			width: 0;
+			height: 0;
+			overflow: hidden;
+			opacity: 0;
 		}
 		`;
 	}
@@ -121,7 +130,11 @@ class Overview extends GitlabProjects {
 					` : ''}
 				</div>
 			</div>
-		</div>`;
+		</div>
+		<div id="hiddenIframe">
+			<ros-rocketchat-frame channel="ros"></ros-rocketchat-frame>
+		</div>
+		`;
 	}
 
 }
