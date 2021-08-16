@@ -2,7 +2,6 @@ import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 import { GitlabProjects } from '../gitlab/projects.js';
-import '../rocketchat/subscriptions.js';
 import '../rocketchat/iframe.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
@@ -18,6 +17,15 @@ class Overview extends GitlabProjects {
 		this.params = {
 			...this.params,
 			search: value
+		};
+	}
+
+	static get properties() {
+		return {
+			...GitlabProjects.properties,
+			unreadSubscriptions: {
+				type: Array
+			}
 		};
 	}
 
@@ -63,12 +71,12 @@ class Overview extends GitlabProjects {
 											<h5 class="mb-2">${project.name_with_namespace}</h5>
 										</div>
 										<small>
-											Updated
-											${moment(project.last_activity_at).fromNow()}
+											${project.hasUnreadMessages ? html`<ui-icon icon="mail"></ui-icon>` : ''}
 										</small>
 									</div>
 									<p class="mb-1">
-										Created at ${moment(project.created_at).format("LL")}
+										Updated
+											${moment(project.last_activity_at).fromNow()}
 									</p>
 								</div>
 							</a>
@@ -80,12 +88,43 @@ class Overview extends GitlabProjects {
 	}
 
 	render() {
+		const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
+		const getRocketchatProjectMap = (prefix) => {
+			return (project) => {
+				project = {...project};
+				const namespace = project.namespace.path;
+				const projectPath = project.path_with_namespace;
+				const match = projectPath.match(gitlabProjectPathPattern);
+
+				if (match === null) {
+					return;
+				}
+
+				if (namespace === "ros") {
+					project.rocketchatChannelName = `${prefix}-${match.groups.name}`;
+				} else {
+					project.rocketchatChannelName = `${namespace}-${prefix}-${match.groups.name}`;
+				}
+
+				// check unread messages
+				project.hasUnreadMessages = false;
+				if (this.unreadSubscriptions) {
+					if (this.unreadSubscriptions.find((subscription) => subscription.fname === project.rocketchatChannelName)) {
+						project.hasUnreadMessages = true;
+					}
+				}
+
+				return project;
+			};
+		}
+
+
 		const pentests = this.projects.filter((project) => {
 			return project.name.startsWith("pen-") || project.tag_list.includes("pentest");
-		});
+		}).map(getRocketchatProjectMap("pen"));
 		const offertes = this.projects.filter((project) => {
 			return project.name.startsWith("off-") || project.tag_list.includes("offerte");
-		});
+		}).map(getRocketchatProjectMap("off"));
 
 		const loadingIndicatorClass = classMap({
 			"spinner-border": true,
@@ -107,12 +146,6 @@ class Overview extends GitlabProjects {
 							<h1 class="me-auto">Overview</h1>
 							<div class="${loadingIndicatorClass}" role="status">
 								<span class="visually-hidden">Loading...</span>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12">
-								<h2>Unread Messages in:</h2>
-								<rocketchat-subscriptions></rocketchat-subscriptions>
 							</div>
 						</div>
 					</ui-content-card>

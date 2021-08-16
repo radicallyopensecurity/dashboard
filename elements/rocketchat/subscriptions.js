@@ -1,4 +1,5 @@
 import { LitElement, html } from '../../web_modules/lit.js';
+import { LitNotify } from '../../lib/lit-element-notify.js';
 
 class Rocketchat extends LitElement {
 
@@ -16,7 +17,7 @@ class Rocketchat extends LitElement {
 
 }
 
-class RocketchatSubscriptions extends Rocketchat {
+class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 
 	constructor() {
 		super();
@@ -46,7 +47,8 @@ class RocketchatSubscriptions extends Rocketchat {
 	static get properties() {
 		return {
 			unread: {
-				type: Array
+				type: Array,
+				notify: true
 			}
 		};
 	}
@@ -57,16 +59,6 @@ class RocketchatSubscriptions extends Rocketchat {
 
 		this.unread = rooms
 			.filter((update) => !!update.alert);
-	}
-
-	render() {
-		return html`
-			<ul>
-				${this.unread.map((unreadSubscription) => html`
-					<li>${unreadSubscription.name}</li>
-				`)}
-			</ul>
-		`;
 	}
 
 }
