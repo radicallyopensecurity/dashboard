@@ -49,6 +49,10 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 			unread: {
 				type: Array,
 				notify: true
+			},
+			subscriptions: {
+				type: Array,
+				notify: true
 			}
 		};
 	}
@@ -56,7 +60,7 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 	async query() {
 		const rooms = (await this.fetch("subscriptions.get")).update
 			.filter((update) => update.t === "p") // rooms only
-
+		this.subscriptions = rooms;
 		this.unread = rooms
 			.filter((update) => !!update.alert);
 	}

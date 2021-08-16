@@ -23,7 +23,7 @@ class Overview extends GitlabProjects {
 	static get properties() {
 		return {
 			...GitlabProjects.properties,
-			unreadSubscriptions: {
+			chatSubscriptions: {
 				type: Array
 			}
 		};
@@ -75,8 +75,7 @@ class Overview extends GitlabProjects {
 										</small>
 									</div>
 									<p class="mb-1">
-										Updated
-											${moment(project.last_activity_at).fromNow()}
+										Updated ${project.lastProjectActivity.fromNow()}
 									</p>
 								</div>
 							</a>
@@ -106,11 +105,19 @@ class Overview extends GitlabProjects {
 					project.rocketchatChannelName = `${namespace}-${prefix}-${match.groups.name}`;
 				}
 
+				project.lastProjectActivity = moment(project.last_activity_at);
+
 				// check unread messages
 				project.hasUnreadMessages = false;
-				if (this.unreadSubscriptions) {
-					if (this.unreadSubscriptions.find((subscription) => subscription.fname === project.rocketchatChannelName)) {
-						project.hasUnreadMessages = true;
+				if (this.chatSubscriptions) {
+					const subscription = this.chatSubscriptions
+						.find((subscription) => subscription.fname === project.rocketchatChannelName);
+					if (subscription) {
+						project.hasUnreadMessages = subscription.alert;
+						const lastChatActivity = moment(subscription._updatedAt);
+						if (lastChatActivity.isAfter(project.lastProjectActivity)) {
+							project.lastProjectActivity = lastChatActivity;
+						}
 					}
 				}
 
@@ -118,13 +125,28 @@ class Overview extends GitlabProjects {
 			};
 		}
 
+		const sortProjectsByLastActivity = (a, b) => {
+			if (a.lastProjectActivity.isBefore(b.lastProjectActivity)) {
+				return 1;
+			} else if (b.lastProjectActivity.isBefore(a.lastProjectActivity)) {
+				return -1;
+			} else {
+				return 0;
+			}
+		}
 
-		const pentests = this.projects.filter((project) => {
-			return project.namespace.path !== "pentext" && (project.name.startsWith("pen-") || project.tag_list.includes("pentest"));
-		}).map(getRocketchatProjectMap("pen"));
-		const offertes = this.projects.filter((project) => {
-			return project.namespace.path !== "pentext" && (project.name.startsWith("off-") || project.tag_list.includes("offerte"));
-		}).map(getRocketchatProjectMap("off"));
+		const pentests = this.projects
+			.filter((project) => {
+				return project.namespace.path !== "pentext" && (project.name.startsWith("pen-") || project.tag_list.includes("pentest"));
+			})
+			.map(getRocketchatProjectMap("pen"))
+			.sort(sortProjectsByLastActivity);
+		const offertes = this.projects
+			.filter((project) => {
+				return project.namespace.path !== "pentext" && (project.name.startsWith("off-") || project.tag_list.includes("offerte"));
+			})
+			.map(getRocketchatProjectMap("off"))
+			.sort(sortProjectsByLastActivity);
 
 		const loadingIndicatorClass = classMap({
 			"spinner-border": true,

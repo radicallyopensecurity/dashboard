@@ -21,7 +21,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.initialized = false;
 		this.subroute = undefined;
 		this.availableSubroutes = {};
-		this.unreadSubscriptions = [];
+		this.chatSubscriptions = [];
 		this.onHashChange();
 		this.fetch();
 	}
@@ -66,7 +66,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				notify: true
 			},
 			// Rocket.Chat
-			unreadSubscriptions: {
+			chatSubscriptions: {
 				type: Array
 			}
 		}
@@ -214,7 +214,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			this.pageTitle = undefined;
 			view = html`<ros-overview
 					.params=${{search: this.search, order_by: "last_activity_at"}}
-					.unreadSubscriptions=${this.unreadSubscriptions}
+					.chatSubscriptions=${this.chatSubscriptions}
 					perPage="20"
 				></ros-overview>`;
 		}
@@ -224,7 +224,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		<link rel="stylesheet" href="dashboard.css"/>`;
 
 		const header = html`
-		<rocketchat-subscriptions .unread="${this.sync("unreadSubscriptions")}"></rocketchat-subscriptions>
+		<rocketchat-subscriptions .subscriptions="${this.sync("chatSubscriptions")}"></rocketchat-subscriptions>
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-2 px-sm-3 flex-nowrap">
 
 			${this.gitlabProjectData != null ? html`
