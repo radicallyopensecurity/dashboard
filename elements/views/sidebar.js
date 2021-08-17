@@ -3,6 +3,26 @@ import { LitElement, html, css } from '../../web_modules/lit.js';
 import { LitNotify } from '../../lib/lit-element-notify.js';
 import "../ros/projects.js";
 
+const matchSearch = (text, search) => {
+	if (!search || !search.length) {
+		return true;
+	}
+
+	text = text.toLowerCase();
+	search = search.toLowerCase();
+
+	for (let t=0, s=0; (t < text.length); t++) {
+		if (text[t] === search[s]) {
+			s++;
+		}
+		if (s === search.length) {
+			// entire text found
+			return true;
+		}
+	}
+	return false;
+};
+
 class SidebarView extends LitNotify(LitElement) {
 
 	constructor() {
@@ -117,8 +137,22 @@ class SidebarView extends LitNotify(LitElement) {
 	}
 
 	get filteredProjects() {
-		console.log(this.search)
-		return this.projects.filter((project) => !this.search || project.path_with_namespace.includes(this.search))
+		return this.projects
+			.filter((project) => {
+				// one of this slugs must match to pass the filter
+				const projectSlugs = [
+					`${project.namespace.name} / ${project.name}`,
+					`${project.namespace.path} / ${project.name}`,
+					`${project.namespace.name} / ${project.path}`,
+					`${project.namespace.path} / ${project.path}`
+				];
+				for (let slug of projectSlugs) {
+					if (matchSearch(slug, this.search)) {
+						return true;
+					}
+				}
+				return false;
+			});
 	}
 
 	render() {
