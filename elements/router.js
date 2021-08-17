@@ -357,6 +357,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 					${header}
 					<sidebar-view
 						class="flex-grow-1 position-relative"
+						.selectedProjectId=${this.gitlabProjectId}
 						.projects=${this.projects}
 						.search=${this.sync('search')}
 						.forceSidebarVisible=${this.sync('forceSidebarVisible')}
