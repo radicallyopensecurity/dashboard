@@ -11,6 +11,8 @@ import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import { ContentCard } from '../ui/content-card.js';
 import '../ui/accordion.js';
+import '../ros/finding.js';
+import '../ros/non-finding.js';
 import '../ros/ui/unsafe-finding-content.js';
 import '../ui/icon.js';
 import './project/projectActivity.js';
@@ -571,9 +573,13 @@ export class Project extends LitNotify(GitlabProject) {
 									<span class="small me-2 text-muted">${nonFinding.iid}</span>
 									<span>${nonFinding.title}</span>
 								`;
-								const content = document.createElement("ros-ui-unsafe-finding-content");
-								content.unsafeHTML = marked(nonFinding.description, { gfm: true });
-								return { title, content };
+								const $rosNonFinding = document.createElement('ros-non-finding');
+								$rosNonFinding.autoload = false;
+								$rosNonFinding.gitlabProjectId = this.gitlabProjectId;
+								$rosNonFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
+								$rosNonFinding.gitlabIssueData = nonFinding;
+								$rosNonFinding.gitlabIssueIid = nonFinding.iid;
+								return { title, content: $rosNonFinding, id: `${this.gitlabProjectId}::${nonFinding.iid}` };
 							})}"></ui-accordion>
 						</div>
 					</ui-content-card>
