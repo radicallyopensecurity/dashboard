@@ -29,6 +29,7 @@ export class RosProjects extends GitlabProjects {
 	}
 
 	updateProjects() {
+		const oldProjectsValue = this.projects;
 		this.projects.forEach((project) => {
 			const subscriptions = this.chatSubscriptions
 				.filter((subscription) => project.rocketchatChannelNames.has(subscription.fname));
@@ -52,7 +53,8 @@ export class RosProjects extends GitlabProjects {
 				project.lastChatActivity = null;
 			}
 		});
-		this.projects = this.projects.sort(GitlabProjects.sortProjectsByLastActivity);
+		this.projects = [...this.projects.sort(GitlabProjects.sortProjectsByLastActivity)];
+		//this.requestUpdate("projects", oldProjectsValue);
 	}
 
 	willUpdate(changedProperties) {

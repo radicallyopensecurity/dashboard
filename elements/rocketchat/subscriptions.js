@@ -22,6 +22,7 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 	constructor() {
 		super();
 		this.unread = [];
+		this.subscriptions = [];
 		this.query();
 	}
 
