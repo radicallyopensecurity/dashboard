@@ -73,8 +73,7 @@ class SidebarView extends LitNotify(LitElement) {
 		return {
 			... super.properties,
 			search: {
-				type: String,
-				notify: true
+				type: String
 			},
 			projects: {
 				type: Array,
@@ -107,7 +106,7 @@ class SidebarView extends LitNotify(LitElement) {
 
 	get onSearch() {
 		return (e) => {
-			this.search = e.target.search.value;
+			this.search = e.target.value;
 			e.preventDefault();
 			e.stopPropagation();
 		};
@@ -115,6 +114,11 @@ class SidebarView extends LitNotify(LitElement) {
 
 	static getAvatarUrl(project) {
 		return project.avatar_url || project.namespace.avatar_url;
+	}
+
+	get filteredProjects() {
+		console.log(this.search)
+		return this.projects.filter((project) => !this.search || project.path_with_namespace.includes(this.search))
 	}
 
 	render() {
@@ -126,12 +130,14 @@ class SidebarView extends LitNotify(LitElement) {
 			<div class="position-absolute w-100 h-100 mx-0 d-flex flex-row align-items-stretch">
 				<nav id="sidebar" class="d-lg-block bg-body sidebar collapse shadow px-3 h-100 pb-3">
 					<div class="position-sticky mx-1 mt-4 mb-1 safe-padding-left">
-						<form @submit="${this.onSearch}">
+						<form>
 							<div class="input-group">
 								<input id="search" name="search" type="search"
+									@keyup=${this.onSearch}
+									@change=${this.onSearch}
 									.value="${this.search}"
 									class="form-control"
-									placeholder="Search"
+									placeholder="Filter"
 									aria-label="Search"
 									aria-describedby="search-button" />
 								<button class="input-group-text btn-primary" id="search-button">
@@ -163,7 +169,7 @@ class SidebarView extends LitNotify(LitElement) {
 									<span>Projects</span>
 								</h6>
 								<ul class="nav flex-column">
-									${this.projects.map((project) => html`
+									${this.filteredProjects.map((project) => html`
 										<li class="nav-item" active="${project.id === this.selectedProjectId}">
 											<a class="nav-link text-nowrap" aria-current="page" href="#${project.id}">
 												<img class="avatar feather" src="${this.constructor.getAvatarUrl(project)}" />
