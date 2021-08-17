@@ -117,9 +117,7 @@ class SidebarView extends LitNotify(LitElement) {
 
 	updated(changedProperties) {
 		super.updated(changedProperties);
-		const keys = [...changedProperties.keys()];
-
-		if (keys.includes("forceSidebarVisible")) {
+		if (changedProperties.has("forceSidebarVisible")) {
 			if (this.forceSidebarVisible === true) {
 				this.shadowRoot.getElementById("sidebar").classList.add("show");
 			} else {
