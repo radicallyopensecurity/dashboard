@@ -133,7 +133,9 @@ export class Gitlab extends LitElement {
 		return data;
 	}
 
-	async fetchPaginated(key, url) {
+	async fetchPaginated(key, url, mapResponse, filterResponse) {
+		mapResponse = mapResponse || ((x) => x);
+		filterResponse = filterResponse || ((x) => x);
 		const _url = this.getUrl(url, this.params);
 		let nextPage = 1;
 		this[key] = [];
@@ -155,7 +157,9 @@ export class Gitlab extends LitElement {
 			if(this.batch !== currentBatch) {
 				return;
 			}
-			this[key] = this[key].concat(await response.json());
+			const newItems = mapResponse(filterResponse(await response.json()))
+					.filter((item) => item !== undefined);
+			this[key] = this[key].concat(newItems);
 			this.requestUpdate(key, oldValue);
 		}
 		this.loading = false;

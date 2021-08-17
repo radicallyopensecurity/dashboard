@@ -2,36 +2,117 @@ import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit.js';
 import { GitlabProjects } from '../gitlab/projects.js';
 
-class Projects extends GitlabProjects {
+const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
-	get search() {
-		return this.params.search.substr(5);
+const isPentest = (project) => {
+	return project.name.startsWith("pen-") || project.tag_list.includes("pentest");
+};
+
+const isOfferte = (project) => {
+	return project.name.startsWith("off-") || project.tag_list.includes("offerte");
+};
+
+export class RosProjects extends GitlabProjects {
+
+	constructor() {
+		super();
+		this.chatSubscriptions = [];
 	}
 
-	set search(value) {
-		this.params = {
-			...this.params,
-			search: `pen- ${value}`
+	static get properties() {
+		return {
+			...GitlabProjects.properties,
+			chatSubscriptions: {
+				type: Array
+			}
 		};
+	}
+
+	updateProjects() {
+		this.projects.forEach((project) => {
+			const subscription = this.chatSubscriptions
+				.find((subscription) => subscription.fname === project.rocketchatChannelName);
+			if (subscription) {
+				project.hasUnreadMessages = subscription.alert;
+				const lastChatActivity = moment(subscription._updatedAt);
+				project.lastChatActivity = lastChatActivity;
+				if (lastChatActivity.isAfter(project.lastGitActivity)) {
+					project.lastProjectActivity = lastChatActivity;
+				}
+			} else {
+				project.hasUnreadMessages = false;
+				project.lastChatActivity = null;
+			}
+		});
+		this.projects = this.projects.sort(GitlabProjects.sortProjectsByLastActivity);
+	}
+
+	willUpdate(changedProperties) {
+		super.willUpdate(changedProperties);
+		if (changedProperties.has("chatSubscriptions") || changedProperties.has("projects")) {
+			this.updateProjects();
+		}
+	}
+
+	get pentests() {
+		return this.projects
+			.filter((project) => isPentest(project));
+	}
+
+	get offertes() {
+		return this.projects
+			.filter((project) => isOfferte(project));
+	}
+
+	static filterProjects(projects) {
+		return projects
+			.filter((project) => {
+				if (!isPentest(project) && !isOfferte(project)) {
+					return false;
+				} else if (project.namespace.path === "pentext") {
+					return false;
+				}
+				return true;
+			});
+	}
+
+	static mapProjects(projects) {
+		return projects
+			.map((project) => {
+				project.isPentest = isPentest(project);
+				project.isOfferte = isOfferte(project);
+
+				const prefix = project.isPentest ? "pen" : "off";
+				const namespace = project.namespace.path;
+				const projectPath = project.path_with_namespace;
+				const match = projectPath.match(gitlabProjectPathPattern);
+
+				if (match === null) {
+					return;
+				}
+
+				if (namespace === "ros") {
+					project.rocketchatChannelName = `${prefix}-${match.groups.name}`;
+				} else {
+					project.rocketchatChannelName = `${namespace}-${prefix}-${match.groups.name}`;
+				}
+
+				project.lastGitActivity = moment(project.last_activity_at);
+				project.lastProjectActivity = project.lastGitActivity;
+
+				return project;
+			})
+			.filter((project) => (project !== undefined));
 	}
 
 	static getAvatarUrl(project) {
 		return project.avatar_url || project.namespace.avatar_url;
 	}
 
-	static get styles() {
-		return css`
-		.small {
-			font-size: 0.75em;
-		}
+}
+customElements.define("ros-projects", RosProjects);
 
-		.avatar {
-			width: 48px;
-			height: 48px;
-		}
-		`;
-	}
-
+class RosProjectsList extends RosProjects {
 	render() {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
@@ -78,6 +159,5 @@ class Projects extends GitlabProjects {
 			</div>
 		</div>`;
 	}
-
-}
-customElements.define("ros-projects", Projects);
+};
+customElements.define("ros-projects-list", RosProjectsList);

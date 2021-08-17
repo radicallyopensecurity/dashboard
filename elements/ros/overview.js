@@ -1,36 +1,29 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit.js';
 import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
-import { GitlabProjects } from '../gitlab/projects.js';
+import { RosProjects } from '../ros/projects.js';
 import '../rocketchat/iframe.js';
 import '../ui/icon.js';
 import '../ui/breadcrumbs.js';
 import '../ui/content-card.js';
 
-class Overview extends GitlabProjects {
+class Overview extends LitElement {
 
-	get search() {
-		return this.params.search;
-	}
-
-	set search(value) {
-		this.params = {
-			...this.params,
-			search: value
-		};
-	}
-
-	static get properties() {
-		return {
-			...GitlabProjects.properties,
-			chatSubscriptions: {
-				type: Array
-			}
-		};
+	constructor() {
+		super();
+		this.projects = [];
 	}
 
 	static getAvatarUrl(project) {
 		return project.avatar_url || project.namespace.avatar_url;
+	}
+
+	static get properties() {
+		return {
+			projects: {
+				type: Array
+			}
+		};
 	}
 
 	static get styles() {
@@ -87,66 +80,6 @@ class Overview extends GitlabProjects {
 	}
 
 	render() {
-		const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
-		const getRocketchatProjectMap = (prefix) => {
-			return (project) => {
-				project = {...project};
-				const namespace = project.namespace.path;
-				const projectPath = project.path_with_namespace;
-				const match = projectPath.match(gitlabProjectPathPattern);
-
-				if (match === null) {
-					return;
-				}
-
-				if (namespace === "ros") {
-					project.rocketchatChannelName = `${prefix}-${match.groups.name}`;
-				} else {
-					project.rocketchatChannelName = `${namespace}-${prefix}-${match.groups.name}`;
-				}
-
-				project.lastProjectActivity = moment(project.last_activity_at);
-
-				// check unread messages
-				project.hasUnreadMessages = false;
-				if (this.chatSubscriptions) {
-					const subscription = this.chatSubscriptions
-						.find((subscription) => subscription.fname === project.rocketchatChannelName);
-					if (subscription) {
-						project.hasUnreadMessages = subscription.alert;
-						const lastChatActivity = moment(subscription._updatedAt);
-						if (lastChatActivity.isAfter(project.lastProjectActivity)) {
-							project.lastProjectActivity = lastChatActivity;
-						}
-					}
-				}
-
-				return project;
-			};
-		}
-
-		const sortProjectsByLastActivity = (a, b) => {
-			if (a.lastProjectActivity.isBefore(b.lastProjectActivity)) {
-				return 1;
-			} else if (b.lastProjectActivity.isBefore(a.lastProjectActivity)) {
-				return -1;
-			} else {
-				return 0;
-			}
-		}
-
-		const pentests = this.projects
-			.filter((project) => {
-				return project.namespace.path !== "pentext" && (project.name.startsWith("pen-") || project.tag_list.includes("pentest"));
-			})
-			.map(getRocketchatProjectMap("pen"))
-			.sort(sortProjectsByLastActivity);
-		const offertes = this.projects
-			.filter((project) => {
-				return project.namespace.path !== "pentext" && (project.name.startsWith("off-") || project.tag_list.includes("offerte"));
-			})
-			.map(getRocketchatProjectMap("off"))
-			.sort(sortProjectsByLastActivity);
 
 		const loadingIndicatorClass = classMap({
 			"spinner-border": true,
@@ -174,10 +107,10 @@ class Overview extends GitlabProjects {
 					${this.projects.length > 0 ? html`
 						<div class="row gx-3">
 							<ui-content-card class="col-12 col-xl-6">
-								${this.renderSection("Pentests", pentests)}
+								${this.renderSection("Pentests", this.projects.filter((project) => project.isPentest))}
 							</ui-content-card>
 							<ui-content-card class="col-12 col-xl-6">
-								${this.renderSection("Quotes", offertes)}
+								${this.renderSection("Quotes", this.projects.filter((project) => project.isOfferte))}
 							</ui-content-card>
 						</div>
 					` : (!this.loading) ? html`

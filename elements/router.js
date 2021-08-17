@@ -21,6 +21,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.initialized = false;
 		this.subroute = undefined;
 		this.availableSubroutes = {};
+		this.projects = [];
 		this.chatSubscriptions = [];
 		this.onHashChange();
 		this.fetch();
@@ -64,6 +65,11 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			pageTitle: {
 				type: String,
 				notify: true
+			},
+
+			// ROS Projects
+			projects: {
+				type: Array
 			},
 			// Rocket.Chat
 			chatSubscriptions: {
@@ -214,7 +220,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			this.pageTitle = undefined;
 			view = html`<ros-overview
 					.params=${{search: this.search, order_by: "last_activity_at"}}
-					.chatSubscriptions=${this.chatSubscriptions}
+					.projects=${this.projects}
 					perPage="20"
 				></ros-overview>`;
 		}
@@ -225,6 +231,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 
 		const header = html`
 		<rocketchat-subscriptions .subscriptions="${this.sync("chatSubscriptions")}"></rocketchat-subscriptions>
+		<ros-projects .chatSubscriptions="${this.sync("chatSubscriptions")}" .projects="${this.sync("projects")}"></ros-projects>
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-2 px-sm-3 flex-nowrap">
 
 			${this.gitlabProjectData != null ? html`
@@ -344,9 +351,12 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			default: // sidebar
 				return html`${stylesheetIncludes}<div class="d-flex flex-column h-100">
 					${header}
-					<sidebar-view .search="${this.sync('search')}" .forceSidebarVisible="${this.sync('forceSidebarVisible')}" class="flex-grow-1 position-relative">
-						${view}
-					</sidebar-view>
+					<sidebar-view
+						class="flex-grow-1 position-relative"
+						.projects=${this.projects}
+						.search=${this.sync('search')}
+						.forceSidebarVisible=${this.sync('forceSidebarVisible')}
+					>${view}</sidebar-view>
 					${footer}
 				</div>`;
 		}
