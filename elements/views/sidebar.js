@@ -169,6 +169,7 @@ class SidebarView extends LitNotify(LitElement) {
 								<input id="search" name="search" type="search"
 									@keyup=${this.onSearch}
 									@change=${this.onSearch}
+									@search=${this.onSearch}
 									.value="${this.search}"
 									class="form-control"
 									placeholder="Filter"
