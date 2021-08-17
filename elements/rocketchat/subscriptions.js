@@ -26,7 +26,7 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 	}
 
 	static get queryInterval() {
-		return 30 * 1000; // milliseconds
+		return 15 * 1000; // milliseconds
 	}
 
 	get cronEvent() {
