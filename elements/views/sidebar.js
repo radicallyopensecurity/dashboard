@@ -164,7 +164,7 @@ class SidebarView extends LitNotify(LitElement) {
 			<div class="position-absolute w-100 h-100 mx-0 d-flex flex-row align-items-stretch">
 				<nav id="sidebar" class="d-lg-block bg-body sidebar collapse shadow px-3 h-100 pb-3">
 					<div class="position-sticky mx-1 mt-4 mb-1 safe-padding-left">
-						<form>
+						<form @submit=${(e) => e.preventDefault()}>
 							<div class="input-group">
 								<input id="search" name="search" type="search"
 									@keyup=${this.onSearch}
