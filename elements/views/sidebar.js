@@ -69,6 +69,10 @@ class SidebarView extends LitNotify(LitElement) {
 			text-decoration: underline;
 		}
 
+		#sidebar .nav-item[unread=true] .nav-link span {
+			font-weight: bold;
+		}
+
 		@media (max-width: 575px) {
 			#sidebar {
 				width: 100%;
@@ -205,7 +209,7 @@ class SidebarView extends LitNotify(LitElement) {
 								</h6>
 								<ul class="nav flex-column">
 									${this.filteredProjects.map((project) => html`
-										<li class="nav-item" active="${project.id === this.selectedProjectId}">
+										<li class="nav-item" active="${project.id === this.selectedProjectId}" unread="${project.hasUnreadMessages}">
 											<a class="nav-link text-nowrap" aria-current="page" href="#${project.id}">
 												<img class="avatar feather" src="${this.constructor.getAvatarUrl(project)}" />
 												<span>${project.name_with_namespace}</span>
