@@ -185,7 +185,7 @@ class SidebarView extends LitNotify(LitElement) {
 									<li class="nav-item">
 										<a class="nav-link text-nowrap" aria-current="page" href="#">
 											<ui-icon icon="bookmark"></ui-icon>
-											<span>My Projects</span>
+											<span>Overview</span>
 										</a>
 									</li>
 									<li class="nav-item">
