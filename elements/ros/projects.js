@@ -30,14 +30,22 @@ export class RosProjects extends GitlabProjects {
 
 	updateProjects() {
 		this.projects.forEach((project) => {
-			const subscription = this.chatSubscriptions
-				.find((subscription) => subscription.fname === project.rocketchatChannelName);
-			if (subscription) {
-				project.hasUnreadMessages = subscription.alert;
-				const lastChatActivity = moment(subscription._updatedAt);
-				project.lastChatActivity = lastChatActivity;
-				if (lastChatActivity.isAfter(project.lastGitActivity)) {
-					project.lastProjectActivity = lastChatActivity;
+			const subscriptions = this.chatSubscriptions
+				.filter((subscription) => project.rocketchatChannelNames.has(subscription.fname));
+			if (subscriptions) {
+				project.hasUnreadMessages = subscriptions.some((subscription) => subscription.alert);
+				project.lastChatActivity = subscriptions.reduce((curr, next) => {
+					const updatedAt = moment(next._updatedAt);
+					if (!curr || updatedAt.isAfter(curr)) {
+						return updatedAt;
+					} else {
+						return curr;
+					}
+				}, null);
+				if (project.lastChatActivity && project.lastChatActivity.isAfter(project.lastGitActivity)) {
+					project.lastProjectActivity = project.lastChatActivity;
+				} else {
+					project.lastProjectActivity = project.lastGitActivity
 				}
 			} else {
 				project.hasUnreadMessages = false;
@@ -91,10 +99,21 @@ export class RosProjects extends GitlabProjects {
 					return;
 				}
 
+				project.rocketchatChannelNames = new Set();
 				if (namespace === "ros") {
-					project.rocketchatChannelName = `${prefix}-${match.groups.name}`;
+					if (project.isPentext) {
+						project.rocketchatChannelNames.add(`pen-${match.groups.name}`);
+					}
+					if (project.isOfferte) {
+						project.rocketchatChannelNames.add(`off-${match.groups.name}`);
+					}
 				} else {
-					project.rocketchatChannelName = `${namespace}-${prefix}-${match.groups.name}`;
+					if (project.isPentext) {
+						project.rocketchatChannelNames.add(`${namespace}-pen-${match.groups.name}`);
+					}
+					if (project.isOfferte) {
+						project.rocketchatChannelNames.add(`${namespace}-off-${match.groups.name}`);
+					}
 				}
 
 				project.lastGitActivity = moment(project.last_activity_at);
