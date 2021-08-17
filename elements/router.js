@@ -152,6 +152,10 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 
 	static get styles() {
 		return css`
+		header {
+			height: 60px;
+		}
+
 		a.gitlab-user {
 			--line-height: 24px;
 			line-height: var(--line-height);
