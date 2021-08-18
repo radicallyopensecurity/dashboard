@@ -73,6 +73,10 @@ class SidebarView extends LitNotify(LitElement) {
 			font-weight: bold;
 		}
 
+		#sidebar form {
+			margin-block-end: 0.5em;
+		}
+
 		@media (max-width: 575px) {
 			#sidebar {
 				width: 100%;
@@ -167,23 +171,7 @@ class SidebarView extends LitNotify(LitElement) {
 		<div class="position-absolute h-100 w-100 d-block overflow-hidden">
 			<div class="position-absolute w-100 h-100 mx-0 d-flex flex-row align-items-stretch">
 				<nav id="sidebar" class="d-lg-block bg-body sidebar collapse shadow px-3 h-100 pb-3">
-					<div class="position-sticky mx-1 mt-4 mb-1 safe-padding-left">
-						<form @submit=${(e) => e.preventDefault()}>
-							<div class="input-group">
-								<input id="search" name="search" type="search"
-									@keyup=${this.onSearch}
-									@change=${this.onSearch}
-									@search=${this.onSearch}
-									.value="${this.search}"
-									class="form-control"
-									placeholder="Filter"
-									aria-label="Search"
-									aria-describedby="search-button" />
-								<button class="input-group-text btn-primary" id="search-button">
-									<ui-icon icon="search"></ui-icon>
-								</button>
-							</div>
-						</form>
+					<div class="position-sticky mx-1 mt-3 mb-1 safe-padding-left">
 						<div class="row">
 							<div class="col-12 col-sm-6 col-lg-12">
 								<h6 class="sidebar-heading mt-3 text-muted">
@@ -192,6 +180,22 @@ class SidebarView extends LitNotify(LitElement) {
 										<ui-icon icon="plus-square"></ui-icon>
 									</a>
 								</h6>
+								<form @submit=${(e) => e.preventDefault()}>
+									<div class="input-group">
+										<input id="search" name="search" type="search"
+											@keyup=${this.onSearch}
+											@change=${this.onSearch}
+											@search=${this.onSearch}
+											.value="${this.search}"
+											class="form-control"
+											placeholder="Filter"
+											aria-label="Search"
+											aria-describedby="search-button" />
+										<button class="input-group-text btn-primary" id="search-button">
+											<ui-icon icon="search"></ui-icon>
+										</button>
+									</div>
+								</form>
 								<ul class="nav flex-column">
 									${this.filteredProjects.map((project) => html`
 										<li class="nav-item" active="${project.id === this.selectedProjectId}" unread="${project.hasUnreadMessages}">
