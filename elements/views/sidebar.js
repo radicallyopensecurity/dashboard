@@ -76,6 +76,8 @@ class SidebarView extends LitNotify(LitElement) {
 		@media (max-width: 575px) {
 			#sidebar {
 				width: 100%;
+				min-width: 100%;
+				max-width: 100%;
 			}
 		}
 
