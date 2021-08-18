@@ -188,12 +188,6 @@ class SidebarView extends LitNotify(LitElement) {
 							<div class="col-12 col-sm-6 col-lg-12">
 								<ul class="nav flex-column">
 									<li class="nav-item">
-										<a class="nav-link text-nowrap" aria-current="page" href="#">
-											<ui-icon icon="bookmark"></ui-icon>
-											<span>Overview</span>
-										</a>
-									</li>
-									<li class="nav-item">
 										<a class="nav-link text-nowrap" aria-current="page" href="#new">
 											<ui-icon icon="plus-square"></ui-icon>
 											<span>New Project</span>
