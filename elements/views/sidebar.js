@@ -186,20 +186,11 @@ class SidebarView extends LitNotify(LitElement) {
 						</form>
 						<div class="row">
 							<div class="col-12 col-sm-6 col-lg-12">
-								<ul class="nav flex-column">
-									<li class="nav-item">
-										<a class="nav-link text-nowrap" aria-current="page" href="#new">
-											<ui-icon icon="plus-square"></ui-icon>
-											<span>New Project</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12 col-sm-6 col-lg-12">
 								<h6 class="sidebar-heading mt-3 text-muted">
 									<span>Projects</span>
+									<a class="text-nowrap btn btn-link btn-sm" aria-current="page" href="#new">
+										<ui-icon icon="plus-square"></ui-icon>
+									</a>
 								</h6>
 								<ul class="nav flex-column">
 									${this.filteredProjects.map((project) => html`
