@@ -225,6 +225,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			view = html`<ros-overview
 					.params=${{search: this.search, order_by: "last_activity_at"}}
 					.projects=${this.projects}
+					.gitlabUser=${this.gitlabUser}
 					perPage="20"
 				></ros-overview>`;
 		}

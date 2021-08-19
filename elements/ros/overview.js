@@ -22,6 +22,9 @@ class Overview extends LitElement {
 		return {
 			projects: {
 				type: Array
+			},
+			gitlabUser: {
+				type: Object
 			}
 		};
 	}
@@ -87,29 +90,36 @@ class Overview extends LitElement {
 			"d-none": !this.loading
 		});
 
+		const pentests = this.projects.filter((project) => project.isPentest);
+		const offertes = this.projects.filter((project) => project.isOfferte);
+
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 
 		<div class="row">
 			<div class="col-12 bg-light">
 				<ui-content-card>
-					<ui-breadcrumbs>
-						<span>Projects</span>
-					</ui-breadcrumbs>
 					<div class="d-flex align-items-center">
-						<h1 class="me-auto">Overview</h1>
+						<h1 class="me-auto">ROS Dashboard</h1>
 						<div class="${loadingIndicatorClass}" role="status">
 							<span class="visually-hidden">Loading...</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<p>
+								Hi ${this.gitlabUser.name},
+							</p>
+							<p>
+								You have access to ${pentests.length} pentest projects.
+							</p>
 						</div>
 					</div>
 				</ui-content-card>
 				${this.projects.length > 0 ? html`
 					<div class="row gx-3">
-						<ui-content-card class="col-12 col-xl-6">
-							${this.renderSection("Pentests", this.projects.filter((project) => project.isPentest))}
-						</ui-content-card>
-						<ui-content-card class="col-12 col-xl-6">
-							${this.renderSection("Quotes", this.projects.filter((project) => project.isOfferte))}
+						<ui-content-card class="col-12">
+							${this.renderSection("Recently Updated", this.projects.slice(0, 5))}
 						</ui-content-card>
 					</div>
 				` : (!this.loading) ? html`
