@@ -8,7 +8,7 @@ export class DropdownInput extends LitNotify(LitElement) {
 		this.path = undefined;
 		this.label = undefined;
 		this.params = {};
-		this.value = undefined;
+		this.value = null;
 		this._options = [];
 	}
 
@@ -39,7 +39,9 @@ export class DropdownInput extends LitNotify(LitElement) {
 	}
 
 	set options(options) {
+		const oldValue = this._options;
 		this._options = options;
+		this.requestUpdate("options", oldValue);
 	}
 
 	get url() {
@@ -51,12 +53,12 @@ export class DropdownInput extends LitNotify(LitElement) {
 		return url;
 	}
 
-	async updated(changedProperties) {
-		const keys = [...changedProperties.keys()];
-		if (keys.includes("path") || keys.includes("params")) {
+	async willUpdate(changedProperties) {
+		super.willUpdate(changedProperties);
+		if (changedProperties.has("path") || changedProperties.has("params")) {
 			this.options = await this.query();
 		}
-		if (keys.includes("_options") && !keys.includes("value")) {
+		if (changedProperties.has("_options") && !changedProperties.has("value")) {
 			if ((this.value === undefined) && (this.options.length > 0)) {
 				this.value = this.options[0].value
 			}
@@ -94,7 +96,12 @@ export class DropdownInput extends LitNotify(LitElement) {
 	get onChangeSelection() {
 		return (e) => {
 			e.stopPropagation();
-			this.value = e.currentTarget.value;
+
+			if (this.constructor.properties.value.type === Number) {
+				this.value = parseInt(e.currentTarget.value, 10);
+			} else {
+				this.value = e.currentTarget.value;
+			}
 		}
 	}
 

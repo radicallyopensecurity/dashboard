@@ -21,6 +21,16 @@ class GitlabNamespaceChooser extends DropdownInput {
 		}
 	}
 
+	static get properties() {
+		return {
+			...super.properties,
+			value: {
+				type: Number,
+				notify: true
+			}
+		}
+	}
+
 	static mapOptions(item) {
 		return {
 			value: item.id,
@@ -65,10 +75,9 @@ class GitlabTemplateChooser extends DropdownInput {
 		}
 	}
 
-	updated(changedProperties) {
-		super.updated(changedProperties);
-		const keys = [...changedProperties.keys()];
-		if (keys.includes("topic")) {
+	willUpdate(changedProperties) {
+		super.willUpdate(changedProperties);
+		if (changedProperties.has("topic") || changedProperties.has("_options")) {
 			const options = this.options;
 			if (options !== undefined && !!this.options.length) {
 				this.value = options[0].value;
@@ -113,8 +122,8 @@ class NewRosProject extends LitSync(GitlabProject) {
 		super();
 		this.topic = "offerte";
 		this.title = "";
-		this.namespace_id = undefined;
-		this.import_url = undefined;
+		this.namespace_id = null;
+		this.import_url = null;
 	}
 
 	static get properties() {
