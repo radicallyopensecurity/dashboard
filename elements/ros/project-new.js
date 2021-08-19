@@ -205,10 +205,6 @@ class NewRosProject extends LitSync(GitlabProject) {
 		<link rel="stylesheet" href="dashboard.css"/>
 
 		<ui-content-card>
-			<ui-breadcrumbs>
-				<span>Projects</span>
-				<span>New</span>
-			</ui-breadcrumbs>
 			<form name="new" @submit="${this.onSubmitForm}">
 				<h1 aria-role="legend">Create New Project</h1>
 				<div class="row mt-3 mb-3">
