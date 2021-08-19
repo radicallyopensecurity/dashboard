@@ -36,17 +36,23 @@ export class ContentCard extends LitElement {
 	}
 
 	get _cardClasses() {
+		return {
+			"mb-0": true,
+			"mb-sm-3": true,
+			"bg-body": true,
+			"rounded": true,
+			"shadow-sm": true
+		};
+	}
+
+	get _cardClassMap() {
 		const extraClasses = {};
 		if (!this.seamless) {
 			extraClasses["p-3"] = true;
 		}
 		return classMap({
 			...extraClasses,
-			"mb-0": true,
-			"mb-sm-3": true,
-			"bg-body": true,
-			"rounded": true,
-			"shadow-sm": true
+			...this._cardClasses
 		});
 	}
 
@@ -69,7 +75,7 @@ export class ContentCard extends LitElement {
 	render() {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-		<div id="card" class="${this._cardClasses}" style="${this.cardStyles}">
+		<div id="card" class="${this._cardClassMap}" style="${this.cardStyles}">
 			<slot></slot>
 		</div>
 		`;

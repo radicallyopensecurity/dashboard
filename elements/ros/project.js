@@ -22,6 +22,14 @@ const gitlabCiJobName = "build";
 const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
 class ChatContentCard extends ContentCard {
+
+	get _cardClasses() {
+		const classes = super._cardClasses;
+		delete classes.rounded;
+		classes["rounded-bottom"] = true;
+		return classes;
+	}
+
 	static get styles() {
 		return css`
 		${super.styles}
@@ -378,6 +386,18 @@ export class Project extends LitNotify(GitlabProject) {
 			transition: background-color 0.2 ease;
 		}
 
+		.nav-tabs {
+			border-bottom: none;
+		}
+
+		.nav-tabs .nav-item {
+			border: none !important;
+		}
+
+		.nav-tabs .nav-link.active {
+			font-weight: bold;
+		}
+
 		#chat-card {
 			position: relative;
 		}
@@ -488,9 +508,9 @@ export class Project extends LitNotify(GitlabProject) {
 								classes["bg-white"] = true;
 							}
 							return html`
-								<li class="nav-item" @click="${this.onClickChatTab}">
+								<li class="nav-item shadow-sm" @click="${this.onClickChatTab}">
 									<a class="${classMap(classes)}"
-										style="text-transform: capitalize;"
+										style="text-transform: capitalize; border: none;"
 										name="${name}"
 										aria-current="page"
 										href="#"
