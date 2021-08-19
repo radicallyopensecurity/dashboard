@@ -423,190 +423,188 @@ export class Project extends LitNotify(GitlabProject) {
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 		<link rel="stylesheet" href="dashboard.css"/>
 
-		<div class="container-fluid px-sm-0 p-md-2">
-			<div class="row d-none d-sm-block" subroute="overview">
-				<div class="col-12 px-0 px-sm-3">
-					<header><ui-content-card>
-						<div class="d-block d-md-flex flex-row flex-wrap flex-md-nowrap align-items-start pb-2 align-items-center">
-							<div class="flex-grow-1">
-								<div>
-									<div id="namespace" class="lead d-block d-md-inline text-center">${this.gitlabProjectData.namespace.name}</div>
+		<div class="row d-none d-sm-block" subroute="overview">
+			<div class="col-12 px-0 px-sm-3">
+				<header><ui-content-card>
+					<div class="d-block d-md-flex flex-row flex-wrap flex-md-nowrap align-items-start pb-2 align-items-center">
+						<div class="flex-grow-1">
+							<div>
+								<div id="namespace" class="lead d-block d-md-inline text-center">${this.gitlabProjectData.namespace.name}</div>
+							</div>
+							<div>
+								<h1 class="d-block d-md-inline text-center">${this.gitlabProjectData.name}</h1>
+							</div>
+							<div class="d-flex me-auto d-none">
+								<ul class="list-group list-group-horizontal">
+									<li class="list-group-item">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
+									<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
+								</ul>
+							</div>
+							<div class="d-flex d-md-inline-flex flex-column flex-sm-row align-items-center mt-3 justify-content-center">
+								<div class="d-flex text-nowrap mb-2 mb-sm-4">
+									${this.channelName !== undefined ? html`
+										<a aria-current="page" href="${this.chatChannelUrl}" target="_blank" role="button" class="btn btn-secondary me-2">
+											<ui-icon icon="message-square"></ui-icon>
+											Chat
+										</a>
+									` : ''}
+									${this.gitlabProjectData.web_url !== undefined ? html`
+										<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
+											<ui-icon icon="gitlab"></ui-icon>
+											Git
+										</a>
+									` : ''}
 								</div>
-								<div>
-									<h1 class="d-block d-md-inline text-center">${this.gitlabProjectData.name}</h1>
-								</div>
-								<div class="d-flex me-auto d-none">
-									<ul class="list-group list-group-horizontal">
-										<li class="list-group-item">${findings.length} finding${(findings.length === 1) ? "" : "s"}</li>
-										<li class="list-group-item">${nonFindings.length} non-finding${(nonFindings.length === 1) ? "" : "s"}</li>
-									</ul>
-								</div>
-								<div class="d-flex d-md-inline-flex flex-column flex-sm-row align-items-center mt-3 justify-content-center">
-									<div class="d-flex text-nowrap mb-2 mb-sm-4">
-										${this.channelName !== undefined ? html`
-											<a aria-current="page" href="${this.chatChannelUrl}" target="_blank" role="button" class="btn btn-secondary me-2">
-												<ui-icon icon="message-square"></ui-icon>
-												Chat
-											</a>
-										` : ''}
-										${this.gitlabProjectData.web_url !== undefined ? html`
-											<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
-												<ui-icon icon="gitlab"></ui-icon>
-												Git
-											</a>
-										` : ''}
-									</div>
-									<div class="d-flex btn-toolbar text-nowrap mb-4">
-										<div class="input-group flex-nowrap">
-											${!!this.pdfPassword ? html`<span class="input-group-text">
-												<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
-											</span>` : ``}
-											<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
-												Report
-												<ui-icon icon="file-text"></ui-icon>
-											</a>
-										</div>
+								<div class="d-flex btn-toolbar text-nowrap mb-4">
+									<div class="input-group flex-nowrap">
+										${!!this.pdfPassword ? html`<span class="input-group-text">
+											<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
+										</span>` : ``}
+										<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
+											Report
+											<ui-icon icon="file-text"></ui-icon>
+										</a>
 									</div>
 								</div>
 							</div>
-							<div class="ms-0 ms-md-3 d-block text-center">
-								<img class="avatar" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
+						</div>
+						<div class="ms-0 ms-md-3 d-block text-center">
+							<img class="avatar" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
+						</div>
+					</div>
+				</div>
+			</ui-content-card></header>
+		</div>
+		<div class="row d-none d-sm-block" subroute="chat">
+			<div class="col-12 px-0 px-sm-3">
+				<ul class="nav nav-tabs">
+					${Object.entries(this.enabledStates)
+						.map(([name, options]) => {
+							const classes = {
+								"nav-link": true
+							};
+							if (name === this.selectedChatTabState) {
+								classes["active"] = true;
+								classes["bg-white"] = true;
+							}
+							return html`
+								<li class="nav-item" @click="${this.onClickChatTab}">
+									<a class="${classMap(classes)}"
+										style="text-transform: capitalize;"
+										name="${name}"
+										aria-current="page"
+										href="#"
+									>${name}</a>
+								</li>
+							`;
+						})
+					}
+				</ul>
+				<div class="chat-frame">
+					<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
+						<ros-rocketchat-frame channel="${this.channelName}"></ros-rocketchat-frame>
+					</project-ui-content-card-chat>
+				</div>
+			</div>
+		</div>
+		<div class="row d-none d-sm-block" subroute="overview">
+			<div class="col-12 px-0 px-sm-3">
+				<ui-content-card seamless="true">
+					<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-2">
+						<div class="border rounded p-2 m-1 flex-grow-1">
+							<h5>Crew</h5>
+							<div class="d-flex flex-wrap">
+								${this.staff.map((member) => html`
+									<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
+										<a href="/${member.username}" target="_blank">
+											<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
+											<div>${member.name}</div>
+										</a>
+									</div>
+								`)}
+							</div>
+						</div>
+						<div class="border rounded p-2 m-1 flex-grow-1">
+							<h5>Stakeholder${this.customers.length > 1 ? "s" : ""}</h5>
+							<div class="d-flex flex-wrap">
+								${this.customers.map((member) => html`
+									<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
+										<a href="/${member.username}" target="_blank">
+											<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
+											<div>${member.name}</div>
+										</a>
+									</div>
+								`)}
 							</div>
 						</div>
 					</div>
-				</ui-content-card></header>
+				</ui-content-card>
 			</div>
-			<div class="row d-none d-sm-block" subroute="chat">
-				<div class="col-12 px-0 px-sm-3">
-					<ul class="nav nav-tabs">
-						${Object.entries(this.enabledStates)
-							.map(([name, options]) => {
-								const classes = {
-									"nav-link": true
-								};
-								if (name === this.selectedChatTabState) {
-									classes["active"] = true;
-									classes["bg-white"] = true;
-								}
-								return html`
-									<li class="nav-item" @click="${this.onClickChatTab}">
-										<a class="${classMap(classes)}"
-											style="text-transform: capitalize;"
-											name="${name}"
-											aria-current="page"
-											href="#"
-										>${name}</a>
-									</li>
-								`;
-							})
-						}
-					</ul>
-					<div class="chat-frame">
-						<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
-							<ros-rocketchat-frame channel="${this.channelName}"></ros-rocketchat-frame>
-						</project-ui-content-card-chat>
+		</div>
+		<div class="row">
+			<div class="col-12 col-xl-8 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
+				<ui-content-card>
+					<h3 class="pb-1">Findings <span class="badge bg-primary">${findings.length}</span></h3>
+					${repeat(Object.entries(this.findingsBySeverity), ([severity, findings]) => severity, ([severity, findings]) => html`
+						<h5 class="py-1">${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
+						<ui-accordion .items="${findings.map((finding) => {
+							const title = html`
+								<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
+								<span>${finding.title}</span>
+							`;
+							const $rosFinding = document.createElement('ros-finding');
+							$rosFinding.autoload = false;
+							$rosFinding.gitlabProjectId = this.gitlabProjectId;
+							$rosFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
+							$rosFinding.gitlabIssueData = finding;
+							$rosFinding.gitlabIssueIid = finding.iid;
+							$rosFinding.onBecomeVisible = async function() {
+								await $rosFinding.fetch();
+								$rosFinding.requestUpdate("gitlabIssueData");
+							};
+							return { title, content: $rosFinding, id: `${this.gitlabProjectId}::${finding.iid}` };
+						})}"></ui-accordion>
+					`)}
+					<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
+					<div class="list-group">
+						<ui-accordion .items="${nonFindings.map((nonFinding) => {
+							const title = html`
+								<span class="small me-2 text-muted">${nonFinding.iid}</span>
+								<span>${nonFinding.title}</span>
+							`;
+							const $rosNonFinding = document.createElement('ros-non-finding');
+							$rosNonFinding.autoload = false;
+							$rosNonFinding.gitlabProjectId = this.gitlabProjectId;
+							$rosNonFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
+							$rosNonFinding.gitlabIssueData = nonFinding;
+							$rosNonFinding.gitlabIssueIid = nonFinding.iid;
+							return { title, content: $rosNonFinding, id: `${this.gitlabProjectId}::${nonFinding.iid}` };
+						})}"></ui-accordion>
 					</div>
-				</div>
+				</ui-content-card>
 			</div>
-			<div class="row d-none d-sm-block" subroute="overview">
-				<div class="col-12 px-0 px-sm-3">
-					<ui-content-card seamless="true">
-						<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-2">
-							<div class="border rounded p-2 m-1 flex-grow-1">
-								<h5>Crew</h5>
-								<div class="d-flex flex-wrap">
-									${this.staff.map((member) => html`
-										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
-											<a href="/${member.username}" target="_blank">
-												<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
-												<div>${member.name}</div>
-											</a>
-										</div>
-									`)}
-								</div>
+			<div class="col-12 col-xl-4 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="overview">
+				<div>
+					<div class="col-12">
+						<ui-content-card>
+							<h3>Recent Changes</h3>
+							<div class="list-group mb-3">
+								${this.recentFindings.map((finding) => html`
+									<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
+								`)}
 							</div>
-							<div class="border rounded p-2 m-1 flex-grow-1">
-								<h5>Stakeholder${this.customers.length > 1 ? "s" : ""}</h5>
-								<div class="d-flex flex-wrap">
-									${this.customers.map((member) => html`
-										<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
-											<a href="/${member.username}" target="_blank">
-												<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
-												<div>${member.name}</div>
-											</a>
-										</div>
-									`)}
-								</div>
-							</div>
-						</div>
-					</ui-content-card>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12 col-xl-8 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
-					<ui-content-card>
-						<h3 class="pb-1">Findings <span class="badge bg-primary">${findings.length}</span></h3>
-						${repeat(Object.entries(this.findingsBySeverity), ([severity, findings]) => severity, ([severity, findings]) => html`
-							<h5 class="py-1">${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
-							<ui-accordion .items="${findings.map((finding) => {
-								const title = html`
-									<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
-									<span>${finding.title}</span>
-								`;
-								const $rosFinding = document.createElement('ros-finding');
-								$rosFinding.autoload = false;
-								$rosFinding.gitlabProjectId = this.gitlabProjectId;
-								$rosFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
-								$rosFinding.gitlabIssueData = finding;
-								$rosFinding.gitlabIssueIid = finding.iid;
-								$rosFinding.onBecomeVisible = async function() {
-									await $rosFinding.fetch();
-									$rosFinding.requestUpdate("gitlabIssueData");
-								};
-								return { title, content: $rosFinding, id: `${this.gitlabProjectId}::${finding.iid}` };
-							})}"></ui-accordion>
-						`)}
-						<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
-						<div class="list-group">
-							<ui-accordion .items="${nonFindings.map((nonFinding) => {
-								const title = html`
-									<span class="small me-2 text-muted">${nonFinding.iid}</span>
-									<span>${nonFinding.title}</span>
-								`;
-								const $rosNonFinding = document.createElement('ros-non-finding');
-								$rosNonFinding.autoload = false;
-								$rosNonFinding.gitlabProjectId = this.gitlabProjectId;
-								$rosNonFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
-								$rosNonFinding.gitlabIssueData = nonFinding;
-								$rosNonFinding.gitlabIssueIid = nonFinding.iid;
-								return { title, content: $rosNonFinding, id: `${this.gitlabProjectId}::${nonFinding.iid}` };
-							})}"></ui-accordion>
-						</div>
-					</ui-content-card>
-				</div>
-				<div class="col-12 col-xl-4 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="overview">
-					<div>
-						<div class="col-12">
-							<ui-content-card>
-								<h3>Recent Changes</h3>
-								<div class="list-group mb-3">
-									${this.recentFindings.map((finding) => html`
-										<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
-									`)}
-								</div>
-							</ui-content-card>
-						</div>
-						<div class="col-12">
-							<ui-content-card>
-								<h3>History</h3>
-								${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
-									<h5 class="mt-3">${moment(day).format("dddd, DD.MM.YYYY")}</h5>
-									${events.map((eventData) => html`
-									<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
-									`)}
-								`;})}
-							</ui-content-card>
-						</div>
+						</ui-content-card>
+					</div>
+					<div class="col-12">
+						<ui-content-card>
+							<h3>History</h3>
+							${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
+								<h5 class="mt-3">${moment(day).format("dddd, DD.MM.YYYY")}</h5>
+								${events.map((eventData) => html`
+								<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
+								`)}
+							`;})}
+						</ui-content-card>
 					</div>
 				</div>
 			</div>

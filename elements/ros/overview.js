@@ -90,33 +90,31 @@ class Overview extends LitElement {
 		return html`
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 
-		<div class="container-fluid px-sm-0">
-			<div class="row">
-				<div class="col-12 bg-light">
-					<ui-content-card>
-						<ui-breadcrumbs>
-							<span>Projects</span>
-						</ui-breadcrumbs>
-						<div class="d-flex align-items-center">
-							<h1 class="me-auto">Overview</h1>
-							<div class="${loadingIndicatorClass}" role="status">
-								<span class="visually-hidden">Loading...</span>
-							</div>
+		<div class="row">
+			<div class="col-12 bg-light">
+				<ui-content-card>
+					<ui-breadcrumbs>
+						<span>Projects</span>
+					</ui-breadcrumbs>
+					<div class="d-flex align-items-center">
+						<h1 class="me-auto">Overview</h1>
+						<div class="${loadingIndicatorClass}" role="status">
+							<span class="visually-hidden">Loading...</span>
 						</div>
-					</ui-content-card>
-					${this.projects.length > 0 ? html`
-						<div class="row gx-3">
-							<ui-content-card class="col-12 col-xl-6">
-								${this.renderSection("Pentests", this.projects.filter((project) => project.isPentest))}
-							</ui-content-card>
-							<ui-content-card class="col-12 col-xl-6">
-								${this.renderSection("Quotes", this.projects.filter((project) => project.isOfferte))}
-							</ui-content-card>
-						</div>
-					` : (!this.loading) ? html`
-						<p>No projects found</p>
-					` : ''}
-				</div>
+					</div>
+				</ui-content-card>
+				${this.projects.length > 0 ? html`
+					<div class="row gx-3">
+						<ui-content-card class="col-12 col-xl-6">
+							${this.renderSection("Pentests", this.projects.filter((project) => project.isPentest))}
+						</ui-content-card>
+						<ui-content-card class="col-12 col-xl-6">
+							${this.renderSection("Quotes", this.projects.filter((project) => project.isOfferte))}
+						</ui-content-card>
+					</div>
+				` : (!this.loading) ? html`
+					<p>No projects found</p>
+				` : ''}
 			</div>
 		</div>
 		<div id="hiddenIframe">
