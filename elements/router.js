@@ -21,6 +21,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.initialized = false;
 		this.subroute = undefined;
 		this.availableSubroutes = {};
+		this.loading = true;
 		this.projects = [];
 		this.chatSubscriptions = [];
 		this.onHashChange();
@@ -68,6 +69,9 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			},
 
 			// ROS Projects
+			loading: {
+				type: Boolean
+			},
 			projects: {
 				type: Array
 			},
@@ -224,6 +228,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			this.pageTitle = undefined;
 			view = html`<ros-overview
 					.params=${{search: this.search, order_by: "last_activity_at"}}
+					.loading=${this.loading}
 					.projects=${this.projects}
 					.gitlabUser=${this.gitlabUser}
 					perPage="20"
@@ -236,7 +241,11 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 
 		const header = html`
 		<rocketchat-subscriptions .subscriptions="${this.sync("chatSubscriptions")}"></rocketchat-subscriptions>
-		<ros-projects .chatSubscriptions="${this.sync("chatSubscriptions")}" .projects="${this.sync("projects")}"></ros-projects>
+		<ros-projects
+			.chatSubscriptions="${this.sync("chatSubscriptions")}"
+			.projects="${this.sync("projects")}"
+			.loading=${this.sync("loading")}
+		></ros-projects>
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap shadow px-2 px-sm-3 flex-nowrap">
 
 			${this.gitlabProjectData != null ? html`

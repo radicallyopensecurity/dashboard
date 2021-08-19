@@ -6,6 +6,7 @@ export class GitlabProjects extends LitNotify(Gitlab) {
 	constructor() {
 		super();
 		this.projects = [];
+		this.loading = false;
 	}
 
 	static get autofetch() {
@@ -29,6 +30,10 @@ export class GitlabProjects extends LitNotify(Gitlab) {
 			sort: {
 				type: String,
 				reflect: true
+			},
+			loading: {
+				type: Boolean,
+				notify: true
 			}
 		};
 	}
@@ -77,12 +82,14 @@ export class GitlabProjects extends LitNotify(Gitlab) {
 	}
 
 	async fetch() {
+		this.loading = true;
 		await super.fetchPaginated(
 			"projects",
 			this.baseUrl,
 			this.constructor.mapProjects,
 			this.constructor.filterProjects
 		);
+		this.loading = false;
 	}
 
 }

@@ -11,7 +11,9 @@ class Overview extends LitElement {
 
 	constructor() {
 		super();
+		this.gitlabUser = null;
 		this.projects = [];
+		this.loading = true;
 	}
 
 	static getAvatarUrl(project) {
@@ -25,6 +27,9 @@ class Overview extends LitElement {
 			},
 			gitlabUser: {
 				type: Object
+			},
+			loading: {
+				type: Boolean
 			}
 		};
 	}
