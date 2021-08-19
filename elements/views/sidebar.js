@@ -173,7 +173,32 @@ class SidebarView extends LitNotify(LitElement) {
 				<nav id="sidebar" class="d-lg-block bg-body sidebar collapse shadow px-3 h-100 pb-3">
 					<div class="position-sticky mx-1 mt-3 mb-1 safe-padding-left">
 						<div class="row">
-							<div class="col-12 col-sm-6 col-lg-12">
+							<div class="col-12">
+								<h6 class="sidebar-heading mt-3 text-muted">
+									<span>ROS Services</span>
+								</h6>
+								<ul class="nav flex-row">
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
+											<ui-icon icon="message-square"></ui-icon>
+											Rocket.Chat
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
+											<ui-icon icon="gitlab"></ui-icon>
+											Gitlab
+										</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-nowrap" aria-current="page" href="https://codimd.radicallyopensecurity.com" target="_blank">
+											<ui-icon icon="file-text"></ui-icon>
+											CodiMD
+										</a>
+									</li>
+								</ul>
+							</div>
+							<div class="col-12">
 								<h6 class="sidebar-heading mt-3 text-muted">
 									<span>Projects</span>
 									<a class="text-nowrap btn btn-link btn-sm" aria-current="page" href="#new">
@@ -205,31 +230,6 @@ class SidebarView extends LitNotify(LitElement) {
 											</a>
 										</li>
 									`)}
-								</ul>
-							</div>
-							<div class="col-12 col-sm-6 col-lg-12">
-								<h6 class="sidebar-heading mt-3 text-muted">
-									<span>ROS Services</span>
-								</h6>
-								<ul class="nav flex-column">
-									<li class="nav-item">
-										<a class="nav-link text-nowrap" aria-current="page" href="https://chat.radicallyopensecurity.com" target="_blank">
-											<ui-icon icon="message-square"></ui-icon>
-											Rocket.Chat
-										</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link text-nowrap" aria-current="page" href="https://git.radicallyopensecurity.com" target="_blank">
-											<ui-icon icon="gitlab"></ui-icon>
-											Gitlab
-										</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link text-nowrap" aria-current="page" href="https://codimd.radicallyopensecurity.com" target="_blank">
-											<ui-icon icon="file-text"></ui-icon>
-											CodiMD
-										</a>
-									</li>
 								</ul>
 							</div>
 						</div>
