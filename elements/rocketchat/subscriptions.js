@@ -59,11 +59,16 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 	}
 
 	async query() {
+		if (this.querying === true) {
+			return;
+		}
+		this.querying = true;
 		const rooms = (await this.fetch("subscriptions.get")).update
 			.filter((update) => update.t === "p") // rooms only
 		this.subscriptions = rooms;
 		this.unread = rooms
 			.filter((update) => !!update.alert);
+		this.querying = false;
 	}
 
 }
