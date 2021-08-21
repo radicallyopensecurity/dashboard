@@ -3,16 +3,35 @@ import { LitNotify } from '../../lib/lit-element-notify.js';
 
 class Rocketchat extends LitElement {
 
-	get apiBaseUrl() {
-		return "https://chat.radicallyopensecurity.com/api/v1"
+	constructor() {
+		super();
+		this.lastUpdated = null;
 	}
 
-	async fetch(endpoint) {
-		const url = `${this.apiBaseUrl}/${endpoint}`
-		return fetch(url, {
+	static get properties() {
+		return {
+			lastUpdated: {
+				type: Date,
+				notify: true
+			}
+		}
+	}
+
+	get apiBaseUrl() {
+		return "https://chat.radicallyopensecurity.com/api/v1/";
+	}
+
+	async fetch(endpoint, queryParams) {
+		const url = new URL(endpoint, this.apiBaseUrl);
+		if (queryParams !== undefined) {
+			url.search = queryParams.toString();
+		}
+		const data = await fetch(url, {
 			mode: "cors",
 			credentials: "include"
 		}).then((response) => response.json());
+		this.lastUpdated = new Date();
+		return data;
 	}
 
 }
@@ -31,7 +50,7 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 	}
 
 	get cronEvent() {
-		return (e) => {
+		return async (e) => {
 			this.query();
 		};
 	}
@@ -47,6 +66,7 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 
 	static get properties() {
 		return {
+			...super.properties,
 			unread: {
 				type: Array,
 				notify: true
@@ -63,11 +83,27 @@ class RocketchatSubscriptions extends LitNotify(Rocketchat) {
 			return;
 		}
 		this.querying = true;
-		const rooms = (await this.fetch("subscriptions.get")).update
+		const searchParams = new URLSearchParams();
+		if (this.lastUpdated instanceof Date) {
+			searchParams.append("updatedSince", this.lastUpdated.toString());
+		}
+		const rooms = (await this.fetch("subscriptions.get", searchParams)).update
 			.filter((update) => update.t === "p") // rooms only
-		this.subscriptions = rooms;
-		this.unread = rooms
+
+		const oldSubscriptions = this.subscriptions;
+		const knownSubscriptions = this.subscriptions;
+		for (let updatedRoom of rooms) {
+			let currentSubscription = knownSubscriptions.findIndex((subscription) => subscription._id === updatedRoom._id);
+			if (currentSubscription !== -1) {
+				knownSubscriptions[currentSubscription] = updatedRoom;
+			} else {
+				knownSubscriptions.unshift(updatedRoom);
+			}
+		}
+		this.subscriptions = [...knownSubscriptions];
+		this.unread = knownSubscriptions
 			.filter((update) => !!update.alert);
+
 		this.querying = false;
 	}
 
