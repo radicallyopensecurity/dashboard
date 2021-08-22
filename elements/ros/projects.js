@@ -32,7 +32,7 @@ export class RosProjects extends GitlabProjects {
 		const oldProjectsValue = this.projects;
 		this.projects.forEach((project) => {
 			const subscriptions = this.chatSubscriptions
-				.filter((subscription) => project.rocketchatChannelNames.has(subscription.fname));
+				.filter((subscription) => project.rocketchatChannelNames.has(subscription.name));
 			if (subscriptions) {
 				project.hasUnreadMessages = subscriptions.some((subscription) => subscription.alert);
 				project.lastChatActivity = subscriptions.reduce((curr, next) => {
