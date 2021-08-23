@@ -77,7 +77,9 @@ export class RosProjects extends GitlabProjects {
 	static filterProjects(projects) {
 		return projects
 			.filter((project) => {
-				if (!isPentest(project) && !isOfferte(project)) {
+				if (project.archived === true) {
+					return false;
+				} else if (!isPentest(project) && !isOfferte(project)) {
 					return false;
 				} else if (project.namespace.path === "pentext") {
 					return false;
