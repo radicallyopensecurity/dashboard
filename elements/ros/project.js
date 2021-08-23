@@ -420,6 +420,14 @@ export class Project extends LitNotify(GitlabProject) {
 			flex-shrink: 1;
 			flex-base: 0;
 		}
+
+		a.member-link {
+			text-decoration: none;
+		}
+
+		a.member-link span {
+			text-decoration: underline;
+		}
 		`;
 	}
 
@@ -536,9 +544,9 @@ export class Project extends LitNotify(GitlabProject) {
 							<div class="d-flex flex-wrap">
 								${this.staff.map((member) => html`
 									<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
-										<a href="/${member.username}" target="_blank">
-											<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
-											<div>${member.name}</div>
+										<a href="/${member.username}" target="_blank" class="member-link">
+											<gitlab-avatar .user="${member}" class="me-1" style="--line-height: 24px;"></gitlab-avatar>
+											<span>${member.name}</div>
 										</a>
 									</div>
 								`)}
@@ -549,9 +557,9 @@ export class Project extends LitNotify(GitlabProject) {
 							<div class="d-flex flex-wrap">
 								${this.customers.map((member) => html`
 									<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
-										<a href="/${member.username}" target="_blank">
-											<gitlab-avatar .user="${member}" class="mb-2" style="--line-height: 48px;"></gitlab-avatar>
-											<div>${member.name}</div>
+										<a href="/${member.username}" target="_blank" class="member-link">
+											<gitlab-avatar .user="${member}" class="me-1" style="--line-height: 24px;"></gitlab-avatar>
+											<span>${member.name}</span>
 										</a>
 									</div>
 								`)}
