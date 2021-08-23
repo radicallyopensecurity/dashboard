@@ -618,12 +618,17 @@ export class Project extends LitNotify(GitlabProject) {
 					<div class="col-12">
 						<ui-content-card>
 							<h3>History</h3>
-							${Object.entries(this.eventsByDay).map(([day, events]) => { return html`
-								<h5 class="mt-3">${moment(day).format("dddd, DD.MM.YYYY")}</h5>
-								${events.map((eventData) => html`
-								<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
-								`)}
-							`;})}
+							<ui-accordion .items="${Object.entries(this.eventsByDay).map(([day, events]) => {
+								const dateString = moment(day).format("dddd, DD.MM.YYYY");
+								const title = html`
+									<span>${dateString}</span>
+								`;
+
+								const content = events.map((eventData) => html`
+									<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
+								`);
+								return { title, content, id: dateString };
+							})}"></ui-accordion>
 						</ui-content-card>
 					</div>
 				</div>
