@@ -537,40 +537,54 @@ export class Project extends LitNotify(GitlabProject) {
 		</div>
 		<div class="row d-none d-sm-block" subroute="overview">
 			<div class="col-12 px-0 px-sm-3">
-				<ui-content-card seamless="true">
-					<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-2">
-						<div class="rounded p-2 m-1 flex-grow-1">
-							<h5>Crew</h5>
-							<div class="d-flex flex-wrap">
-								${this.staff.map((member) => html`
-									<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
-										<a href="/${member.username}" target="_blank" class="member-link">
-											<gitlab-avatar .user="${member}" class="me-1" style="--line-height: 24px;"></gitlab-avatar>
-											<span>${member.name}</div>
-										</a>
-									</div>
+				<div class="row">
+					<div class="col-12 col-xl-7 col-xxl-8 d-none d-sm-block px-0 px-sm-3 pe-lg-2">
+						<ui-content-card>
+							<h3>Recent Changes</h3>
+							<div class="list-group mb-3">
+								${this.recentFindings.map((finding) => html`
+									<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
 								`)}
 							</div>
-						</div>
-						<div class="rounded p-2 m-1 flex-grow-1">
-							<h5>Stakeholder${this.customers.length > 1 ? "s" : ""}</h5>
-							<div class="d-flex flex-wrap">
-								${this.customers.map((member) => html`
-									<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
-										<a href="/${member.username}" target="_blank" class="member-link">
-											<gitlab-avatar .user="${member}" class="me-1" style="--line-height: 24px;"></gitlab-avatar>
-											<span>${member.name}</span>
-										</a>
-									</div>
-								`)}
-							</div>
-						</div>
+						</ui-content-card>
 					</div>
-				</ui-content-card>
+					<div class="col-12 col-xl-5 col-xxl-4 d-none d-sm-block px-0 px-sm-3 ps-lg-2">
+						<ui-content-card seamless="true">
+							<div class="d-flex flex-row w-100 align-self-stretch flex-wrap p-2">
+								<div class="rounded p-2 m-1 flex-grow-1">
+									<h5>Crew</h5>
+									<div class="d-flex flex-wrap">
+										${this.staff.map((member) => html`
+											<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
+												<a href="/${member.username}" target="_blank" class="member-link">
+													<gitlab-avatar .user="${member}" class="me-1" style="--line-height: 24px;"></gitlab-avatar>
+													<span>${member.name}</div>
+												</a>
+											</div>
+										`)}
+									</div>
+								</div>
+								<div class="rounded p-2 m-1 flex-grow-1">
+									<h5>Stakeholder${this.customers.length > 1 ? "s" : ""}</h5>
+									<div class="d-flex flex-wrap">
+										${this.customers.map((member) => html`
+											<div class="p-2 flex-item flex-nowrap text-nowrap text-center">
+												<a href="/${member.username}" target="_blank" class="member-link">
+													<gitlab-avatar .user="${member}" class="me-1" style="--line-height: 24px;"></gitlab-avatar>
+													<span>${member.name}</span>
+												</a>
+											</div>
+										`)}
+									</div>
+								</div>
+							</div>
+						</ui-content-card>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-12 col-xl-8 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
+			<div class="col-12 col-xl-7 col-xxl-8 d-none d-sm-block px-0 px-sm-3 pe-lg-2" subroute="findings">
 				<ui-content-card>
 					<h3 class="pb-1">Findings <span class="badge bg-primary">${findings.length}</span></h3>
 					${repeat(Object.entries(this.findingsBySeverity), ([severity, findings]) => severity, ([severity, findings]) => html`
@@ -611,35 +625,21 @@ export class Project extends LitNotify(GitlabProject) {
 					</div>
 				</ui-content-card>
 			</div>
-			<div class="col-12 col-xl-4 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="overview">
-				<div>
-					<div class="col-12">
-						<ui-content-card>
-							<h3>Recent Changes</h3>
-							<div class="list-group mb-3">
-								${this.recentFindings.map((finding) => html`
-									<ros-project-recent-issues .finding="${finding}" .project="${this.gitlabProjectData}"></ros-project-recent-issues>
-								`)}
-							</div>
-						</ui-content-card>
-					</div>
-					<div class="col-12">
-						<ui-content-card>
-							<h3>History</h3>
-							<ui-accordion .items="${Object.entries(this.eventsByDay).map(([day, events]) => {
-								const dateString = moment(day).format("dddd, DD.MM.YYYY");
-								const title = html`
-									<span>${dateString}</span>
-								`;
+			<div class="col-12 col-xl-5 col-xxl-4 d-none d-sm-block px-0 px-sm-3 ps-lg-2" subroute="overview">
+				<ui-content-card>
+					<h3>History</h3>
+					<ui-accordion .items="${Object.entries(this.eventsByDay).map(([day, events]) => {
+						const dateString = moment(day).format("dddd, DD.MM.YYYY");
+						const title = html`
+							<span>${dateString}</span>
+						`;
 
-								const content = events.map((eventData) => html`
-									<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
-								`);
-								return { title, content, id: dateString };
-							})}"></ui-accordion>
-						</ui-content-card>
-					</div>
-				</div>
+						const content = events.map((eventData) => html`
+							<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
+						`);
+						return { title, content, id: dateString };
+					})}"></ui-accordion>
+				</ui-content-card>
 			</div>
 		</div>
 		`;
