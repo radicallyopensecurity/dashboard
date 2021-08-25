@@ -35,6 +35,7 @@ export class RosProjects extends GitlabProjects {
 				.filter((subscription) => project.rocketchatChannelNames.has(subscription.name));
 			if (subscriptions) {
 				project.hasUnreadMessages = subscriptions.some((subscription) => subscription.alert);
+				project.mentions = subscriptions.reduce((curr, subscription) => (curr + subscription.userMentions), 0);
 				project.lastChatActivity = subscriptions.reduce((curr, next) => {
 					const updatedAt = moment(next._updatedAt);
 					if (!curr || updatedAt.isAfter(curr)) {
@@ -50,6 +51,7 @@ export class RosProjects extends GitlabProjects {
 				}
 			} else {
 				project.hasUnreadMessages = false;
+				project.mentions = 0;
 				project.lastChatActivity = null;
 			}
 		});

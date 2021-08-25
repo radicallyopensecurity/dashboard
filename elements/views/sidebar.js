@@ -227,6 +227,7 @@ class SidebarView extends LitNotify(LitElement) {
 											<a class="nav-link text-nowrap" aria-current="page" href="#${project.id}">
 												<img class="avatar feather" src="${this.constructor.getAvatarUrl(project)}" />
 												<span>${project.name_with_namespace}</span>
+												${(project.mentions > 0) ? html`<span class="badge bg-secondary">${project.mentions}</span>` : ''}
 											</a>
 										</li>
 									`)}
