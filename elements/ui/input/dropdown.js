@@ -59,7 +59,7 @@ export class DropdownInput extends LitNotify(LitElement) {
 			this.options = await this.query();
 		}
 		if (changedProperties.has("_options") && !changedProperties.has("value")) {
-			if ((this.value === undefined) && (this.options.length > 0)) {
+			if ((this.value == undefined) && (this.options.length > 0)) {
 				this.value = this.options[0].value
 			}
 		}
