@@ -1,5 +1,6 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit.js';
+import { classMap } from '../../web_modules/lit-html/directives/class-map.js';
 
 class ProjectsTable extends LitElement {
 
@@ -80,6 +81,11 @@ class ProjectsTable extends LitElement {
 				</tr>
 				${this.projects.map((project) => {
 
+					let columnClasses = {
+						foo: true
+					};
+					const today = moment().hours(0).minutes(0).seconds(0);
+
 					let start = "-";
 					let end = "-";
 					let due = "-";
@@ -90,10 +96,14 @@ class ProjectsTable extends LitElement {
 						start = offerte.start.format(format);
 						end = offerte.end.format(format);
 						// due = offerte.due.format(format);
+
+						if (today.isAfter(offerte.end)) { // overdue
+							columnClasses["bg-danger"] = true;
+						}
 					}
 
 					return html`
-					<tr>
+					<tr class="${classMap(columnClasses)}">
 						<td>${project.id}</td>
 						<td>${project.namespace.name}</td>
 						<td>${project.name}</td>
