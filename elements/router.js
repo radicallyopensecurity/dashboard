@@ -16,6 +16,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 		this.projectId = null;
 		this.forceSidebarVisible = false;
 		this.search = "";
+		this.view = "default";
 		this.pageTitle = undefined;
 		this.gitlabProjectData = null;
 		this.initialized = false;
@@ -68,6 +69,12 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 				notify: true
 			},
 
+			// The selected view to render.
+			view: {
+				type: String,
+				notify: true
+			},
+
 			// ROS Projects
 			loading: {
 				type: Boolean
@@ -97,11 +104,15 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			const hash = window.location.hash.substring(1);
 			const hashFragments = hash.split("/", 2);
 
+			let view = "default";
 			if (hashFragments[0] === "new") {
 				this.gitlabProjectId = "new";
+			} else if (hashFragments[0] === "table") {
+				view = "table";
 			} else {
 				this.gitlabProjectId = parseInt(hashFragments[0], 10) || null;
 			}
+			this.view = view;
 			this.subroute = hashFragments[1];
 			this.forceSidebarVisible = false;
 		}
@@ -214,6 +225,8 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			</div>
 			`;
 			layout = "plain";
+		} else if(this.view === "table") {
+			view = html`<h1>Projects Table</h1>`;
 		} else if (this.gitlabProjectId === "new") {
 			view = html`<ros-project-new></ros-project-new>`;
 		} else if (this.gitlabProjectId !== null) {
