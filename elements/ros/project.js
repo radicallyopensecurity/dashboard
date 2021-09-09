@@ -53,6 +53,7 @@ export class Project extends LitNotify(GitlabProject) {
 	constructor() {
 		super();
 		this.fullscreen = true;
+		this.offerte = null;
 	}
 
 	static get properties() {
@@ -76,6 +77,11 @@ export class Project extends LitNotify(GitlabProject) {
 				notify: true
 			},
 
+			offerte: {
+				type: Object,
+				notify: true
+			},
+
 			_selectedChatTabState: {
 				type: Boolean
 			}
@@ -84,6 +90,9 @@ export class Project extends LitNotify(GitlabProject) {
 
 	willUpdate(changedProperties) {
 		this.availableSubroutes = this.constructor.subroutes;
+		if (changedProperties.has("gitlabProjectId")) {
+			this.queryOfferte();
+		}
 		super.willUpdate(changedProperties);
 	}
 
@@ -129,6 +138,23 @@ export class Project extends LitNotify(GitlabProject) {
 		} else {
 			return this.subroute;
 		}
+	}
+
+	async queryOfferte() {
+		this.offerte = null;
+		this.offerte = await fetch(`/api/v4/projects/${this.gitlabProjectId}/repository/files/source%2Fofferte.xml?ref=main`)
+			.then(response => response.json())
+			.then(filedata => atob(filedata.content))
+			.then(text => (new window.DOMParser()).parseFromString(text, "text/xml"))
+			.then(xmldata => {
+				const planning = xmldata.getElementsByTagName("planning")[0];
+				const start = planning.getElementsByTagName("start")[0].textContent;
+				const end = planning.getElementsByTagName("end")[0].textContent;
+				return {
+					start: moment(start),
+					end: moment(end)
+				};
+			});
 	}
 
 	get title() {
@@ -495,6 +521,12 @@ export class Project extends LitNotify(GitlabProject) {
 									</div>
 								</div>
 							</div>
+							${this.offerte !== null ? html`
+								<div id="offerte">
+									<div>Start: ${this.offerte.start.format("DD.MM.YYYY")}</div>
+									<div>End: ${this.offerte.end.format("DD.MM.YYYY")}</div>
+								</div>
+							` : undefined}
 						</div>
 						<div class="ms-0 ms-md-3 d-block text-center">
 							<img class="avatar" src="${this.constructor.getAvatarUrl(this.gitlabProjectData)}" />
