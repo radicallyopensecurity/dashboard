@@ -6,6 +6,7 @@ import './rocketchat/subscriptions.js';
 import "./ros/project.js";
 import "./ros/project-new.js";
 import "./ros/projects.js";
+import "./ros/projects-table.js";
 import "./ros/overview.js";
 import "./views/sidebar.js";
 
@@ -226,7 +227,12 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			`;
 			layout = "plain";
 		} else if(this.view === "table") {
-			view = html`<h1>Projects Table</h1>`;
+			view = html`
+				<h1>Projects Table</h1>
+				<ros-projects-table
+					.projects=${this.projects}
+				></ros-projects-table>
+			`;
 		} else if (this.gitlabProjectId === "new") {
 			view = html`<ros-project-new></ros-project-new>`;
 		} else if (this.gitlabProjectId !== null) {
