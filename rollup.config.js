@@ -19,6 +19,18 @@ export default [
         },
         plugins: [nodeResolve()]
     },{
+        input: "node_modules/lit/directive.js",
+        output: {
+            file: "web_modules/lit/directive.js"
+        },
+        plugins: [nodeResolve()]
+    },{
+        input: "node_modules/lit/async-directive.js",
+        output: {
+            file: "web_modules/lit/async-directive.js"
+        },
+        plugins: [nodeResolve()]
+    },{
         input: "node_modules/lit-html/directives/style-map.js",
         output: {
             file: "web_modules/lit-html/directives/style-map.js"

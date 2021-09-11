@@ -1,5 +1,7 @@
 import moment from '../../web_modules/moment.js';
 import { LitElement, html, css } from '../../web_modules/lit.js';
+import { directive } from "../../web_modules/lit/directive.js";
+import { AsyncDirective } from "../../web_modules/lit/async-directive.js";
 import { GitlabProjects } from '../gitlab/projects.js';
 
 const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
@@ -11,6 +13,151 @@ const isPentest = (project) => {
 const isOfferte = (project) => {
 	return project.name.startsWith("off-") || project.tag_list.includes("offerte");
 };
+
+const _xmlDocumentsCache = {};
+
+
+class CachedProjectXMLFile {
+
+	constructor(gitlabProjectId, ref, sourceFile) {
+		this.gitlabProjectId = gitlabProjectId;
+		this.ref = ref || "main";
+		this.sourceFile = sourceFile;
+	}
+
+	queryXMLFile() {
+		// fetch new document
+		const query = fetch(`/api/v4/projects/${this.gitlabProjectId}/repository/files/${encodeURIComponent(this.sourceFile)}?ref=${this.ref}`);
+		return query
+			.then((response) => {
+				if (response.status !== 200) {
+					this.xmlData = null;
+					throw new Error(`${this.sourceFile} in project ${this.gitlabProjectId}`);
+				}
+				return response.json();
+			})
+			.then(filedata => atob(filedata.content))
+			.then(text => (new window.DOMParser()).parseFromString(text, "text/xml"));
+	}
+
+	get xmlData() {
+		const gitlabProjectId = Number(this.gitlabProjectId);
+		if (
+			!_xmlDocumentsCache.hasOwnProperty(gitlabProjectId)
+		 || !_xmlDocumentsCache[gitlabProjectId].hasOwnProperty([this.ref])
+		 || !_xmlDocumentsCache[gitlabProjectId][this.ref].hasOwnProperty(this.sourceFile)
+		) {
+			this.xmlData = this.queryXMLFile();
+		}
+		return _xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile];
+	}
+
+	set xmlData(value) {
+		const gitlabProjectId = Number(this.gitlabProjectId);
+		if (!_xmlDocumentsCache.hasOwnProperty(gitlabProjectId)) {
+			_xmlDocumentsCache[gitlabProjectId] = {};
+		}
+		if (!_xmlDocumentsCache[gitlabProjectId].hasOwnProperty([this.ref])) {
+			_xmlDocumentsCache[gitlabProjectId][this.ref] = {};
+		}
+		_xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile] = value;
+	}
+
+}
+
+class CachedReportXMLFile extends CachedProjectXMLFile {
+	constructor(gitlabProjectId, ref) {
+		super(gitlabProjectId, ref, "source/report.xml");
+	}
+}
+
+class CachedOfferteXMLFile extends CachedProjectXMLFile {
+
+	constructor(gitlabProjectId, ref) {
+		super(gitlabProjectId, ref, "source/offerte.xml");
+		this._start = this.constructor.getCustomDirective(["planning", "start"], this.xmlData);
+		this._end = this.constructor.getCustomDirective(["planning", "end"], this.xmlData);
+		this._report_due = this.constructor.getCustomDirective(["report_due"], this.xmlData);
+	}
+
+	static getCustomDirective(keys, xmlData) {
+		class CustomDirective extends CachedXMLDirective {
+			get xmlData() {
+				return xmlData;
+			}
+			mapValue(data) {
+				if (data) {
+					for (let key of keys) {
+						data = data.getElementsByTagName(key)[0];
+					}
+					return data.textContent;
+				}
+			}
+		}
+		return directive(CustomDirective);
+	}
+
+	get start() {
+		return this._start();
+	}
+
+	get end() {
+		return this._end();
+	}
+
+	get report_due() {
+		return this._report_due();
+	}
+
+}
+
+class CachedXMLDirective extends AsyncDirective {
+
+	mapValue(xmlData) {
+		throw new Error("Not implemented");
+	}
+
+	render(promise) {
+		if (this.xmlData === null) {
+			return "N/A";
+		}
+		this.xmlData.then((xmlData) => {
+			const directiveValue = this.mapValue(xmlData);
+			this.setValue(directiveValue);
+		});
+		return null;
+	}
+
+}
+
+class RosProjectData extends LitElement {
+
+	constructor() {
+		super();
+		this.id = null;
+	}
+
+	static get properties() {
+		return {
+			id: {
+				type: Number,
+				reflect: true
+			}
+		}
+	}
+
+	get offerte() {
+		return new CachedOfferteXMLFile(this.id, this.default_branch, "source/offerte.xml");
+	}
+
+
+	get report() {
+		return new CachedReportXMLFile(this.id, this.default_branch, "source/report.xml");
+	}
+
+}
+customElements.define("ros-project-data", RosProjectData);
+
 
 export class RosProjects extends GitlabProjects {
 
@@ -91,7 +238,11 @@ export class RosProjects extends GitlabProjects {
 
 	static mapProjects(projects) {
 		return projects
-			.map((project) => {
+			.map((inputProject) => {
+
+				const project = document.createElement("ros-project-data");
+				Object.entries(inputProject).forEach(([key, value]) => project[key] = value);
+
 				project.isPentest = isPentest(project);
 				project.isOfferte = isOfferte(project);
 
@@ -123,7 +274,6 @@ export class RosProjects extends GitlabProjects {
 
 				project.lastGitActivity = moment(project.last_activity_at);
 				project.lastProjectActivity = project.lastGitActivity;
-
 				return project;
 			})
 			.filter((project) => (project !== undefined));

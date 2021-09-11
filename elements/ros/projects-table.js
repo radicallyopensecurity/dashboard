@@ -14,49 +14,7 @@ class ProjectsTable extends LitElement {
 		return {
 			projects: {
 				type: Array
-			},
-
-			offertes: {
-				type: Object
 			}
-		}
-	}
-
-	async queryOfferte(gitlabProjectId) {
-		this.offerte = null;
-
-		const response = fetch(`/api/v4/projects/${gitlabProjectId}/repository/files/source%2Fofferte.xml?ref=main`);
-		const status = await response.then((response) => response.status);
-		if (status !== 200) {
-			return null;
-		}
-		return await response
-			.then(response => response.json())
-			.then(filedata => atob(filedata.content))
-			.then(text => (new window.DOMParser()).parseFromString(text, "text/xml"))
-			.then(xmldata => {
-				const planning = xmldata.getElementsByTagName("planning")[0];
-				const start = planning.getElementsByTagName("start")[0].textContent;
-				const end = planning.getElementsByTagName("end")[0].textContent;
-				return {
-					start: moment(start),
-					end: moment(end)
-				};
-			});
-	}
-
-	async updateOffertes() {
-		this.projects.forEach(async (project) => {
-			if (!this.offertes.hasOwnProperty(project.id)) {
-				this.offertes[project.id] = null;
-				this.offertes[project.id] = await this.queryOfferte(project.id);
-			}
-		});
-	}
-
-	async willUpdate(changedProperties) {
-		if (changedProperties.has("projects")) {
-			await this.updateOffertes();
 		}
 	}
 
@@ -90,26 +48,16 @@ class ProjectsTable extends LitElement {
 					let end = "-";
 					let due = "-";
 
-					if (this.offertes.hasOwnProperty(project.id) && (this.offertes[project.id] !== null)) {
-						const format = "DD.MM.YYYY";
-						const offerte = this.offertes[project.id];
-						start = offerte.start.format(format);
-						end = offerte.end.format(format);
-						// due = offerte.due.format(format);
-
-						if (today.isAfter(offerte.end)) { // overdue
-							columnClasses["bg-danger"] = true;
-						}
-					}
+					const offerte = project.offerte;
 
 					return html`
 					<tr class="${classMap(columnClasses)}">
 						<td>${project.id}</td>
 						<td>${project.namespace.name}</td>
 						<td>${project.name}</td>
-						<td>${start}</td>
-						<td>${end}</td>
-						<td>${due}</td>
+						<td>${offerte.start}</td>
+						<td>${offerte.end}</td>
+						<td>${offerte.report_due}</td>
 					</tr>
 					`;
 				})}
