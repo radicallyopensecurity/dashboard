@@ -56,7 +56,6 @@ export class RosProjects extends GitlabProjects {
 			}
 		});
 		this.projects = [...this.projects.sort(GitlabProjects.sortProjectsByLastActivity)];
-		//this.requestUpdate("projects", oldProjectsValue);
 	}
 
 	willUpdate(changedProperties) {
