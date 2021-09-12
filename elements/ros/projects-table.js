@@ -8,14 +8,55 @@ class ProjectsTable extends LitElement {
 		super();
 		this.projects = [];
 		this.offertes = {};
+		this.sort = undefined;
 	}
 
 	static get properties() {
 		return {
 			projects: {
 				type: Array
+			},
+			sort: {
+				type: String
 			}
 		}
+	}
+
+	get sortFunction() {
+		switch (this.sort) {
+			case "id":
+				return (a, b) => a.id > b.id ? 1 : -1;
+			case "namespace":
+				return (a, b) => a.namespace.name.localeCompare(b.namespace.name);
+			case "name":
+				return (a, b) => a.name.localeCompare(b.name);
+			case "start":
+				return (a, b) => {
+					if (a.offerte.xmlData == null) {
+						return 1;
+					} else if (b.offerte.xmlData == null) {
+						return -1;
+					} else {
+						return a.offerte.start.isBefore(b.offerte.start);
+					}
+				};
+			default:
+				return undefined;
+		}
+	}
+
+	static get styles() {
+		return css`
+			table[sort=id] th[name=id] a,
+			table[sort=namespace] th[name=namespace] a,
+			table[sort=name] th[name=name] a,
+			table[sort=start] th[name=start] a,
+			table[sort=end] th[name=end] a,
+			table[sort=report] th[name=report] a,
+			table[sort=report_date] th[name=report_date] a {
+				color: var(--ros-orange, red);
+			}
+		`;
 	}
 
 	render() {
@@ -26,19 +67,22 @@ class ProjectsTable extends LitElement {
 			`;
 		}
 
+		const sortFunction = this.sortFunction;
+		const projects = (sortFunction !== undefined) ? [...this.projects.sort(sortFunction)] : this.projects;
+
 		return html`
 			<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-			<table class="table">
+			<table class="table" sort="${this.sort}">
 				<tr>
-					<th>ID</th>
-					<th>Namespace</th>
-					<th>Project</th>
-					<th>Start</th>
-					<th>End</th>
-					<th>Report Due</th>
-					<th>Report Date</th>
+					<th name="id"><a href="#table/id">ID</a></th>
+					<th name="namespace"><a href="#table/namespace">Namespace</a></th>
+					<th name="name"><a href="#table/name">Project</a></th>
+					<th name="start"><a href="#table/start">Start</a></th>
+					<th name="end"><a href="#table/end">End</a></th>
+					<th name="report"><a href="#table/report">Report Due</a></th>
+					<th name="report_date"><a href="#table/report_date">Latest Report Version</a></th>
 				</tr>
-				${this.projects.map((project) => {
+				${projects.map((project) => {
 
 					let columnClasses = {
 						foo: true

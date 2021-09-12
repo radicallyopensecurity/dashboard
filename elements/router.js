@@ -230,7 +230,8 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			view = html`
 				<h1>Projects Table</h1>
 				<ros-projects-table
-					.projects=${this.projects}
+					.projects=${[...this.projects]}
+					.sort=${this.subroute}
 				></ros-projects-table>
 			`;
 		} else if (this.gitlabProjectId === "new") {

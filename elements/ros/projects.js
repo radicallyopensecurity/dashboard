@@ -6,6 +6,8 @@ import { GitlabProjects } from '../gitlab/projects.js';
 
 const gitlabProjectPathPattern = /^(?<namespace>[a-zA-Z]+)\/(?:(?<prefix>pen|off)-)?(?<name>[a-zA-Z0-9](?:-?[a-zA-Z0-9]+)*)$/;
 
+moment.fn.toString = function() { return this.format("YYYY-MM-DD"); }
+
 const isPentest = (project) => {
 	return project.name.startsWith("pen-") || project.tag_list.includes("pentest");
 };
@@ -134,7 +136,7 @@ class CachedXMLDirective extends AsyncDirective {
 								this.setValue(html`<span class="text-muted">TBD</span>`);
 								break;
 							default:
-								this.setValue(moment(value).format("DD.MM.YYYY"));
+								this.setValue(moment(value));
 								break;
 						}
 						break;
