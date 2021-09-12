@@ -63,23 +63,6 @@ class CachedProjectXMLFile {
 		_xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile] = value;
 	}
 
-}
-
-class CachedReportXMLFile extends CachedProjectXMLFile {
-	constructor(gitlabProjectId, ref) {
-		super(gitlabProjectId, ref, "source/report.xml");
-	}
-}
-
-class CachedOfferteXMLFile extends CachedProjectXMLFile {
-
-	constructor(gitlabProjectId, ref) {
-		super(gitlabProjectId, ref, "source/offerte.xml");
-		this._start = this.constructor.getCustomDirective(["planning", "start"], this.xmlData);
-		this._end = this.constructor.getCustomDirective(["planning", "end"], this.xmlData);
-		this._report_due = this.constructor.getCustomDirective(["report_due"], this.xmlData);
-	}
-
 	static getCustomDirective(keys, xmlData) {
 		class CustomDirective extends CachedXMLDirective {
 			get xmlData() {
@@ -95,6 +78,29 @@ class CachedOfferteXMLFile extends CachedProjectXMLFile {
 			}
 		}
 		return directive(CustomDirective);
+	}
+
+}
+
+class CachedReportXMLFile extends CachedProjectXMLFile {
+	constructor(gitlabProjectId, ref) {
+		super(gitlabProjectId, ref, "source/report.xml");
+		this._version_history = this.constructor.getCustomDirective(["version_history"], this.xmlData);
+	}
+
+	get version_history() {
+		return this._version_history();
+	}
+
+}
+
+class CachedOfferteXMLFile extends CachedProjectXMLFile {
+
+	constructor(gitlabProjectId, ref) {
+		super(gitlabProjectId, ref, "source/offerte.xml");
+		this._start = this.constructor.getCustomDirective(["planning", "start"], this.xmlData);
+		this._end = this.constructor.getCustomDirective(["planning", "end"], this.xmlData);
+		this._report_due = this.constructor.getCustomDirective(["report_due"], this.xmlData);
 	}
 
 	get start() {

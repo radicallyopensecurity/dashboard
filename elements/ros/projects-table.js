@@ -36,6 +36,7 @@ class ProjectsTable extends LitElement {
 					<th>Start</th>
 					<th>End</th>
 					<th>Report Due</th>
+					<th>Report Versions</th>
 				</tr>
 				${this.projects.map((project) => {
 
@@ -49,6 +50,7 @@ class ProjectsTable extends LitElement {
 					let due = "-";
 
 					const offerte = project.offerte;
+					const report = project.report;
 
 					return html`
 					<tr class="${classMap(columnClasses)}">
@@ -58,6 +60,7 @@ class ProjectsTable extends LitElement {
 						<td>${offerte.start}</td>
 						<td>${offerte.end}</td>
 						<td>${offerte.report_due}</td>
+						<td>${report.version_history}</td>
 					</tr>
 					`;
 				})}
