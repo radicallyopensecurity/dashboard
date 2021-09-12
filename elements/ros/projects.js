@@ -77,7 +77,7 @@ class CachedReportXMLFile extends CachedProjectXMLFile {
 			const version_history = xmlData.getElementsByTagName("version_history")[0];
 			const versions = version_history.getElementsByTagName("version");
 			return versions[0].getAttribute("date");
-		}, this.xmlData);
+		}, this.xmlData, "date");
 	}
 
 	get version_history() {
@@ -95,35 +95,52 @@ class CachedOfferteXMLFile extends CachedProjectXMLFile {
 	}
 
 	get start() {
-		return this.directive(["planning", "start"], this.xmlData);
+		return this.directive(["planning", "start"], this.xmlData, "date");
 	}
 
 	get end() {
-		return this.directive(["planning", "end"], this.xmlData);
+		return this.directive(["planning", "end"], this.xmlData, "date");
 	}
 
 	get report_due() {
-		return this.directive(["report_due"], this.xmlData);
+		return this.directive(["report_due"], this.xmlData, "date");
 	}
 
 }
 
 class CachedXMLDirective extends AsyncDirective {
 
-	render(selector, xmlData) {
+	render(selector, xmlData, type) {
+		// selector can be array of tag names or a map function
+
 		if (xmlData === null) {
 			return "N/A";
 		}
 		xmlData.then((data) => {
 			if (data) {
-				// selector can be array of tag names or a map function
+				let value;
 				if (typeof selector === "function") {
-					this.setValue(selector(data));
+					value = selector(data);
 				} else {
 					for (let key of selector) {
 						data = data.getElementsByTagName(key)[0];
 					}
-					this.setValue(data.textContent);
+					value = data.textContent;
+				}
+				switch (type) {
+					case "date":
+						switch (value) {
+							case "TBD":
+								this.setValue(html`<span class="text-muted">TBD</span>`);
+								break;
+							default:
+								this.setValue(moment(value).format("DD.MM.YYYY"));
+								break;
+						}
+						break;
+					default:
+						this.setValue(value);
+						break;
 				}
 			}
 		});
