@@ -36,7 +36,8 @@ class CachedProjectXMLFile {
 				}
 				return response.json();
 			})
-			.then(filedata => atob(filedata.content))
+			//.then(filedata => atob(filedata.content))
+			.then(filedata => new TextDecoder().decode(Uint8Array.from(atob(filedata.content), c => c.charCodeAt(0))))
 			.then(text => (new window.DOMParser()).parseFromString(text, "text/xml"));
 	}
 
@@ -63,14 +64,18 @@ class CachedProjectXMLFile {
 		_xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile] = value;
 	}
 
-	static getCustomDirective(keys, xmlData) {
+	static getCustomDirective(selector, xmlData) {
+		// selector can be array of tag names or a map function
 		class CustomDirective extends CachedXMLDirective {
 			get xmlData() {
 				return xmlData;
 			}
 			mapValue(data) {
 				if (data) {
-					for (let key of keys) {
+					if (typeof selector === "function") {
+						return selector(data);
+					}
+					for (let key of selector) {
 						data = data.getElementsByTagName(key)[0];
 					}
 					return data.textContent;
@@ -86,6 +91,17 @@ class CachedReportXMLFile extends CachedProjectXMLFile {
 	constructor(gitlabProjectId, ref) {
 		super(gitlabProjectId, ref, "source/report.xml");
 		this._version_history = this.constructor.getCustomDirective(["version_history"], this.xmlData);
+	}
+
+	get latest_version_date() {
+		if (!this._latest_version) {
+			this._latest_version = this.constructor.getCustomDirective((xmlData) => {
+				const version_history = xmlData.getElementsByTagName("version_history")[0];
+				const versions = version_history.getElementsByTagName("version");
+				return versions[0].getAttribute("date");
+			}, this.xmlData);
+		}
+		return this._latest_version();
 	}
 
 	get version_history() {
