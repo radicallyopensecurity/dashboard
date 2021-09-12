@@ -23,6 +23,7 @@ class CachedProjectXMLFile {
 		this.gitlabProjectId = gitlabProjectId;
 		this.ref = ref || "main";
 		this.sourceFile = sourceFile;
+		this.directive = directive(CachedXMLDirective);
 	}
 
 	queryXMLFile() {
@@ -64,48 +65,25 @@ class CachedProjectXMLFile {
 		_xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile] = value;
 	}
 
-	static getCustomDirective(selector, xmlData) {
-		// selector can be array of tag names or a map function
-		class CustomDirective extends CachedXMLDirective {
-			get xmlData() {
-				return xmlData;
-			}
-			mapValue(data) {
-				if (data) {
-					if (typeof selector === "function") {
-						return selector(data);
-					}
-					for (let key of selector) {
-						data = data.getElementsByTagName(key)[0];
-					}
-					return data.textContent;
-				}
-			}
-		}
-		return directive(CustomDirective);
-	}
-
 }
 
 class CachedReportXMLFile extends CachedProjectXMLFile {
 	constructor(gitlabProjectId, ref) {
 		super(gitlabProjectId, ref, "source/report.xml");
-		this._version_history = this.constructor.getCustomDirective(["version_history"], this.xmlData);
 	}
 
 	get latest_version_date() {
-		if (!this._latest_version) {
-			this._latest_version = this.constructor.getCustomDirective((xmlData) => {
-				const version_history = xmlData.getElementsByTagName("version_history")[0];
-				const versions = version_history.getElementsByTagName("version");
-				return versions[0].getAttribute("date");
-			}, this.xmlData);
-		}
-		return this._latest_version();
+		return this.directive((xmlData) => {
+			const version_history = xmlData.getElementsByTagName("version_history")[0];
+			const versions = version_history.getElementsByTagName("version");
+			return versions[0].getAttribute("date");
+		}, this.xmlData);
 	}
 
 	get version_history() {
-		return this._version_history();
+		return this.directive((xmlData) => {
+			return xmlData.getElementsByTagName("version_history")[0].textContent;
+		}, this.xmlData);
 	}
 
 }
@@ -114,38 +92,40 @@ class CachedOfferteXMLFile extends CachedProjectXMLFile {
 
 	constructor(gitlabProjectId, ref) {
 		super(gitlabProjectId, ref, "source/offerte.xml");
-		this._start = this.constructor.getCustomDirective(["planning", "start"], this.xmlData);
-		this._end = this.constructor.getCustomDirective(["planning", "end"], this.xmlData);
-		this._report_due = this.constructor.getCustomDirective(["report_due"], this.xmlData);
 	}
 
 	get start() {
-		return this._start();
+		return this.directive(["planning", "start"], this.xmlData);
 	}
 
 	get end() {
-		return this._end();
+		return this.directive(["planning", "end"], this.xmlData);
 	}
 
 	get report_due() {
-		return this._report_due();
+		return this.directive(["report_due"], this.xmlData);
 	}
 
 }
 
 class CachedXMLDirective extends AsyncDirective {
 
-	mapValue(xmlData) {
-		throw new Error("Not implemented");
-	}
-
-	render(promise) {
-		if (this.xmlData === null) {
+	render(selector, xmlData) {
+		if (xmlData === null) {
 			return "N/A";
 		}
-		this.xmlData.then((xmlData) => {
-			const directiveValue = this.mapValue(xmlData);
-			this.setValue(directiveValue);
+		xmlData.then((data) => {
+			if (data) {
+				// selector can be array of tag names or a map function
+				if (typeof selector === "function") {
+					this.setValue(selector(data));
+				} else {
+					for (let key of selector) {
+						data = data.getElementsByTagName(key)[0];
+					}
+					this.setValue(data.textContent);
+				}
+			}
 		});
 		return null;
 	}
