@@ -111,6 +111,16 @@ class CachedOfferteXMLFile extends CachedProjectXMLFile {
 
 class CachedXMLDirective extends AsyncDirective {
 
+	constructor() {
+		super();
+		this.value = undefined;
+	}
+
+	setValue(value) {
+		super.setValue(value);
+		this.value = value;
+	}
+
 	render(selector, xmlData, type) {
 		// selector can be array of tag names or a map function
 
