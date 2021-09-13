@@ -16,8 +16,7 @@ const isOfferte = (project) => {
 	return project.name.startsWith("off-") || project.tag_list.includes("offerte");
 };
 
-const _xmlDocumentsCache = {};
-
+export const xmlDocumentsCache = {};
 
 class CachedProjectXMLFile {
 
@@ -47,24 +46,24 @@ class CachedProjectXMLFile {
 	get xmlData() {
 		const gitlabProjectId = Number(this.gitlabProjectId);
 		if (
-			!_xmlDocumentsCache.hasOwnProperty(gitlabProjectId)
-		 || !_xmlDocumentsCache[gitlabProjectId].hasOwnProperty([this.ref])
-		 || !_xmlDocumentsCache[gitlabProjectId][this.ref].hasOwnProperty(this.sourceFile)
+			!xmlDocumentsCache.hasOwnProperty(gitlabProjectId)
+		 || !xmlDocumentsCache[gitlabProjectId].hasOwnProperty([this.ref])
+		 || !xmlDocumentsCache[gitlabProjectId][this.ref].hasOwnProperty(this.sourceFile)
 		) {
 			this.xmlData = this.queryXMLFile();
 		}
-		return _xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile];
+		return xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile];
 	}
 
 	set xmlData(value) {
 		const gitlabProjectId = Number(this.gitlabProjectId);
-		if (!_xmlDocumentsCache.hasOwnProperty(gitlabProjectId)) {
-			_xmlDocumentsCache[gitlabProjectId] = {};
+		if (!xmlDocumentsCache.hasOwnProperty(gitlabProjectId)) {
+			xmlDocumentsCache[gitlabProjectId] = {};
 		}
-		if (!_xmlDocumentsCache[gitlabProjectId].hasOwnProperty([this.ref])) {
-			_xmlDocumentsCache[gitlabProjectId][this.ref] = {};
+		if (!xmlDocumentsCache[gitlabProjectId].hasOwnProperty([this.ref])) {
+			xmlDocumentsCache[gitlabProjectId][this.ref] = {};
 		}
-		_xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile] = value;
+		xmlDocumentsCache[gitlabProjectId][this.ref][this.sourceFile] = value;
 	}
 
 }
