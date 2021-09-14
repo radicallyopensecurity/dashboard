@@ -51,14 +51,21 @@ class SidebarView extends LitNotify(LitElement) {
 		#sidebar {
 			position: absolute;
 			z-index: 999;
-			width: 450px;
-			min-width: 450px;
-			max-width: 450px;
+			width: 350px;
+			min-width: 350px;
+			max-width: 350px;
 		}
 
 		#sidebar .avatar {
-			width: 16px;
-			height: 16px;
+			width: 32px;
+			height: 32px;
+		}
+		#sidebar .mentions {
+			height: 32px;
+		}
+
+		#sidebar .nav-link {
+			padding: 0.5rem;
 		}
 
 		#sidebar .nav-item[active=true] .nav-link {
@@ -224,10 +231,15 @@ class SidebarView extends LitNotify(LitElement) {
 								<ul class="nav flex-column">
 									${this.filteredProjects.map((project) => html`
 										<li class="nav-item" active="${project.id === this.selectedProjectId}" unread="${project.hasUnreadMessages}">
-											<a class="nav-link text-nowrap" aria-current="page" href="#${project.id}">
-												<img class="avatar feather" src="${this.constructor.getAvatarUrl(project)}" />
-												<span>${project.name_with_namespace}</span>
-												${(project.mentions > 0) ? html`<span class="badge bg-secondary">${project.mentions}</span>` : ''}
+											<a class="nav-link text-nowrap d-flex" aria-current="page" href="#${project.id}">
+												<img class="avatar feather align-self-center me-3" src="${this.constructor.getAvatarUrl(project)}" />
+												<div>
+													<div style="margin-bottom: -3px;" class="small text-muted">${project.namespace.name}</div>
+													<span>
+														${project.name}
+														${(project.mentions > 0) ? html`<span class="badge bg-secondary">${project.mentions}</span>` : ''}
+													</span>
+												</div>
 											</a>
 										</li>
 									`)}
