@@ -7,6 +7,7 @@ class ProjectsTable extends LitElement {
 	constructor() {
 		super();
 		this.projects = [];
+		this.sortedProjects = [];
 		this.offertes = {};
 		this.sort = undefined;
 	}
@@ -14,6 +15,9 @@ class ProjectsTable extends LitElement {
 	static get properties() {
 		return {
 			projects: {
+				type: Array
+			},
+			sortedProjects: {
 				type: Array
 			},
 			sort: {
@@ -59,6 +63,13 @@ class ProjectsTable extends LitElement {
 		`;
 	}
 
+	willUpdate(changedProperties) {
+		if (changedProperties.has("projects")) {
+			const sortFunction = this.sortFunction;
+			this.sortedProjects = (sortFunction !== undefined) ? [...this.projects.sort(sortFunction)] : this.projects;
+		}
+	}
+
 	render() {
 
 		if (this.projects.length === 0) {
@@ -67,8 +78,6 @@ class ProjectsTable extends LitElement {
 			`;
 		}
 
-		const sortFunction = this.sortFunction;
-		const projects = (sortFunction !== undefined) ? [...this.projects.sort(sortFunction)] : this.projects;
 
 		return html`
 			<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
@@ -82,7 +91,7 @@ class ProjectsTable extends LitElement {
 					<th name="report"><a href="#table/report">Report Due</a></th>
 					<th name="report_date"><a href="#table/report_date">Latest Report Version</a></th>
 				</tr>
-				${projects.map((project) => {
+				${this.sortedProjects.map((project) => {
 
 					let columnClasses = {
 						foo: true
