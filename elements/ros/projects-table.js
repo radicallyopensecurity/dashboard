@@ -78,7 +78,6 @@ class ProjectsTable extends LitElement {
 			`;
 		}
 
-
 		return html`
 			<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
 			<table class="table" sort="${this.sort}">
@@ -98,12 +97,14 @@ class ProjectsTable extends LitElement {
 					};
 					const today = moment().hours(0).minutes(0).seconds(0);
 
-					let start = "-";
-					let end = "-";
-					let due = "-";
-
 					const offerte = project.offerte;
 					const report = project.report;
+
+					const start = offerte.start;
+
+					if (project.name === "homeshoppingcenter") {
+						debugger;
+					}
 
 					return html`
 					<tr class="${classMap(columnClasses)}">
