@@ -160,7 +160,8 @@ class NewRosProject extends LitSync(GitlabProject) {
 				issues_access_level: "private",
 				path: this.slug,
 				packages_enabled: false,
-				namespace_id: this.namespace_id
+				namespace_id: this.namespace_id,
+				topics: [this.topic]
 			}
 
 			const nextYear = new Date();
@@ -191,12 +192,8 @@ class NewRosProject extends LitSync(GitlabProject) {
 		}
 	}
 
-	get prefix() {
-		return `${this.topic.substr(0,3)}-`;
-	}
-
 	get slug() {
-		return `${this.prefix}${this.title}`;
+		return `${this.title}`;
 	}
 
 	render() {
@@ -217,7 +214,6 @@ class NewRosProject extends LitSync(GitlabProject) {
 					<label class="col-3 col-form-label" for="repository">Project</label>
 					<div class="col-9">
 						<div class="input-group">
-							<span class="input-group-text">off-</span>
 							<input type="text" name="title"
 								aria-label="Name"
 								id="repository"
