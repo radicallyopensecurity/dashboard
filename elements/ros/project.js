@@ -151,8 +151,8 @@ export class Project extends LitNotify(GitlabProject) {
 				const start = planning.getElementsByTagName("start")[0].textContent;
 				const end = planning.getElementsByTagName("end")[0].textContent;
 				return {
-					start: moment(start),
-					end: moment(end)
+					start: moment(start, "YYYY-MM-DD"),
+					end: moment(end, "YYYY-MM-DD")
 				};
 			});
 	}

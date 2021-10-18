@@ -145,7 +145,7 @@ class CachedXMLDirective extends AsyncDirective {
 								this.setValue(html`<span class="text-muted">TBD</span>`);
 								break;
 							default:
-								this.setValue(moment(value));
+								this.setValue(moment(value, "YYYY-MM-DD"));
 								break;
 						}
 						break;
