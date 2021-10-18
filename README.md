@@ -108,3 +108,16 @@ systemctl reload nginx
 
 The hosting Git nginx server proxies the location `/ros-dashboard` to the above webserver.
 
+Security Concept
+----------------
+
+This static web application is supposed to be served from a path on the same domain as a GitLab instance.
+When a user is authenticated to GitLab, the existing `_gitlab_session` Cookie is passed to requests from the Dashboard to the GitLab API `/api/` on the same virtual host.
+This grants the Dashboard read-only access to API endpoints and resources the user may access.
+For write access to GitLab resources, an additional Personal Access Token of the user is required and requested by the Dashboard (for instance when creating new Projects) - unlike the Cookie this credential is only saved in memory until page reload and will be requested again if necessary.
+
+By sharing a Cookie Domain with GitLab, XSS vulnerabilities in this frontend would have huge impact.
+For that reason untrusted content from GitLab issues and repository XML files is supposed to be rendered as text only.
+Occasions of rendered Markdown, such as data from GitLab issues, are only served from the srcdoc of a [sandboxed iframe](elements/ui/unsafe-content.js).
+
+Additionally Information Disclosure from within the Dashboard are mitigated by limiting the Content-Security-Policy header to only trusted origins.
