@@ -52,7 +52,7 @@ class RocketchatFrame extends LitElement {
 		if (!$sharedIframe) {
 			const $iframe = document.createElement("iframe");
 			$iframe.setAttribute("id", "chat");
-			$iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
+			$iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-popups");
 			$iframe.setAttribute("referrerpolicy" ,"origin");
 			$iframe.src = this.chatChannelUrl;
 			$sharedIframe = $iframe;
