@@ -496,12 +496,6 @@ export class Project extends LitNotify(GitlabProject) {
 							</div>
 							<div class="d-flex d-md-inline-flex flex-column flex-sm-row align-items-center mt-3 justify-content-center">
 								<div class="d-flex text-nowrap mb-2 mb-sm-4">
-									${this.channelName !== undefined ? html`
-										<a aria-current="page" href="${this.chatChannelUrl}" target="_blank" role="button" class="btn btn-secondary me-2">
-											<ui-icon icon="message-square"></ui-icon>
-											Chat
-										</a>
-									` : ''}
 									${this.gitlabProjectData.web_url !== undefined ? html`
 										<a aria-current="page" href="${this.gitlabProjectData.web_url}" target="_blank" role="button" class="btn btn-secondary me-2">
 											<ui-icon icon="gitlab"></ui-icon>
