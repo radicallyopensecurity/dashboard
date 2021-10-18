@@ -27,7 +27,7 @@ export class UnsafeContent extends LitElement {
 	}
 
 	get contentStyle() {
-		return '';
+		return;
 	}
 
 	update(changedProperties) {
@@ -36,7 +36,7 @@ export class UnsafeContent extends LitElement {
 			<html>
 				<head>
 					<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-					<style>${this.contentStyle}</style>
+					${this.contentStyle}
 				</head>
 				<body>
 					${this.renderedUnsafeHTML}

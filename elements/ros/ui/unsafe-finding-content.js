@@ -4,8 +4,7 @@ class UnsafeFindingContent extends UnsafeContent {
 
 	get contentStyle() {
 		return `
-			img { width: 100%; }
-			h2 { border-bottom: 1px solid var(--bs-gray); }
+			<link rel="stylesheet" href="./elements/ros/ui/unsafe-finding-content.css"/>
 		`;
 	}
 

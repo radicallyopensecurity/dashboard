@@ -75,8 +75,9 @@ chmod g+s /var/www/html
 
 The original Debian index.html file can be deleted in favor of nginx directory listing:
 
-```
+```sh
 rm /var/www/html/index.*
+ROCKET_CHAT_DOMAIN=chat.example.com
 
 cat > /etc/nginx/sites-available/default <<EOF
 server {
@@ -84,6 +85,8 @@ server {
         listen [::]:80 default_server;
         root /var/www/html;
         index index.html;
+
+        add_header Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; manifest-src 'self'; font-src https://${ROCKET_CHAT_DOMAIN}; img-src 'self' data:; connect-src 'self' https://${ROCKET_CHAT_DOMAIN}; frame-src https://${ROCKET_CHAT_DOMAIN}; upgrade-insecure-requests; sandbox allow-same-origin allow-scripts allow-forms allow-modals" always;
 
         location ~ /$ {
                 autoindex on;
