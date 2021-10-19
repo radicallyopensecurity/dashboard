@@ -251,6 +251,9 @@ export class Project extends LitNotify(GitlabProject) {
 
 	get onClickChatTab() {
 		return (e) => {
+			if (e.shiftKey || e.altKey) {
+				return;
+			}
 			e.preventDefault();
 			e.stopPropagation();
 			const target = e.target;
