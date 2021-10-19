@@ -6,7 +6,7 @@ import { repeat } from '../../web_modules/lit-html/directives/repeat.js';
 import { LitNotify } from '../../lib/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/project.js';
 import { Finding } from '../ros/finding.js';
-import '../rocketchat/iframe.js';
+import { getChannelUrl } from '../rocketchat/iframe.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import { ContentCard } from '../ui/content-card.js';
@@ -349,7 +349,7 @@ export class Project extends LitNotify(GitlabProject) {
 		return "main";
 	}
 
-	get channelName() {
+	getChannelName(prefix) {
 		const namespace = this.gitlabProjectData.namespace.path;
 		const projectPath = this.gitlabProjectData.path_with_namespace;
 		const match = projectPath.match(gitlabProjectPathPattern);
@@ -358,13 +358,17 @@ export class Project extends LitNotify(GitlabProject) {
 			return;
 		}
 
-		const prefix = match.groups.prefix || this.states[this.selectedChatTabState].prefix;
+		prefix = prefix || match.groups.prefix || this.states[this.selectedChatTabState].prefix;
 
 		if (namespace === "ros") {
 			return `${prefix}-${match.groups.name}`;
 		} else {
 			return `${namespace}-${prefix}-${match.groups.name}`;
 		}
+	}
+
+	get channelName() {
+		return this.getChannelName();
 	}
 
 	get _artifactDownloadUrl() {
@@ -547,7 +551,7 @@ export class Project extends LitNotify(GitlabProject) {
 										style="text-transform: capitalize; border: none;"
 										name="${name}"
 										aria-current="page"
-										href="#"
+										href="${getChannelUrl(this.getChannelName(this.states[name].prefix))}"
 									>${name}</a>
 								</li>
 							`;

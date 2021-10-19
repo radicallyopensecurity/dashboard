@@ -1,6 +1,15 @@
 import { LitElement, css } from '../../web_modules/lit.js';
-
 let $sharedIframe;
+
+export const chatHostname = window.location.hostname.replace(/^git\./, "chat.");
+
+export function getChannelPath(channel) {
+	return `/group/${channel}?layout=embedded`;
+}
+
+export function getChannelUrl(channel) {
+	return `https://${chatHostname}${getChannelPath(channel)}`;
+}
 
 class RocketchatFrame extends LitElement {
 
@@ -18,16 +27,12 @@ class RocketchatFrame extends LitElement {
 		};
 	}
 
-	get chatHostname() {
-		return window.location.hostname.replace(/^git\./, "chat.");
-	}
-
 	get chatChannelPath() {
-		return `/group/${this.channel}?layout=embedded`;
+		return getChannelPath(this.channel);
 	}
 
 	get chatChannelUrl() {
-		return `https://${this.chatHostname}${this.chatChannelPath}`;
+		return getChannelUrl(this.channel)
 	}
 
 	updated(changedProperties) {
