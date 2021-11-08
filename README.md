@@ -86,7 +86,7 @@ server {
         root /var/www/html;
         index index.html;
 
-        add_header Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; manifest-src 'self'; font-src https://${ROCKET_CHAT_DOMAIN}; img-src 'self' data:; connect-src 'self' https://${ROCKET_CHAT_DOMAIN}; frame-src https://${ROCKET_CHAT_DOMAIN}; upgrade-insecure-requests; sandbox allow-same-origin allow-scripts allow-forms allow-modals" always;
+        add_header Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; manifest-src 'self'; font-src https://${ROCKET_CHAT_DOMAIN}; img-src 'self' data:; connect-src 'self' https://${ROCKET_CHAT_DOMAIN}; frame-src https://${ROCKET_CHAT_DOMAIN}; upgrade-insecure-requests; sandbox allow-forms allow-downloads allow-same-origin allow-scripts allow-forms allow-modals" always;
 
         location ~ /$ {
                 autoindex on;
