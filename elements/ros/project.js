@@ -158,10 +158,10 @@ export class Project extends LitNotify(GitlabProject) {
 	}
 
 	get title() {
-		// if (this.gitlabProjectData.name.startsWith("pen-")) {
-		// 	return this.gitlabProjectData.name.substr(4);
-		// }
-		return this.gitlabProjectData.path.substr(4);
+		if (this.gitlabProjectData.name.startsWith("pen-") || this.gitlabProjectData.name.startsWith("off-")) {
+			return this.gitlabProjectData.name.substr(4);
+		}
+		return this.gitlabProjectData.path;
 	}
 
 	get allFindings(){
