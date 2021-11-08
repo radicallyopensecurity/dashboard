@@ -209,11 +209,13 @@ export class Project extends LitNotify(GitlabProject) {
 		const states = {
 			offerte: {
 				enabled: true,
-				prefix: "off"
+				prefix: "off",
+				documentName: "Offerte"
 			},
 			pentest: {
 				enabled: false,
-				prefix: "pen"
+				prefix: "pen",
+				documentName: "Report"
 			}
 		};
 
@@ -374,16 +376,19 @@ export class Project extends LitNotify(GitlabProject) {
 		return this.getChannelName();
 	}
 
-	get _artifactDownloadUrl() {
-		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/${this.branchName}/raw/target/${this._assetFileName}?job=${gitlabCiJobName}`;
+	getArtifactDownloadUrl(documentType) {
+		return `/api/v4/projects/${this.gitlabProjectId}/jobs/artifacts/${this.branchName}/raw/target/${this.getAssetFileName(documentType)}?job=${gitlabCiJobName}`;
 	}
 
-	get _assetFileName() {
-		if (this.gitlabProjectData.path.startsWith("pen-")) {
-			return `report_${this.title}.pdf`;
-		} else {
-			return `offerte_${this.title}.pdf`
+	getAssetFileName(documentType) {
+		const availableDocumentTypes = Object.values(this.states)
+			.map((state) => state.documentName.toLowerCase());
+
+		if (availableDocumentTypes.includes(documentType)) {
+			return `${documentType}_${this.title}.pdf`;
 		}
+
+		throw new Error("Unsupported document type");
 	}
 
 	get pdfPassword() {
@@ -510,17 +515,29 @@ export class Project extends LitNotify(GitlabProject) {
 										</a>
 									` : ''}
 								</div>
-								<div class="d-flex btn-toolbar text-nowrap mb-4">
-									<div class="input-group flex-nowrap">
-										${!!this.pdfPassword ? html`<span class="input-group-text">
-											<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
-										</span>` : ``}
-										<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this._artifactDownloadUrl}">
-											Report
-											<ui-icon icon="file-text"></ui-icon>
-										</a>
+								${Object.keys(this.enabledStates).includes("offerte") ? html`
+									<div class="d-flex text-nowrap mb-2 mb-sm-4">
+										${this.gitlabProjectData.web_url !== undefined ? html`
+											<a class="btn btn-outline-secondary bg-primary text-white me-2" title="${this._assetFileName}" href="${this.getArtifactDownloadUrl("offerte")}">
+												<ui-icon icon="file-text"></ui-icon>
+												Offerte
+											</a>
+										` : ''}
 									</div>
-								</div>
+								` : ''}
+								${Object.keys(this.enabledStates).includes("pentest") ? html`
+									<div class="d-flex btn-toolbar text-nowrap mb-4">
+										<div class="input-group flex-nowrap">
+											${!!this.pdfPassword ? html`<span class="input-group-text">
+												<pdf-password cleartext="${this.pdfPassword}"></pdf-password>
+											</span>` : ``}
+											<a class="btn btn-outline-secondary bg-primary text-white" title="${this._assetFileName}" href="${this.getArtifactDownloadUrl("report")}">
+												Report
+												<ui-icon icon="file-text"></ui-icon>
+											</a>
+										</div>
+									</div>
+								` : ''}
 							</div>
 							${this.offerte !== null ? html`
 								<div id="offerte">
