@@ -174,11 +174,13 @@ export class Project extends LitNotify(GitlabProject) {
 
 	get findings() {
 		return this.gitlabProjectIssues
+			.filter((gitlabIssue) => gitlabIssue.state !== "closed")
 			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding"));
 	}
 
 	get nonFindings() {
 		return this.gitlabProjectIssues
+			.filter((gitlabIssue) => gitlabIssue.state !== "closed")
 			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "non-finding"))
 			// .map((gitlabIssue) => html`
 			// 	<ros-non-finding
