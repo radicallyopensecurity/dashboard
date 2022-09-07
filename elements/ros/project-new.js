@@ -161,7 +161,8 @@ class NewRosProject extends LitSync(GitlabProject) {
 				path: this.slug,
 				packages_enabled: false,
 				namespace_id: this.namespace_id,
-				topics: [this.topic]
+				topics: [this.topic],
+				enforce_auth_checks_on_uploads: false
 			}
 
 			const nextYear = new Date();
