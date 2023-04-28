@@ -1,4 +1,5 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
 export default [
     {
@@ -9,9 +10,9 @@ export default [
     },{
         input: "node_modules/marked/src/marked.js",
         output: {
-            file: "web_modules/d3.js"
+            file: "web_modules/marked.js"
         },
-        plugins: [nodeResolve()]
+        plugins: [nodeResolve(), commonjs({transformMixedEsModules:true})]
     },{
         input: "node_modules/lit/index.js",
         output: {
