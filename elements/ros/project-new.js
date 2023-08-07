@@ -166,7 +166,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 			}
 
 			const nextYear = new Date();
-			nextYear.setFullYear(nextYear.getFullYear() + 1);
+			nextYear.setDate(nextYear.getDate() + 365);
 
 			const project = await this.post("/api/v4/projects", {}, {
 				body: JSON.stringify(createOptions)
