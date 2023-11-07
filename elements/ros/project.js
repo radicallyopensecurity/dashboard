@@ -7,6 +7,7 @@ import { LitNotify } from '../../lib/lit-element-notify.js';
 import { GitlabProject } from '../gitlab/project.js';
 import { Finding } from '../ros/finding.js';
 import { getChannelUrl } from '../rocketchat/iframe.js';
+import { gitlabAuth } from '../gitlab/index.js';
 import '../gitlab/avatar.js';
 import '../pdf-password.js';
 import { ContentCard } from '../ui/content-card.js';
@@ -82,6 +83,11 @@ export class Project extends LitNotify(GitlabProject) {
 				notify: true
 			},
 
+			archived: {
+				type: Boolean,
+				notify: true
+			},
+
 			_selectedChatTabState: {
 				type: Boolean
 			}
@@ -101,6 +107,8 @@ export class Project extends LitNotify(GitlabProject) {
 		const keys = [...changedProperties.keys()];
 		if (keys.includes("gitlabProjectData")) {
 			if (this.gitlabProjectData instanceof Object) {
+				this.archived = this.isArchived
+
 				if (this.gitlabProjectData.namespace.path === "ros") {
 					this.pageTitle = this.gitlabProjectData.name;
 				} else {
@@ -164,11 +172,11 @@ export class Project extends LitNotify(GitlabProject) {
 		return this.gitlabProjectData.path;
 	}
 
-	get allFindings(){
+	get allFindings() {
 		return this.gitlabProjectIssues.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "finding" || label.toLowerCase() === "non-finding"));
 	}
 
-	get recentFindings(){
+	get recentFindings() {
 		return this.allFindings.slice(0, 5);
 	}
 
@@ -182,12 +190,12 @@ export class Project extends LitNotify(GitlabProject) {
 		return this.gitlabProjectIssues
 			.filter((gitlabIssue) => gitlabIssue.state !== "closed")
 			.filter((gitlabIssue) => gitlabIssue.labels.some((label) => label.toLowerCase() === "non-finding"))
-			// .map((gitlabIssue) => html`
-			// 	<ros-non-finding
-			// 		.gitlabProjectId="${this.gitlabProjectId}"
-			// 		.gitlabIssueId="${this.gitlabIssueIid}"
-			// 	></ros-non-finding>
-			// `);
+		// .map((gitlabIssue) => html`
+		// 	<ros-non-finding
+		// 		.gitlabProjectId="${this.gitlabProjectId}"
+		// 		.gitlabIssueId="${this.gitlabIssueIid}"
+		// 	></ros-non-finding>
+		// `);
 	}
 
 	get members() {
@@ -223,7 +231,9 @@ export class Project extends LitNotify(GitlabProject) {
 
 		this.gitlabProjectData.tag_list
 			.forEach((tag) => {
-				states[tag].enabled = true;
+				if (states[tag]) {
+					states[tag].enabled = true;
+				}
 			});
 
 		return states;
@@ -471,6 +481,42 @@ export class Project extends LitNotify(GitlabProject) {
 		`;
 	}
 
+	get isArchived() {
+		return this.gitlabProjectData.topics.includes('archive')
+	}
+
+	async onClickArchive() {
+		const token = gitlabAuth.token;
+
+		let topics = this.gitlabProjectData.topics
+		if (topics.includes('archive')) {
+			topics = topics.filter(x => x !== 'archive')
+		} else {
+			topics = topics.concat(['archive'])
+		}
+
+		const res = await fetch(`/api/v4/projects/${this.gitlabProjectId}`, {
+			method: 'PUT',
+			headers: {
+				'PRIVATE-TOKEN': token,
+				'content-type': 'application/json'
+			},
+			body: JSON.stringify({
+				topics
+			})
+		})
+
+		if (!res.ok) {
+			alert(`Failed: ${await res.text()}`)
+			return
+		}
+
+		this.gitlabProjectData = {
+			...this.gitlabProjectData,
+			topics
+		}
+	}
+
 	render() {
 		if (this.gitlabProjectData === null) {
 			return html`
@@ -540,6 +586,22 @@ export class Project extends LitNotify(GitlabProject) {
 										</div>
 									</div>
 								` : ''}
+								${html`
+										<div class="d-flex btn-toolbar text-nowrap mb-4">
+											<div class="input-group flex-nowrap">
+												<button 
+													@click="${this.onClickArchive}"
+													class="btn btn-outline ${this.archived ? 'bg-warning' : 'bg-danger'}"
+													type="button"
+													aria-expanded="false"
+													aria-label="Archive/Unarchive"
+												>
+													${this.archived
+														? html`<ui-icon icon="corner-down-left"></ui-icon> Unarchive`
+														: html`<ui-icon icon="archive"></ui-icon> Archive`}
+												</button>
+											</div>
+								</div>`}
 							</div>
 							${this.offerte !== null ? html`
 								<div id="offerte">
@@ -559,15 +621,15 @@ export class Project extends LitNotify(GitlabProject) {
 			<div class="col-12 px-0 px-sm-3">
 				<ul class="nav nav-tabs">
 					${Object.entries(this.enabledStates)
-						.map(([name, options]) => {
-							const classes = {
-								"nav-link": true
-							};
-							if (name === this.selectedChatTabState) {
-								classes["active"] = true;
-								classes["bg-white"] = true;
-							}
-							return html`
+				.map(([name, options]) => {
+					const classes = {
+						"nav-link": true
+					};
+					if (name === this.selectedChatTabState) {
+						classes["active"] = true;
+						classes["bg-white"] = true;
+					}
+					return html`
 								<li class="nav-item shadow-sm" @click="${this.onClickChatTab}">
 									<a class="${classMap(classes)}"
 										style="text-transform: capitalize; border: none;"
@@ -577,8 +639,8 @@ export class Project extends LitNotify(GitlabProject) {
 									>${name}</a>
 								</li>
 							`;
-						})
-					}
+				})
+			}
 				</ul>
 				<div class="chat-frame">
 					<project-ui-content-card-chat resize="vertical" id="chat-card" seamless="true">
@@ -642,38 +704,38 @@ export class Project extends LitNotify(GitlabProject) {
 					${repeat(Object.entries(this.findingsBySeverity), ([severity, findings]) => severity, ([severity, findings]) => html`
 						<h5 class="py-1">${severity} <span class="badge" style="${this.severityColorStyle(severity)}">${findings.length}</span></h5>
 						<ui-accordion .items="${findings.map((finding) => {
-							const title = html`
+				const title = html`
 								<span style="min-width: 2ch;" class="small me-1 text-muted">${finding.iid}</span>
 								<span>${finding.title}</span>
 							`;
-							const $rosFinding = document.createElement('ros-finding');
-							$rosFinding.autoload = false;
-							$rosFinding.gitlabProjectId = this.gitlabProjectId;
-							$rosFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
-							$rosFinding.gitlabIssueData = finding;
-							$rosFinding.gitlabIssueIid = finding.iid;
-							$rosFinding.onBecomeVisible = async function() {
-								await $rosFinding.fetch();
-								$rosFinding.requestUpdate("gitlabIssueData");
-							};
-							return { title, content: $rosFinding, id: `${this.gitlabProjectId}::${finding.iid}` };
-						})}"></ui-accordion>
+				const $rosFinding = document.createElement('ros-finding');
+				$rosFinding.autoload = false;
+				$rosFinding.gitlabProjectId = this.gitlabProjectId;
+				$rosFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
+				$rosFinding.gitlabIssueData = finding;
+				$rosFinding.gitlabIssueIid = finding.iid;
+				$rosFinding.onBecomeVisible = async function () {
+					await $rosFinding.fetch();
+					$rosFinding.requestUpdate("gitlabIssueData");
+				};
+				return { title, content: $rosFinding, id: `${this.gitlabProjectId}::${finding.iid}` };
+			})}"></ui-accordion>
 					`)}
 					<h3 class="pb-1">Non-Findings <span class="badge bg-secondary">${nonFindings.length}</span></h3>
 					<div class="list-group">
 						<ui-accordion .items="${nonFindings.map((nonFinding) => {
-							const title = html`
+				const title = html`
 								<span class="small me-2 text-muted">${nonFinding.iid}</span>
 								<span>${nonFinding.title}</span>
 							`;
-							const $rosNonFinding = document.createElement('ros-non-finding');
-							$rosNonFinding.autoload = false;
-							$rosNonFinding.gitlabProjectId = this.gitlabProjectId;
-							$rosNonFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
-							$rosNonFinding.gitlabIssueData = nonFinding;
-							$rosNonFinding.gitlabIssueIid = nonFinding.iid;
-							return { title, content: $rosNonFinding, id: `${this.gitlabProjectId}::${nonFinding.iid}` };
-						})}"></ui-accordion>
+				const $rosNonFinding = document.createElement('ros-non-finding');
+				$rosNonFinding.autoload = false;
+				$rosNonFinding.gitlabProjectId = this.gitlabProjectId;
+				$rosNonFinding.gitlabProjectFullPath = this.gitlabProjectData.web_url;
+				$rosNonFinding.gitlabIssueData = nonFinding;
+				$rosNonFinding.gitlabIssueIid = nonFinding.iid;
+				return { title, content: $rosNonFinding, id: `${this.gitlabProjectId}::${nonFinding.iid}` };
+			})}"></ui-accordion>
 					</div>
 				</ui-content-card>
 			</div>
@@ -681,16 +743,16 @@ export class Project extends LitNotify(GitlabProject) {
 				<ui-content-card>
 					<h3>History</h3>
 					<ui-accordion .items="${Object.entries(this.eventsByDay).map(([day, events]) => {
-						const dateString = moment(day).format("dddd, DD.MM.YYYY");
-						const title = html`
+				const dateString = moment(day).format("dddd, DD.MM.YYYY");
+				const title = html`
 							<span>${dateString}</span>
 						`;
 
-						const content = events.map((eventData) => html`
+				const content = events.map((eventData) => html`
 							<ros-project-activity .data="${eventData}" .project="${this.gitlabProjectData}"></ros-project-activity>
 						`);
-						return { title, content, id: dateString };
-					})}"></ui-accordion>
+				return { title, content, id: dateString };
+			})}"></ui-accordion>
 				</ui-content-card>
 			</div>
 		</div>
