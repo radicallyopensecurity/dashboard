@@ -3,6 +3,7 @@ import { LitSync, LitNotify } from '../../lib/lit-element-notify.js';
 import { gitlabAuth } from '../gitlab/index.js';
 import { GitlabProject} from '../gitlab/project.js';
 import { DropdownInput } from '../ui/input/dropdown.js';
+import { generatePassword } from '../utils/generate-password.js'
 import '../ui/breadcrumbs.js';
 import '../ui/content-card.js';
 import '../ros/project/member-chooser.js';
@@ -171,6 +172,7 @@ class NewRosProject extends LitSync(GitlabProject) {
 			const project = await this.post("/api/v4/projects", {}, {
 				body: JSON.stringify(createOptions)
 			});
+
 			const accessTokenResponse = await this.post(`/api/v4/projects/${project.id}/access_tokens`, {}, {
 				body: JSON.stringify({
 					scopes: ["api"],
@@ -184,6 +186,15 @@ class NewRosProject extends LitSync(GitlabProject) {
 				body: JSON.stringify({
 					key: "PROJECT_ACCESS_TOKEN",
 					value: accessTokenResponse.token,
+					protected: false,
+					masked: true
+				})
+			});
+
+			await this.post(`/api/v4/projects/${project.id}/variables`, {}, {
+				body: JSON.stringify({
+					key: "PDF_PASSWORD",
+					value: generatePassword(),
 					protected: false,
 					masked: true
 				})
