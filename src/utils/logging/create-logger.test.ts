@@ -1,6 +1,6 @@
 import { vi, test, expect } from 'vitest'
-import { LogLevel } from './types'
-import { createLoggerFactory } from './create-logger'
+import { LogLevel } from '@/utils/logging/types'
+import { createLoggerFactory } from '@/utils/logging/create-logger'
 
 type Case = [LogLevel, 'debug' | 'info' | 'warn' | 'error', boolean]
 

@@ -1,4 +1,4 @@
-import { LogLevel } from './types'
+import { LogLevel } from '@/utils/logging/types'
 
 export const parseLogLevel = (level: string | undefined): LogLevel => {
   switch (level?.toLowerCase()) {

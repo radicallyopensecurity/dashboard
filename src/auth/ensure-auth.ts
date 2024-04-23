@@ -1,6 +1,6 @@
 import { OidcUserInfo } from '@axa-fr/oidc-client'
-import { createLogger } from '../utils/logging/create-logger'
-import { isCallbackRoute } from './is-callback-route'
+import { createLogger } from '@/utils/logging/create-logger'
+import { isCallbackRoute } from '@/auth/is-callback-route'
 import { authClient } from './auth-client'
 
 const logger = createLogger('ensure-auth')

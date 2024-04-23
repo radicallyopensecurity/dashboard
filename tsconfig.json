@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    /* Library */
     "target": "ESNext",
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
@@ -19,6 +20,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+
+    /* Paths */
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src", "vite-env.d.ts"]
+  "include": ["src", "vite-env.d.ts"],
 }

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { requiredEnvVariable } from './required-env-var'
+import { requiredEnvVariable } from '@/utils/environment/required-env-var'
 
 const KEY_VALUE_EXISTS = 'KEY_VALUE_EXISTS'
 

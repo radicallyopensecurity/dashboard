@@ -122,7 +122,7 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] GitLab Auth
 - [x] State management: mobx
 - [x] Vitest
-- [ ] Module aliases
+- [x] Module aliases
 - [ ] Eslint
 - [ ] Pretty quick
 - [ ] Lint staged

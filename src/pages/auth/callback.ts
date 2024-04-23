@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { authClient } from '../../auth/auth-client'
-import { createLogger } from '../../utils/logging/create-logger'
+import { authClient } from '@/auth/auth-client'
+import { createLogger } from '@/utils/logging/create-logger'
 
 const ELEMENT_NAME = 'auth-callback'
 
@@ -49,6 +49,6 @@ export class AuthCallback extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [ELEMENT_NAME]: AuthGitlabCallback
+    [ELEMENT_NAME]: AuthCallback
   }
 }

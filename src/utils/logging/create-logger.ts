@@ -1,4 +1,4 @@
-import { config } from '../../config'
+import { config } from '@/config'
 import { LogLevel, Logger } from './types'
 
 export const createLoggerFactory = (logLevel: LogLevel): Logger => {

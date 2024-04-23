@@ -1,7 +1,7 @@
 import { html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { MobxLitElement } from '@adobe/lit-mobx'
-import { user } from '../state/user'
+import { user } from '@/state/user'
 
 const ELEMENT_NAME = 'home-page'
 

@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { ensureAuth } from './auth/ensure-auth'
-import { user } from './state/user'
-import { createLogger } from './utils/logging/create-logger'
+import { ensureAuth } from '@/auth/ensure-auth'
+import { user } from '@/state/user'
+import { createLogger } from '@/utils/logging/create-logger'
 
 const ELEMENT_NAME = 'app-shell'
 

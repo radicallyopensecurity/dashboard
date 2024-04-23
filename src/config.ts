@@ -1,6 +1,6 @@
-import { requiredEnvVariable } from './utils/environment/required-env-var'
-import { parseLogLevel } from './utils/logging/parse-log-level'
-import { LogLevel } from './utils/logging/types'
+import { requiredEnvVariable } from '@/utils/environment/required-env-var'
+import { parseLogLevel } from '@/utils/logging/parse-log-level'
+import { LogLevel } from '@/utils/logging/types'
 
 type Config = {
   app: {
