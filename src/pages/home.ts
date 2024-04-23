@@ -1,38 +1,20 @@
-import { LitElement, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-import { authClient } from '../auth/auth-client'
+import { html } from 'lit'
+import { customElement } from 'lit/decorators.js'
+import { MobxLitElement } from '@adobe/lit-mobx'
+import { user } from '../state/user'
 
 const ELEMENT_NAME = 'home-page'
 
 @customElement(ELEMENT_NAME)
-export class HomePage extends LitElement {
-  @property({ type: String })
-  private userInfo: any = null
-  @property({ type: String })
-  private tokens: any = null
-
-  protected async firstUpdated() {
-    this.userInfo = JSON.stringify(await authClient.userInfoAsync(), null, 2)
-    this.tokens = JSON.stringify(authClient.tokens, null, 2)
-  }
+export class HomePage extends MobxLitElement {
+  private user = user
 
   render() {
     return html`<h1>Home Page</h1>
       <div>
-        <h2>GitLab</h2>
         <h3>User Info</h3>
         <pre style="text-wrap: wrap; overflow-wrap: break-word">
-${this.userInfo}
-        </pre
-        >
-      </div>
-      <div>
-        <h3>Tokens</h3>
-        <blockquote>
-          <strong>Gronke Challenge</strong>: Try to grab this access_token
-        </blockquote>
-        <pre style="text-wrap: wrap; overflow-wrap: break-word">
-${this.tokens}
+${JSON.stringify(this.user, null, 2)}
         </pre
         >
       </div>`
