@@ -1,6 +1,9 @@
 import { OidcUserInfo } from '@axa-fr/oidc-client'
-import { createLogger } from '@/utils/logging/create-logger'
+
 import { isCallbackRoute } from '@/auth/is-callback-route'
+
+import { createLogger } from '@/utils/logging/create-logger'
+
 import { authClient } from './auth-client'
 
 const logger = createLogger('ensure-auth')
@@ -27,5 +30,5 @@ export const ensureAuth = async (
   }
 
   logger.debug(`not authenticated, authenticating...`)
-  authClient.loginAsync(redirectTo)
+  await authClient.loginAsync(redirectTo)
 }

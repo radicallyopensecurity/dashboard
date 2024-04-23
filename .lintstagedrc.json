@@ -1,0 +1,4 @@
+{
+  "**/*.{ts,json,js,svg,html}": ["pretty-quick --write"],
+  "**/*.{ts,js}": ["eslint --fix"]
+}

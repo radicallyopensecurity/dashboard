@@ -16,11 +16,11 @@ type Config = {
 
 export const config: Config = {
   app: {
-    logLevel: parseLogLevel(import.meta.env['VITE_LOG_LEVEL']),
+    logLevel: parseLogLevel(import.meta.env.VITE_LOG_LEVEL),
   },
   oidc: {
-    clientId: requiredEnvVariable('VITE_GITLAB_CLIENT_ID'),
-    authority: requiredEnvVariable('VITE_GITLAB_AUTHORITY'),
+    clientId: requiredEnvVariable(import.meta.env.VITE_GITLAB_CLIENT_ID),
+    authority: requiredEnvVariable(import.meta.env.VITE_GITLAB_AUTHORITY),
     redirectPath: '/auth/callback',
     scope: 'openid profile email',
   },

@@ -1,6 +1,6 @@
+import { Router } from '@lit-labs/router'
 import { LitElement, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { Router } from '@lit-labs/router'
 
 const ELEMENT_NAME = 'app-routes'
 

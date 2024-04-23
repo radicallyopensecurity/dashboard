@@ -22,6 +22,14 @@ See built files in the `dist` folder.
 
 [TODO: nginx config recommendations]
 
+## Test
+
+[TODO]
+
+## Lint
+
+[TODO]
+
 ## Development
 
 ### HTTPS Certificates
@@ -123,11 +131,10 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] State management: mobx
 - [x] Vitest
 - [x] Module aliases
-- [ ] Eslint
-- [ ] Pretty quick
-- [ ] Lint staged
-- [ ] Commit hooks
-- [ ] History pushState
+- [x] Eslint
+- [x] Pretty quick
+- [x] Lint staged
+- [x] Commit hooks
 - [ ] CSS Library
 - [ ] App layout
 - [ ] Features
@@ -136,14 +143,13 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
   - [ ] Homepage
   - [ ] Project detail
   - [ ] Project new
-- [ ] CI/CD
 - [ ] Meta tags
-- [ ] Disable EyeDP Auth in prod builds
+- [ ] CI/CD
+- [ ] Staging
 - [ ] Documentation
   - [ ] SSL
   - [ ] Security
   - [ ] Proxy config
-- [ ] Staging
 - [ ] Security Audit
 - [ ] Cypress
 - [ ] Production

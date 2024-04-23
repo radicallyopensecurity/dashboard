@@ -1,5 +1,6 @@
-import { parseLogLevel } from '@/utils/logging/parse-log-level'
 import { test, expect } from 'vitest'
+
+import { parseLogLevel } from '@/utils/logging/parse-log-level'
 import { LogLevel } from '@/utils/logging/types'
 
 test.each([

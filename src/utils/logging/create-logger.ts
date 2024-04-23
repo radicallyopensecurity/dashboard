@@ -1,29 +1,32 @@
+import { LogFn, LogLevel, Logger } from '@/utils/logging//types'
+
 import { config } from '@/config'
-import { LogLevel, Logger } from './types'
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noOp = () => {}
+
+const logWith =
+  (logLevel: 'debug' | 'info' | 'warn' | 'error', prefix: string): LogFn =>
+  (...data) =>
+    // safe to ignore
+    // console log function parameter is defined as any[]
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    console[logLevel](`[${prefix}]`, ...data)
 
 export const createLoggerFactory = (logLevel: LogLevel): Logger => {
-  return (prefix) => ({
-    debug: (...data) => {
-      if (logLevel === 0) {
-        console.debug(`[${prefix}]`, ...data)
-      }
-    },
-    info: (...data) => {
-      if (logLevel <= 1) {
-        console.info(`[${prefix}]`, ...data)
-      }
-    },
-    warn: (...data) => {
-      if (logLevel <= 2) {
-        console.warn(`[${prefix}]`, ...data)
-      }
-    },
-    error: (...data) => {
-      if (logLevel <= 3) {
-        console.error(`[${prefix}]`, ...data)
-      }
-    },
-  })
+  return (prefix) => {
+    const debug = logLevel === LogLevel.DEBUG ? logWith('debug', prefix) : noOp
+    const info = logLevel <= LogLevel.INFO ? logWith('info', prefix) : noOp
+    const warn = logLevel <= LogLevel.WARN ? logWith('warn', prefix) : noOp
+    const error = logWith('error', prefix)
+
+    return {
+      debug,
+      info,
+      warn,
+      error,
+    }
+  }
 }
 
 export const createLogger = createLoggerFactory(config.app.logLevel)

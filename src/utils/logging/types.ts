@@ -5,6 +5,9 @@ export enum LogLevel {
   ERROR,
 }
 
+// safe to ignore
+// console log function parameter is defined as any[]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type LogFn = (...data: any[]) => void
 
 export type Logger = (prefix: string) => {

@@ -1,9 +1,9 @@
-import { observable, action, makeAutoObservable } from 'mobx'
 import { OidcUserInfo } from '@axa-fr/oidc-client'
+import { observable, action, makeAutoObservable } from 'mobx'
 
 class UserState {
   @observable
-  public name: string = ''
+  public name = ''
   @observable
   public groups: string[] = []
 

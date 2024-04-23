@@ -3,6 +3,7 @@ import {
   TokenAutomaticRenewMode,
   TokenRenewMode,
 } from '@axa-fr/oidc-client'
+
 import { config } from '@/config'
 
 export const authClient = OidcClient.getOrCreate(() => fetch)({
