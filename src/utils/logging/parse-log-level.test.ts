@@ -5,7 +5,7 @@ import { LogLevel } from '@/utils/logging/types'
 
 test.each([
   ['debug', LogLevel.DEBUG],
-  ['DEBUG', LogLevel.DEBUG],
+  ['DeBuG', LogLevel.DEBUG],
   ['info', LogLevel.INFO],
   ['INFO', LogLevel.INFO],
   ['warn', LogLevel.WARN],

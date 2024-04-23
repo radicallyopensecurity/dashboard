@@ -26,14 +26,16 @@ const cases: Case[] = [
 
 test.each(cases)(
   'Log level %s calls %s = %s',
-  (logLevel, logFunction, shouldBeCalled) => {
+  (logLevel, logFunction, shouldHaveBeenCalled) => {
     const createLogger = createLoggerFactory(logLevel)
     const logger = createLogger('test')
-    const loggerSpy = vi.spyOn(console, logFunction)
+    const loggerSpy = vi.spyOn(console, logFunction).mockImplementation(() => ({
+      [logFunction]: () => undefined,
+    }))
 
     logger[logFunction]('test')
 
-    shouldBeCalled
+    shouldHaveBeenCalled
       ? expect(loggerSpy).toHaveBeenCalled()
       : expect(loggerSpy).not.toHaveBeenCalled()
   }
