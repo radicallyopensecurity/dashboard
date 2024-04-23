@@ -1,21 +1,24 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>R♡S _board</title>
-    <meta charset="UTF-8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, user-scalable=no, maximum-scale=1, minimum-scale=1, viewport-fit=cover" />
-    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-180x180.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
-    <script type="module" crossorigin="use-credentials" src="app.js"></script>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css"/>
-    <link rel="stylesheet" href="dashboard.css"/>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROS Dashboard</title>
   </head>
-  <body class="bg-light">
-    <app-router></app-router>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <app-shell></app-shell>
+
+    <script type="module" src="/src/app-shell.ts"></script>
+    <script type="module" src="/src/components/top-bar/top-bar.ts"></script>
+    <script type="module" src="/src/components/side-bar/side-bar.ts"></script>
+    <script type="module" src="/src/app-routes.ts"></script>
+    <script type="module" src="/src/pages/home.ts"></script>
+    <script type="module" src="/src/pages/projects/new.ts"></script>
+    <script type="module" src="/src/pages/projects/:id.ts"></script>
+    <script type="module" src="/src/pages/auth/callback.ts"></script>
+    <script type="module" src="/src/pages/auth/gitlab/callback.ts"></script>
+    <script type="module" src="/src/pages/not-found.ts"></script>
   </body>
 </html>
