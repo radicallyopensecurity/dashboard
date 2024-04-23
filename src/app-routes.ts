@@ -22,10 +22,6 @@ export class AppRoutes extends LitElement {
       render: () => html`<auth-callback></auth-callback>`,
     },
     {
-      path: '/auth/gitlab/callback',
-      render: () => html`<auth-gitlab-callback></auth-gitlab-callback>`,
-    },
-    {
       path: '/*',
       render: () => html`<not-found-page></not-found-page>`,
     },

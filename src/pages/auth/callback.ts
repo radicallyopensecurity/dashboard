@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { eyedpOidc } from '../../auth/eyedp-oidc'
+import { authClient } from '../../auth/auth-client'
 import { createLogger } from '../../utils/logger'
 
 const ELEMENT_NAME = 'auth-callback'
@@ -14,8 +14,8 @@ export class AuthCallback extends LitElement {
 
   protected async firstUpdated() {
     logger.debug('executing eyedp callback')
-    const { callbackPath } = await eyedpOidc.loginCallbackAsync()
-    if (eyedpOidc.tokens) {
+    const { callbackPath } = await authClient.loginCallbackAsync()
+    if (authClient.tokens) {
       logger.debug('callback successful')
       this.isAuthenticated = true
       // TODO: proper client side navigation
@@ -49,6 +49,6 @@ export class AuthCallback extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    [ELEMENT_NAME]: AuthCallback
+    [ELEMENT_NAME]: AuthGitlabCallback
   }
 }

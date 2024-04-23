@@ -1,5 +1,3 @@
-/// <reference types="vite/client" />
-
 import { defineConfig, loadEnv } from 'vite'
 import { readFileSync } from 'node:fs'
 
@@ -21,10 +19,10 @@ export default defineConfig(({ mode }) => {
       port: 3443,
       https: {
         cert: readFileSync(
-          env.DEV_VITE_SERVER_CRT_PATH ?? '.internal/certs/crt.pem'
+          env.DEV_VITE_SERVER_CRT_PATH || '.internal/certs/crt.pem'
         ),
         key: readFileSync(
-          env.DEV_VITE_SERVER_KEY_PATH ?? '.internal/certs/key.pem'
+          env.DEV_VITE_SERVER_KEY_PATH || '.internal/certs/key.pem'
         ),
       },
       headers: {

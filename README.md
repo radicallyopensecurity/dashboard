@@ -56,7 +56,9 @@ Then start the development server.
 npm run dev
 ```
 
-The app will be accessible at <https://ros-dashboard.test:3443>
+Login to the Identity Provider in your browser.
+
+Then access the app at: <https://ros-dashboard.test:3443>
 
 ## Docker
 
@@ -117,12 +119,14 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 ## TODO
 
 - [x] Lit + Vite + Router
-- [x] EyeDP Auth
-- [ ] GitLab Auth
-- [ ] History pushState
+- [x] GitLab Auth
 - [ ] State management: signals? pojo? localStorage? redux?
+- [ ] Jest
+- [ ] Eslint
+- [ ] Pretty quick
 - [ ] Lint staged
 - [ ] Commit hooks
+- [ ] History pushState
 - [ ] CSS Library
 - [ ] App layout
 - [ ] Features
@@ -140,4 +144,5 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
   - [ ] Proxy config
 - [ ] Staging
 - [ ] Security Audit
+- [ ] Cypress
 - [ ] Production
