@@ -1,6 +1,11 @@
-import { requiredEnvVariable } from './utils/environment'
+import { requiredEnvVariable } from './utils/environment/required-env-var'
+import { parseLogLevel } from './utils/logging/parse-log-level'
+import { LogLevel } from './utils/logging/types'
 
 type Config = {
+  app: {
+    logLevel: LogLevel
+  }
   oidc: {
     clientId: string
     authority: string
@@ -10,6 +15,9 @@ type Config = {
 }
 
 export const config: Config = {
+  app: {
+    logLevel: parseLogLevel(import.meta.env['VITE_LOG_LEVEL']),
+  },
   oidc: {
     clientId: requiredEnvVariable('VITE_GITLAB_CLIENT_ID'),
     authority: requiredEnvVariable('VITE_GITLAB_AUTHORITY'),

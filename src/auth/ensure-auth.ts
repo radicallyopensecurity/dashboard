@@ -1,5 +1,5 @@
 import { OidcUserInfo } from '@axa-fr/oidc-client'
-import { createLogger } from '../utils/logger'
+import { createLogger } from '../utils/logging/create-logger'
 import { isCallbackRoute } from './is-callback-route'
 import { authClient } from './auth-client'
 

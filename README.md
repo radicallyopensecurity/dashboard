@@ -120,8 +120,9 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 
 - [x] Lit + Vite + Router
 - [x] GitLab Auth
-- [x] State management: signals? pojo? localStorage? redux?
-- [ ] Jest
+- [x] State management: mobx
+- [x] Vitest
+- [ ] Module aliases
 - [ ] Eslint
 - [ ] Pretty quick
 - [ ] Lint staged
