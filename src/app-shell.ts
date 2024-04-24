@@ -53,6 +53,7 @@ export class AppShell extends MobxLitElement {
       :host {
         height: 100%;
       }
+
       main {
         display: flex;
         height: calc(100% - 60px);

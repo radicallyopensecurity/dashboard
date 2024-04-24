@@ -6,6 +6,8 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const iconsPath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons'
 
+const PORT = 3443
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
@@ -27,9 +29,12 @@ export default defineConfig(({ mode }) => {
       minify: false,
       lib: false,
     },
+    preview: {
+      port: PORT,
+    },
     server: {
       host: 'ros-dashboard.test',
-      port: 3443,
+      port: PORT,
       https: {
         cert: readFileSync(
           env.DEV_VITE_SERVER_CRT_PATH || '.internal/certs/crt.pem'
