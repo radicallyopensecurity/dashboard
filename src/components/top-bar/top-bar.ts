@@ -26,6 +26,8 @@ export class TopBar extends MobxLitElement {
         height: 60px;
         padding: 0 var(--sl-spacing-large);
         background: var(--sl-color-gray-200);
+
+        --avatar-size: 32px;
       }
 
       .content {
@@ -35,13 +37,14 @@ export class TopBar extends MobxLitElement {
       }
 
       .avatar::part(base) {
-        width: 32px;
-        height: 32px;
+        width: var(--avatar-size);
+        height: var(--avatar-size);
       }
     `,
   ]
 
   render() {
+    this.classList.add('sl-theme-dark')
     const { avatar, name } = this.user
 
     return html`<div class="content">

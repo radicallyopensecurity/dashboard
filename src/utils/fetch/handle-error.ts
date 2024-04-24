@@ -7,7 +7,7 @@ export const handleError = async (response: Response): Promise<void> => {
   logger.info(`${url} validating response`)
 
   if (!response.ok) {
-    logger.info(`${url} response NOT OK with status: ${response.status}`)
+    logger.error(`${url} response NOT OK with status: ${response.status}`)
 
     const text = await response.text()
     logger.debug(`${url} response:`, text)

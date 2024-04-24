@@ -33,6 +33,6 @@ export const config: Config = {
     ),
     authority: gitlabAuthority,
     redirectPath: '/auth/callback',
-    scope: 'openid profile email read_user',
+    scope: 'openid profile email read_user read_api',
   },
 }

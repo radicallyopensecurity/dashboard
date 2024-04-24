@@ -9,6 +9,7 @@ import { registerTheme } from '@/utils/browser/register-theme'
 
 import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
+import { projects } from '@/state/projects'
 import { user } from '@/state/user'
 
 import { theme } from '@/theme/theme'
@@ -19,20 +20,31 @@ import '@shoelace-style/shoelace/dist/components/icon/icon.js'
 import '@/theme/light.css'
 import '@/theme/dark.css'
 import '@/theme/base.css'
+import { createLogger } from './utils/logging/create-logger'
 
 setBasePath('/')
 
 const ELEMENT_NAME = 'app-shell'
 
+const logger = createLogger(ELEMENT_NAME)
+
 @customElement(ELEMENT_NAME)
 export class AppShell extends MobxLitElement {
   private user = user
+  private projects = projects
 
   protected async firstUpdated() {
     registerTheme()
     await ensureAuth(window.location.pathname)
-    const gitlabUser = await gitlabClient.user()
-    this.user.setFromGitLabUser(gitlabUser)
+
+    logger.info('getting base app data')
+
+    await Promise.all([
+      gitlabClient.user().then((data) => this.user.setFromGitLabUser(data)),
+      gitlabClient
+        .allProjects()
+        .then((data) => this.projects.setFromGitlabProjects(data)),
+    ])
   }
 
   static styles = [
@@ -50,7 +62,7 @@ export class AppShell extends MobxLitElement {
   ]
 
   render() {
-    return html`<top-bar class="sl-theme-dark"></top-bar>
+    return html`<top-bar></top-bar>
       <main>
         <side-bar></side-bar>
         <app-routes></app-routes>

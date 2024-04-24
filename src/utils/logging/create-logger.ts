@@ -2,8 +2,7 @@ import { LogFn, LogLevel, Logger } from '@/utils/logging//types'
 
 import { config } from '@/config'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const noOp = () => {}
+const noOp = () => undefined
 
 const logWith =
   (logLevel: 'debug' | 'info' | 'warn' | 'error', prefix: string): LogFn =>
