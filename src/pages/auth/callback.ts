@@ -5,6 +5,8 @@ import { authClient } from '@/auth/auth-client'
 
 import { createLogger } from '@/utils/logging/create-logger'
 
+import { theme } from '@/theme/theme'
+
 const ELEMENT_NAME = 'auth-callback'
 
 const logger = createLogger(ELEMENT_NAME)
@@ -28,6 +30,8 @@ export class AuthCallback extends LitElement {
     logger.info('callback unsuccessful. see development console')
     this.isAuthenticated = false
   }
+
+  static styles = [...theme]
 
   render() {
     let text = ''

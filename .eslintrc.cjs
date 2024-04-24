@@ -47,17 +47,22 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
-            pattern: '@/state/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
             pattern: '@/utils/**',
             group: 'external',
             position: 'after',
           },
           {
             pattern: '@/config/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/api/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/state/**',
             group: 'external',
             position: 'after',
           },

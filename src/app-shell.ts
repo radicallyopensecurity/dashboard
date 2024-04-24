@@ -1,56 +1,56 @@
+import { MobxLitElement } from '@adobe/lit-mobx'
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
-import { LitElement, html, css } from 'lit'
+import { html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 import { ensureAuth } from '@/auth/ensure-auth'
 
+import { registerTheme } from '@/utils/browser/register-theme'
+
+import { gitlabClient } from '@/api/gitlab/gitlab-client'
+
 import { user } from '@/state/user'
 
-import { registerTheme } from '@/utils/browser/register-theme'
-import { createLogger } from '@/utils/logging/create-logger'
-
 import { theme } from '@/theme/theme'
+
+import '@shoelace-style/shoelace/dist/components/avatar/avatar.js'
+import '@shoelace-style/shoelace/dist/components/icon/icon.js'
 
 import '@/theme/light.css'
 import '@/theme/dark.css'
 import '@/theme/base.css'
 
-setBasePath('/assets')
+setBasePath('/')
 
 const ELEMENT_NAME = 'app-shell'
 
-const logger = createLogger(ELEMENT_NAME)
-
 @customElement(ELEMENT_NAME)
-export class AppShell extends LitElement {
+export class AppShell extends MobxLitElement {
   private user = user
 
   protected async firstUpdated() {
     registerTheme()
-
-    const userInfo = await ensureAuth(window.location.pathname)
-    if (userInfo) {
-      logger.info('setting userinfo')
-      this.user.set(userInfo)
-    }
+    await ensureAuth(window.location.pathname)
+    const gitlabUser = await gitlabClient.user()
+    this.user.setFromGitLabUser(gitlabUser)
   }
 
   static styles = [
     ...theme,
     css`
-      body {
-        padding: 0;
-        margin: 0;
-      }
       :host {
+        height: 100%;
+      }
+      main {
         display: flex;
-        flex-direction: column;
+        height: calc(100% - 60px);
+        background: var(--sl-color-gray-50);
       }
     `,
   ]
 
   render() {
-    return html`<top-bar></top-bar>
+    return html`<top-bar class="sl-theme-dark"></top-bar>
       <main>
         <side-bar></side-bar>
         <app-routes></app-routes>

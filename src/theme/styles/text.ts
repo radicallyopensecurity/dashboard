@@ -13,6 +13,7 @@ export const textStyles = css`
   h4,
   h5,
   h6 {
+    margin-top: 0;
     font-weight: var(--sl-font-weight-bold);
   }
 

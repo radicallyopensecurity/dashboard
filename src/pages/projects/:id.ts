@@ -1,8 +1,12 @@
 import { LitElement, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
+import { theme } from '@/theme/theme'
+
 @customElement('project-detail-page')
 export class ProjectNewPage extends LitElement {
+  static styles = [...theme]
+
   @property({ type: String })
   projectId = ''
 

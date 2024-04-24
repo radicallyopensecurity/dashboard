@@ -2,27 +2,16 @@ import { MobxLitElement } from '@adobe/lit-mobx'
 import { html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
-import { user } from '@/state/user'
-
 import { theme } from '@/theme/theme'
 
 const ELEMENT_NAME = 'home-page'
 
 @customElement(ELEMENT_NAME)
 export class HomePage extends MobxLitElement {
-  private user = user
-
   static styles = [...theme]
 
   render() {
-    return html`<h1>Home Page</h1>
-      <div>
-        <h3>User Info</h3>
-        <pre style="text-wrap: wrap; overflow-wrap: break-word">
-${JSON.stringify(this.user, null, 2)}
-        </pre
-        >
-      </div>`
+    return html`<h1>Home Page</h1>`
   }
 }
 

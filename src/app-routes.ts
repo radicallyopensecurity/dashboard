@@ -1,5 +1,5 @@
 import { Router } from '@lit-labs/router'
-import { LitElement, html } from 'lit'
+import { LitElement, html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 const ELEMENT_NAME = 'app-routes'
@@ -26,6 +26,14 @@ export class AppRoutes extends LitElement {
       render: () => html`<not-found-page></not-found-page>`,
     },
   ])
+
+  static styles = [
+    css`
+      :host {
+        width: 100%;
+      }
+    `,
+  ]
 
   render() {
     return this.router.outlet()

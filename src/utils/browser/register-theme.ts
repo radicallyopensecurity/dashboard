@@ -46,7 +46,7 @@ const fromLocalStorage = (): Theme => {
 
   const parsed = parseTheme(value)
 
-  logger.info(`parsed theme ${parsed}`)
+  logger.info(`parsed theme: "${parsed}"`)
   return parsed
 }
 

@@ -1,16 +1,14 @@
-import { OidcUserInfo } from '@axa-fr/oidc-client'
-
 import { isCallbackRoute } from '@/auth/is-callback-route'
 
 import { createLogger } from '@/utils/logging/create-logger'
+
+import { user } from '@/state/user'
 
 import { authClient } from './auth-client'
 
 const logger = createLogger('ensure-auth')
 
-export const ensureAuth = async (
-  redirectTo: string
-): Promise<void | OidcUserInfo> => {
+export const ensureAuth = async (redirectTo: string): Promise<void> => {
   logger.info('checking auth')
 
   if (isCallbackRoute()) {
@@ -26,7 +24,12 @@ export const ensureAuth = async (
   if (authClient.tokens) {
     logger.info('authentication good, getting userinfo')
     const userInfo = await authClient.userInfoAsync()
-    return userInfo
+
+    logger.info('setting userinfo')
+    logger.debug('userInfo response', userInfo)
+
+    user.setFromUserInfo(userInfo)
+    return
   }
 
   logger.info(`not authenticated, authenticating...`)
