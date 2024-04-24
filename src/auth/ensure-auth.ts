@@ -1,19 +1,16 @@
+import { authClient } from '@/auth/auth-client'
 import { isCallbackRoute } from '@/auth/is-callback-route'
 
 import { createLogger } from '@/utils/logging/create-logger'
 
-import { user } from '@/state/user'
-
-import { authClient } from './auth-client'
-
 const logger = createLogger('ensure-auth')
 
-export const ensureAuth = async (redirectTo: string): Promise<void> => {
+export const ensureAuth = async (redirectTo: string): Promise<boolean> => {
   logger.info('checking auth')
 
   if (isCallbackRoute()) {
     logger.info('is callback route, do nothing')
-    return
+    return false
   }
 
   logger.info('is not callback route, checking auth session')
@@ -21,17 +18,12 @@ export const ensureAuth = async (redirectTo: string): Promise<void> => {
   const sessionStatus = await authClient.tryKeepExistingSessionAsync()
   logger.info(`session found: ${sessionStatus}`)
 
-  if (authClient.tokens) {
-    logger.info('authentication good, getting userinfo')
-    const userInfo = await authClient.userInfoAsync()
-
-    logger.info('setting userinfo')
-    logger.debug('userInfo response', userInfo)
-
-    user.setFromUserInfo(userInfo)
-    return
+  if (!authClient.tokens) {
+    logger.info(`not authenticated, authenticating...`)
+    await authClient.loginAsync(redirectTo)
+    return false
   }
 
-  logger.info(`not authenticated, authenticating...`)
-  await authClient.loginAsync(redirectTo)
+  logger.info('is authenticated')
+  return true
 }

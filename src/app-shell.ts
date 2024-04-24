@@ -6,8 +6,7 @@ import { customElement } from 'lit/decorators.js'
 import { ensureAuth } from '@/auth/ensure-auth'
 
 import { registerTheme } from '@/utils/browser/register-theme'
-
-import { gitlabClient } from '@/api/gitlab/gitlab-client'
+import { createLogger } from '@/utils/logging/create-logger'
 
 import { projects } from '@/state/projects'
 import { user } from '@/state/user'
@@ -20,7 +19,6 @@ import '@shoelace-style/shoelace/dist/components/icon/icon.js'
 import '@/theme/light.css'
 import '@/theme/dark.css'
 import '@/theme/base.css'
-import { createLogger } from './utils/logging/create-logger'
 
 setBasePath('/')
 
@@ -38,12 +36,10 @@ export class AppShell extends MobxLitElement {
     await ensureAuth(window.location.pathname)
 
     logger.info('getting base app data')
-
     await Promise.all([
-      gitlabClient.user().then((data) => this.user.setFromGitLabUser(data)),
-      gitlabClient
-        .allProjects()
-        .then((data) => this.projects.setFromGitlabProjects(data)),
+      this.user.getUserInfo(),
+      this.user.getGitLabUser(),
+      this.projects.getAllProjects(),
     ])
   }
 

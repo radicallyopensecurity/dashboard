@@ -2,7 +2,7 @@ import { action, makeAutoObservable, observable } from 'mobx'
 
 import { createLogger } from '@/utils/logging/create-logger'
 
-import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
+import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
 import { normalizeProject } from '@/state/normalizers/normalize-project'
 import { Project } from '@/state/types/project'
@@ -24,7 +24,9 @@ class ProjectsState {
   }
 
   @action
-  public setFromGitlabProjects(gitlabProjects: GitLabProject[]) {
+  public async getAllProjects() {
+    const gitlabProjects = await gitlabClient.allProjects()
+
     logger.info('normalizing gitlab projects')
     const normalized = gitlabProjects.map(normalizeProject)
     logger.debug('normalized result', normalized)
