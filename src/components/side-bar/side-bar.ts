@@ -13,8 +13,8 @@ export class SideBar extends LitElement {
       :host {
         min-width: 350px;
         max-width: 350px;
-        background: white;
         padding-top: var(--sl-spacing-large);
+        background: white;
       }
     `,
   ]

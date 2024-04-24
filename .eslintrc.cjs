@@ -19,7 +19,14 @@ module.exports = defineConfig({
       node: true,
     },
   },
-  ignorePatterns: ['.eslintrc.cjs', 'dist/*', 'coverage/*', 'public/*'],
+  ignorePatterns: [
+    '.eslintrc.cjs',
+    'dist/*',
+    'coverage/*',
+    'public/*',
+    'stylelint.config.js',
+    'src/**/*.css',
+  ],
   rules: {
     '@typescript-eslint/consistent-type-definitions': 0,
     'import/order': [

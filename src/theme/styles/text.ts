@@ -2,8 +2,8 @@ import { css } from 'lit'
 
 export const textStyles = css`
   :host {
-    font-size: var(--sl-font-size-medium);
     font-family: var(--sl-font-sans);
+    font-size: var(--sl-font-size-medium);
     line-height: var(--sl-line-height-normal);
   }
 
