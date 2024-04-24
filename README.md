@@ -135,7 +135,7 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] Pretty quick
 - [x] Lint staged
 - [x] Commit hooks
-- [ ] CSS Library
+- [x] CSS Library
 - [ ] App layout
 - [ ] Features
   - [ ] Top bar

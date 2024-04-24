@@ -1,4 +1,4 @@
-import { createLogger } from '../logging/create-logger'
+import { createLogger } from '@/utils/logging/create-logger'
 
 const logger = createLogger('register-theme')
 

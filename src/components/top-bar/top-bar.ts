@@ -1,5 +1,10 @@
-import { LitElement, html } from 'lit'
+import { MobxLitElement } from '@adobe/lit-mobx'
+import { html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
+
+import { user } from '@/state/user'
+
+import { theme } from '@/theme/theme'
 
 const ELEMENT_NAME = 'top-bar'
 
@@ -10,14 +15,19 @@ declare global {
 }
 
 @customElement(ELEMENT_NAME)
-export class NavBar extends LitElement {
+export class NavBar extends MobxLitElement {
+  private user = user
+
+  static styles = [
+    ...theme,
+    css`
+      :host {
+        background: black;
+      }
+    `,
+  ]
+
   render() {
-    return html`<nav>
-      <a href="/">Home</a>
-      <a href="/projects/new">New Project</a>
-      <a href="/projects/3">Project 3</a>
-      <a href="/projects/4">Project 4</a>
-      <a href="/fafasfa">404</a>
-    </nav>`
+    return html`<div>${this.user.name}</div>`
   }
 }
