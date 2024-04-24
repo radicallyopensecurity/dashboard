@@ -61,6 +61,11 @@ module.exports = defineConfig({
             group: 'external',
             position: 'after',
           },
+          {
+            pattern: '@/theme/**',
+            group: 'external',
+            position: 'after',
+          },
         ],
       },
     ],

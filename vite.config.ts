@@ -1,13 +1,24 @@
 import { readFileSync } from 'node:fs'
 
 import { defineConfig, loadEnv } from 'vite'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import tsconfigPaths from 'vite-tsconfig-paths'
+
+const iconsPath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
     base: '/',
+    resolve: {
+      alias: [
+        {
+          find: /\/assets\/icons\/(.+)/,
+          replacement: `${iconsPath}/$1`,
+        },
+      ],
+    },
     build: {
       sourcemap: true,
       assetsDir: 'dist',
@@ -39,6 +50,16 @@ export default defineConfig(({ mode }) => {
         ].join(';'),
       },
     },
-    plugins: [tsconfigPaths()],
+    plugins: [
+      tsconfigPaths(),
+      viteStaticCopy({
+        targets: [
+          {
+            src: iconsPath,
+            dest: 'assets',
+          },
+        ],
+      }),
+    ],
   }
 })

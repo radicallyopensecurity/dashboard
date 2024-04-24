@@ -15,17 +15,17 @@ export class AuthCallback extends LitElement {
   private isAuthenticated: boolean | null = null
 
   protected async firstUpdated() {
-    logger.debug('executing eyedp callback')
+    logger.info('executing eyedp callback')
     const { callbackPath } = await authClient.loginCallbackAsync()
     if (authClient.tokens) {
-      logger.debug('callback successful')
+      logger.info('callback successful')
       this.isAuthenticated = true
       // TODO: proper client side navigation
       window.location.href = callbackPath
       return
     }
 
-    logger.debug('callback unsuccessful. see development console')
+    logger.info('callback unsuccessful. see development console')
     this.isAuthenticated = false
   }
 
