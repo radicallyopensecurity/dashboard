@@ -4,18 +4,20 @@ export type Project = {
   nameWithNamespace: string
   path: string
   pathWithNamespace: string
-  createdAt: string // #TODO date
+  createdAt: Date
   defaultBranch: string
   ssh: string
   url: string
   readme: string
   avatar: string
-  lastActivityAt: string // #TODO date
+  lastActivityAt: Date
   isArchived: boolean
-  updatedAt: string // #TODO date
-  namespaceId: number
-  namespace: string
-  namespaceUrl: string
-  namespaceAvatar: string | null
+  updatedAt: Date
+  namespace: {
+    id: number
+    name: string
+    url: string
+    avatar: string | null
+  }
   tags: string[]
 }

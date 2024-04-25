@@ -22,7 +22,7 @@ export class ProjectListItem extends LitElement {
 
       a {
         display: flex;
-        gap: var(--sl-spacing-x-small);
+        gap: var(--sl-spacing-small);
         align-items: center;
         width: 100%;
         padding: var(--sl-spacing-x-small);
@@ -60,9 +60,9 @@ export class ProjectListItem extends LitElement {
   ]
 
   render() {
-    const { id, avatar, namespaceAvatar, name, namespace } = this.project
+    const { id, avatar, namespace, name } = this.project
 
-    const image = avatar || namespaceAvatar
+    const image = avatar || namespace.avatar
 
     const avatarElement = image
       ? html`<img id="avatar" src="${image}" />`
@@ -72,7 +72,7 @@ export class ProjectListItem extends LitElement {
       <a href="/projects/${id}">
         ${avatarElement}
         <div id="details">
-          <span id="namespace">${namespace}</span>
+          <span id="namespace">${namespace.name}</span>
           <span id="name">${name}</span>
         </div>
       </a>

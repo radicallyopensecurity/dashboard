@@ -22,7 +22,6 @@ export class TopBar extends MobxLitElement {
       :host {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
         height: 60px;
         padding: 0 var(--sl-spacing-large);
         background: var(--sl-color-gray-200);
@@ -30,25 +29,40 @@ export class TopBar extends MobxLitElement {
         --avatar-size: 32px;
       }
 
-      .content {
+      #content {
         display: flex;
+        flex-grow: 1;
         gap: var(--sl-spacing-small);
         align-items: center;
       }
 
-      .avatar::part(base) {
+      #avatar::part(base) {
         width: var(--avatar-size);
         height: var(--avatar-size);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: var(--sl-font-size-large);
+        color: var(--sl-color-neutral-1000);
+      }
+
+      #brand {
+        margin-right: auto;
+      }
+
+      #content a:link {
+        text-decoration: none;
       }
     `,
   ]
 
   render() {
-    this.classList.add('sl-theme-dark')
     const { avatar, name } = this.user
 
-    return html`<div class="content">
-      <sl-avatar class="avatar" image="${avatar}"></sl-avatar>
+    return html`<div id="content">
+      <a id="brand" href="/"><h1>Radically Open Security</h1></a>
+      <sl-avatar id="avatar" image="${avatar}"></sl-avatar>
       <span>${name}</span><sl-icon name="sliders"></sl-icon>
     </div>`
   }
