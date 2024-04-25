@@ -1,4 +1,5 @@
 export type GitLabProject = {
+  id: number
   name: string
   name_with_namespace: string
   path: string
@@ -16,6 +17,7 @@ export type GitLabProject = {
     id: number
     name: string
     web_url: string
+    avatar_url: string | null
   }
   tag_list: string[]
 }

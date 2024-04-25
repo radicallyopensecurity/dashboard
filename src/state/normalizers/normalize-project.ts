@@ -4,6 +4,7 @@ import { Project } from '@/state/types/project'
 
 export const normalizeProject = (raw: GitLabProject): Project => {
   return {
+    id: raw.id,
     name: raw.name,
     nameWithNamespace: raw.name_with_namespace,
     path: raw.path,
@@ -20,6 +21,7 @@ export const normalizeProject = (raw: GitLabProject): Project => {
     namespaceId: raw.namespace.id,
     namespace: raw.namespace.name,
     namespaceUrl: raw.namespace.web_url,
+    namespaceAvatar: raw.namespace.avatar_url,
     tags: raw.tag_list.map((x) => x.toLowerCase()),
   }
 }

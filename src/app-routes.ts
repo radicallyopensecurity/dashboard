@@ -7,15 +7,30 @@ const ELEMENT_NAME = 'app-routes'
 @customElement(ELEMENT_NAME)
 export class AppRoutes extends LitElement {
   private router = new Router(this, [
-    { path: '/', render: () => html`<home-page></home-page>` },
+    {
+      path: '/',
+      render: () => html`<home-page></home-page>`,
+      enter: async () => {
+        await import('@/pages/home')
+        return true
+      },
+    },
     {
       path: '/projects/new',
       render: () => html`<project-new-page></project-new-page>`,
+      enter: async () => {
+        await import('@/pages/projects/new')
+        return true
+      },
     },
     {
       path: '/projects/:id',
       render: ({ id }) =>
         html`<project-detail-page .projectId=${id}></project-detail-page>`,
+      enter: async () => {
+        await import('@/pages/projects/:id')
+        return true
+      },
     },
     {
       path: '/auth/callback',

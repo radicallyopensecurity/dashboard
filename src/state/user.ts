@@ -1,8 +1,7 @@
+import { OidcUserInfo } from '@axa-fr/oidc-client'
 import { observable, action, makeAutoObservable } from 'mobx'
 
-import { authClient } from '@/auth/auth-client'
-
-import { gitlabClient } from '@/api/gitlab/gitlab-client'
+import { GitLabUser } from '@/api/gitlab/types/gitlab-user'
 
 class UserState {
   @observable
@@ -17,15 +16,13 @@ class UserState {
   }
 
   @action
-  public async getUserInfo() {
-    const userInfo = await authClient.userInfoAsync()
+  public fromUserInfo(userInfo: OidcUserInfo) {
     this.name = userInfo.preferred_username ?? 'username_undefined'
     this.groups = userInfo.groups ?? []
   }
 
   @action
-  async getGitLabUser() {
-    const gitlabUser = await gitlabClient.user()
+  public fromGitLabUser(gitlabUser: GitLabUser) {
     this.avatar = gitlabUser.avatar_url
   }
 }

@@ -139,7 +139,7 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] App layout
 - [x] Stylelint
 - [ ] Features
-  - [ ] Sidebar
+  - [~] Sidebar
   - [ ] Homepage
   - [ ] Project detail
   - [ ] Project new

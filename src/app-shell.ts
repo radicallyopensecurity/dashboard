@@ -3,18 +3,30 @@ import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.j
 import { html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
+import { registerTheme } from '@/theme/register-theme'
+import { theme } from '@/theme/theme'
+
+import { authClient } from '@/auth/auth-client'
 import { ensureAuth } from '@/auth/ensure-auth'
 
-import { registerTheme } from '@/utils/browser/register-theme'
-import { createLogger } from '@/utils/logging/create-logger'
+import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
 import { projects } from '@/state/projects'
 import { user } from '@/state/user'
 
-import { theme } from '@/theme/theme'
+import { createLogger } from '@/utils/logging/create-logger'
 
 import '@shoelace-style/shoelace/dist/components/avatar/avatar.js'
+import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/icon/icon.js'
+import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js'
+import '@shoelace-style/shoelace/dist/components/input/input.js'
+
+import '@/app-routes'
+import '@/pages/auth/callback'
+import '@/pages/not-found'
+import '@/components/top-bar/top-bar'
+import '@/components/side-bar/side-bar'
 
 import '@/theme/light.css'
 import '@/theme/dark.css'
@@ -37,9 +49,11 @@ export class AppShell extends MobxLitElement {
 
     logger.info('getting base app data')
     await Promise.all([
-      this.user.getUserInfo(),
-      this.user.getGitLabUser(),
-      this.projects.getAllProjects(),
+      authClient.userInfoAsync().then((data) => this.user.fromUserInfo(data)),
+      gitlabClient.user().then((data) => this.user.fromGitLabUser(data)),
+      gitlabClient
+        .allProjects()
+        .then((data) => this.projects.fromAllProjects(data)),
     ])
   }
 

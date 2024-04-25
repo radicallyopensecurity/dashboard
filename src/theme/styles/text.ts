@@ -5,6 +5,7 @@ export const textStyles = css`
     font-family: var(--sl-font-sans);
     font-size: var(--sl-font-size-medium);
     line-height: var(--sl-line-height-normal);
+    color: var(--sl-color-gray-900);
   }
 
   h1,

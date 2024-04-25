@@ -1,4 +1,5 @@
 export type Project = {
+  id: number
   name: string
   nameWithNamespace: string
   path: string
@@ -15,5 +16,6 @@ export type Project = {
   namespaceId: number
   namespace: string
   namespaceUrl: string
+  namespaceAvatar: string | null
   tags: string[]
 }

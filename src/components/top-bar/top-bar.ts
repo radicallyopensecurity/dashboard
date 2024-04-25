@@ -2,9 +2,9 @@ import { MobxLitElement } from '@adobe/lit-mobx'
 import { html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
-import { user } from '@/state/user'
-
 import { theme } from '@/theme/theme'
+
+import { user } from '@/state/user'
 
 const ELEMENT_NAME = 'top-bar'
 

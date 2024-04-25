@@ -39,7 +39,12 @@ module.exports = defineConfig({
         },
         pathGroups: [
           {
-            pattern: '@/components/**',
+            pattern: '@/config',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/theme/**',
             group: 'external',
             position: 'after',
           },
@@ -54,12 +59,7 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
-            pattern: '@/utils/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
-            pattern: '@/config/**',
+            pattern: '@/constants/**',
             group: 'external',
             position: 'after',
           },
@@ -69,12 +69,22 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
+            pattern: '@/components/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/features/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
             pattern: '@/state/**',
             group: 'external',
             position: 'after',
           },
           {
-            pattern: '@/theme/**',
+            pattern: '@/utils/**',
             group: 'external',
             position: 'after',
           },
