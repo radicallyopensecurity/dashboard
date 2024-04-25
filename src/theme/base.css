@@ -1,4 +1,9 @@
+:root {
+  --content-padding: var(--sl-spacing-large);
+}
+
 :root,
+:host,
 html,
 body {
   height: 100vh;

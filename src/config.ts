@@ -1,19 +1,24 @@
+import {
+  DASHBOARD_SUBDOMAIN,
+  ROCKET_CHAT_SUBDOMAIN,
+  GITLAB_SUBDOMAIN,
+  CODIMD_SUBMDOMAIN,
+} from '@/constants/services'
+
 import { parseLogLevel } from '@/utils/logging/parse-log-level'
 import { LogLevel } from '@/utils/logging/types'
 import { ensureString } from '@/utils/string/ensure-string'
-
-import {
-  CODIMD_SUBMDOMAIN,
-  DASHBOARD_SUBDOMAIN,
-  GITLAB_SUBDOMAIN,
-  ROCKET_CHAT_SUBDOMAIN,
-} from '@/constants'
 
 type Config = {
   app: {
     logLevel: LogLevel
     gitlabBaseUrl: string
     url: string
+    version: string
+    commit: string
+    publicReportIssueUrl?: string
+    internalReportIssueUrl?: string
+    repositoryUrl?: string
   }
   services: {
     rocketChatUrl: string
@@ -40,6 +45,16 @@ export const config: Config = {
     logLevel: parseLogLevel(import.meta.env.VITE_LOG_LEVEL),
     gitlabBaseUrl: `${gitlabAuthority}/api/v4`,
     url: appUrl,
+    version: `v${__APP_VERSION__}`,
+    commit: __APP_COMMIT__,
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    repositoryUrl: import.meta.env.VITE_REPOSITORY_URL || undefined,
+    publicReportIssueUrl:
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      import.meta.env.VITE_PUBLIC_ISSUE_TRACKER || undefined,
+    internalReportIssueUrl:
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      import.meta.env.VITE_INTERNAL_ISSUE_TRACKER || undefined,
   },
   services: {
     rocketChatUrl: appUrl.replace(DASHBOARD_SUBDOMAIN, ROCKET_CHAT_SUBDOMAIN),

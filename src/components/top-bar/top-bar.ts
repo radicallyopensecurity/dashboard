@@ -20,11 +20,14 @@ export class TopBar extends MobxLitElement {
     ...theme,
     css`
       :host {
+        position: relative;
+        z-index: 100;
         display: flex;
         align-items: center;
         height: 60px;
         padding: 0 var(--sl-spacing-large);
         background: var(--sl-color-gray-200);
+        box-shadow: var(--sl-shadow-large);
 
         --avatar-size: 32px;
       }

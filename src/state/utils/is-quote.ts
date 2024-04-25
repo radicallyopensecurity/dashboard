@@ -1,6 +1,6 @@
-import { Project } from '@/state/types/project'
+import { QUOTE_PROJECT_TAG, QUOTE_PROJECT_PREFIX } from '@/constants/projects'
 
-import { QUOTE_PROJECT_TAG, QUOTE_PROJECT_PREFIX } from '@/constants'
+import { Project } from '@/state/types/project'
 
 export const isQuote = (project: Project): boolean => {
   return (

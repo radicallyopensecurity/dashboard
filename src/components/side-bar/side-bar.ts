@@ -20,18 +20,24 @@ export class SideBar extends MobxLitElement {
     ...theme,
     css`
       :host {
+        position: relative;
+        z-index: 60;
         display: flex;
         flex-direction: column;
         gap: var(--sl-spacing-medium);
         min-width: 324px;
         max-width: 324px;
-        padding: var(--sl-spacing-large);
+        padding: var(--content-padding);
         overflow-y: auto;
         background: white;
       }
 
       h2 {
         margin-bottom: 0;
+        font-size: var(--sl-font-size-medium);
+        font-weight: var(--sl-font-weight-normal);
+        color: var(--sl-color-neutral-600);
+        text-transform: uppercase;
       }
 
       #services {
@@ -41,7 +47,16 @@ export class SideBar extends MobxLitElement {
         padding: var(--sl-spacing-medium);
       }
 
-      .services-item {
+      #services a:link {
+        color: var(--sl-color-neutral-500);
+        text-decoration: none;
+      }
+
+      #services a:hover {
+        color: var(--sl-color-primary-500);
+      }
+
+      .services-item span {
         display: flex;
         gap: var(--sl-spacing-x-small);
         align-items: baseline;
@@ -90,10 +105,8 @@ export class SideBar extends MobxLitElement {
         <div id="services">
           ${SERVICES.map(
             ({ title, icon, href }) =>
-              html` <a href="${href}" target="_blank">
-                <span class="services-item">
-                  <sl-icon name="${icon}"></sl-icon>${title}</span
-                >
+              html` <a class="services-item" href="${href}" target="_blank">
+                <span> <sl-icon name="${icon}"></sl-icon>${title}</span>
               </a>`
           )}
         </div>

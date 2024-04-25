@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 
 import { defineConfig, loadEnv } from 'vite'
@@ -7,6 +8,11 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 const iconsPath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons'
 
 const PORT = 3443
+
+const COMMIT_HASH = execSync('git rev-parse --short HEAD').toString()
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const { version } = JSON.parse(readFileSync('package.json', 'utf8'))
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -20,6 +26,10 @@ export default defineConfig(({ mode }) => {
           replacement: `${iconsPath}/$1`,
         },
       ],
+    },
+    define: {
+      __APP_VERSION__: JSON.stringify(version),
+      __APP_COMMIT__: JSON.stringify(COMMIT_HASH),
     },
     build: {
       sourcemap: true,
