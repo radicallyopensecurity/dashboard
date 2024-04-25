@@ -1,6 +1,5 @@
 import { action, makeAutoObservable, observable } from 'mobx'
 
-
 import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
 
 import { normalizeProject } from '@/state/normalizers/normalize-project'
@@ -8,6 +7,7 @@ import { Project } from '@/state/types/project'
 import { isPentest } from '@/state/utils/is-pentest'
 import { isQuote } from '@/state/utils/is-quote'
 
+import { uniqueBy } from '@/utils/array/unique-by'
 import { createLogger } from '@/utils/logging/create-logger'
 
 const logger = createLogger('projects-state')
@@ -33,7 +33,7 @@ class ProjectsState {
     logger.info('filtering normalized projects')
     const quotes = normalized.filter(isQuote)
     const pentests = normalized.filter(isPentest)
-    const all = quotes.concat(pentests)
+    const all = uniqueBy((x) => x.id, quotes.concat(pentests))
 
     logger.debug('filtered result', {
       quotes,

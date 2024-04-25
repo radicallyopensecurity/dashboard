@@ -140,17 +140,21 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] Stylelint
 - [ ] Features
   - [~] Sidebar
-  - [ ] Homepage
+  - [x] Homepage
   - [ ] Project detail
   - [ ] Project new
-  - [ ] Top bar
+  - [~] Top bar
 - [ ] Meta tags
 - [ ] CI/CD
 - [ ] Staging
+- [ ] Responsive
 - [ ] Documentation
   - [ ] SSL
   - [ ] Security
   - [ ] Proxy config
+  - [ ] Badges
 - [ ] Security Audit
+- [ ] Unit Tests
+- [ ] ESLint no unused exports
 - [ ] Cypress
 - [ ] Production
