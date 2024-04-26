@@ -4,9 +4,8 @@ import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
 
 import { normalizeProject } from '@/state/normalizers/normalize-project'
 import { Project } from '@/state/types/project'
-import { isPentest } from '@/state/utils/is-pentest'
-import { isQuote } from '@/state/utils/is-quote'
 
+import { groupBy } from '@/utils/array/group-by'
 import { uniqueBy } from '@/utils/array/unique-by'
 import { createLogger } from '@/utils/logging/create-logger'
 
@@ -19,9 +18,19 @@ class ProjectsState {
   public pentests: Project[] = []
   @observable
   public all: Project[] = []
+  @observable
+  public allById: Record<number, Project> = {}
+
+  @observable
+  public isLoading = true
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  @action
+  public setIsLoading(value: boolean) {
+    this.isLoading = value
   }
 
   @action
@@ -31,19 +40,22 @@ class ProjectsState {
     logger.debug('normalized result', normalized)
 
     logger.info('filtering normalized projects')
-    const quotes = normalized.filter(isQuote)
-    const pentests = normalized.filter(isPentest)
+    const quotes = normalized.filter((x) => x.isQuote)
+    const pentests = normalized.filter((x) => x.isPentest)
     const all = uniqueBy((x) => x.id, quotes.concat(pentests))
+    const allById = groupBy((x) => x.id, all)
 
     logger.debug('filtered result', {
       quotes,
       pentests,
       all,
+      allById,
     })
 
     this.quotes = quotes
     this.pentests = pentests
     this.all = all
+    this.allById = allById
   }
 }
 

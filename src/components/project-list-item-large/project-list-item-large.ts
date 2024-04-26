@@ -55,7 +55,6 @@ export class ProjectListItemLarge extends LitElement {
       #details {
         display: flex;
         flex-direction: column;
-        /* line-height: var(--sl-line-height-dense); */
       }
 
       #name {
@@ -70,7 +69,10 @@ export class ProjectListItemLarge extends LitElement {
   ]
 
   render() {
-    const { id, avatar, namespace, nameWithNamespace, updatedAt } = this.project
+    const {
+      now,
+      project: { id, avatar, namespace, nameWithNamespace, updatedAt },
+    } = this
 
     const image = avatar || namespace.avatar
 
@@ -84,7 +86,7 @@ export class ProjectListItemLarge extends LitElement {
         <div id="details">
           <span id="name">${nameWithNamespace}</span>
           <span id="updated"
-            >Updated ${formatDistance(this.now, updatedAt)} ago</span
+            >Updated ${formatDistance(now, updatedAt)} ago</span
           >
         </div>
       </a>

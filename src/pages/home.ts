@@ -2,6 +2,7 @@ import { MobxLitElement } from '@adobe/lit-mobx'
 import { html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
+import { pageBase } from '@/theme/page-base'
 import { theme } from '@/theme/theme'
 
 import { projects } from '@/state/projects'
@@ -18,26 +19,8 @@ export class HomePage extends MobxLitElement {
 
   static styles = [
     ...theme,
+    ...pageBase,
     css`
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: var(--sl-spacing-large);
-      }
-
-      sl-card {
-        position: relative;
-        z-index: 50;
-        width: 100%;
-        box-shadow: var(--sl-shadow-medium);
-      }
-
-      h2 {
-        margin: 0;
-        font-size: var(--sl-font-size-2x-large);
-        font-weight: var(--sl-font-weight-normal);
-      }
-
       #recently-updated {
         margin-top: var(--sl-spacing-medium);
       }
@@ -59,9 +42,7 @@ export class HomePage extends MobxLitElement {
     const now = new Date()
 
     return html`<sl-card>
-        <h2>ROS Dashboard</h2>
-
-        <p>Hi ${name}!</p>
+        <h2>Hi ${name}!</h2>
 
         <p>
           You have access to ${countPentestProjects} pentest ${countSuffix}.

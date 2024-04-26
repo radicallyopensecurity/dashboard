@@ -45,7 +45,7 @@ export const config: Config = {
     logLevel: parseLogLevel(import.meta.env.VITE_LOG_LEVEL),
     gitlabBaseUrl: `${gitlabAuthority}/api/v4`,
     url: appUrl,
-    version: `v${__APP_VERSION__}`,
+    version: __APP_VERSION__,
     commit: __APP_COMMIT__,
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     repositoryUrl: import.meta.env.VITE_REPOSITORY_URL || undefined,

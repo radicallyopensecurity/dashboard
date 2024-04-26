@@ -1,11 +1,15 @@
-import { LitElement, html } from 'lit'
+import { MobxLitElement } from '@adobe/lit-mobx'
+import { html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import { toJS } from 'mobx'
 
-import { theme } from '@/theme/theme'
+import { projects } from '@/state/projects'
+
+import '@/features/project-detail/project-detail'
 
 @customElement('project-detail-page')
-export class ProjectNewPage extends LitElement {
-  static styles = [...theme]
+export class ProjectNewPage extends MobxLitElement {
+  private projects = projects
 
   @property({ type: String })
   projectId = ''
@@ -15,7 +19,17 @@ export class ProjectNewPage extends LitElement {
       return html`<not-found-page></not-found-page>`
     }
 
-    return html`<h1>Project Detail ${this.projectId}</h1>`
+    const { allById, isLoading } = this.projects
+    const project = toJS(allById)[Number(this.projectId)] ?? {}
+
+    if (!project?.id && !isLoading) {
+      return html`<not-found-page></not-found-page>`
+    }
+
+    return html`<project-detail
+      .project=${project}
+      .isLoading=${isLoading}
+    ></project-detail>`
   }
 }
 

@@ -26,7 +26,7 @@ export class TopBar extends MobxLitElement {
         align-items: center;
         height: 60px;
         padding: 0 var(--sl-spacing-large);
-        background: var(--sl-color-gray-200);
+        background: var(--sl-color-primary-500);
         box-shadow: var(--sl-shadow-large);
 
         --avatar-size: 32px;
@@ -37,6 +37,7 @@ export class TopBar extends MobxLitElement {
         flex-grow: 1;
         gap: var(--sl-spacing-small);
         align-items: center;
+        color: var(--sl-color-neutral-0);
       }
 
       #avatar::part(base) {
@@ -47,7 +48,8 @@ export class TopBar extends MobxLitElement {
       h1 {
         margin: 0;
         font-size: var(--sl-font-size-large);
-        color: var(--sl-color-neutral-1000);
+        color: var(--sl-color-neutral-0);
+        font-weight: var(--sl-font-weight-normal);
       }
 
       #brand {

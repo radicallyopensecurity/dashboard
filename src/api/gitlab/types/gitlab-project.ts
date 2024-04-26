@@ -16,6 +16,7 @@ export type GitLabProject = {
   namespace: {
     id: number
     name: string
+    path: string
     web_url: string
     avatar_url: string | null
   }

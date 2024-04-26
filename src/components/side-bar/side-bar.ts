@@ -29,14 +29,14 @@ export class SideBar extends MobxLitElement {
         max-width: 324px;
         padding: var(--content-padding);
         overflow-y: auto;
-        background: white;
+        background: var(--sl-color-neutral-0);
       }
 
       h2 {
         margin-bottom: 0;
         font-size: var(--sl-font-size-medium);
         font-weight: var(--sl-font-weight-normal);
-        color: var(--sl-color-neutral-600);
+        color: var(--sl-color-primary-600);
         text-transform: uppercase;
       }
 
@@ -47,8 +47,10 @@ export class SideBar extends MobxLitElement {
         padding: var(--sl-spacing-medium);
       }
 
-      #services a:link {
-        color: var(--sl-color-neutral-500);
+      #services a:link,
+      #services a:active,
+      #services a:visited {
+        color: var(--sl-color-gray-600);
         text-decoration: none;
       }
 
@@ -75,8 +77,17 @@ export class SideBar extends MobxLitElement {
 
       #search-input,
       #search-input::part(form-control) {
+        color: var(--sl-color-gray-600);
         display: inline-block;
         width: 100%;
+      }
+
+      #search-input sl-icon {
+        color: var(--sl-color-gray-600);
+      }
+
+      #search-input::part(input)::placeholder {
+        color: var(--sl-color-gray-500);
       }
 
       #projects-header {
@@ -127,7 +138,7 @@ export class SideBar extends MobxLitElement {
         </header>
 
         <div id="search">
-          <sl-input id="search-input" placeholder="pen-ie11" size="medium">
+          <sl-input id="search-input" placeholder="pen-ie11..." size="medium">
             <sl-icon name="search" slot="suffix"></sl-icon>
           </sl-input>
 

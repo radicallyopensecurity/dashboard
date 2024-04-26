@@ -1,8 +1,26 @@
+import { config } from '@/config'
+
 import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
 
 import { Project } from '@/state/types/project'
+import { isPentest } from '@/state/utils/is-pentest'
+
+import { getChannelName } from '@/utils/rocket-chat/get-channel-name'
+import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
+
+import { isQuote } from '../utils/is-quote'
 
 export const normalizeProject = (raw: GitLabProject): Project => {
+  const tags = raw.tag_list.map((x) => x.toLowerCase())
+  const channelName = getChannelName(
+    raw.namespace.path,
+    raw.name_with_namespace
+  )
+  const chatUrl =
+    (channelName &&
+      getChannelUrl(config.services.rocketChatUrl, channelName)) ??
+    null
+
   return {
     id: raw.id,
     name: raw.name,
@@ -21,9 +39,13 @@ export const normalizeProject = (raw: GitLabProject): Project => {
     namespace: {
       id: raw.namespace.id,
       name: raw.namespace.name,
+      path: raw.namespace.path,
       url: raw.namespace.web_url,
       avatar: raw.namespace.avatar_url,
     },
-    tags: raw.tag_list.map((x) => x.toLowerCase()),
+    tags,
+    isQuote: isQuote(tags, raw.name),
+    isPentest: isPentest(tags, raw.name),
+    chatUrl,
   }
 }

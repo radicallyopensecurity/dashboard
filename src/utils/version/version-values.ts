@@ -1,10 +1,12 @@
 import { config } from '@/config'
 
+export type VersionValue = {
+  text: string
+  href: string
+}
+
 export const versionValues = () => {
-  const result: {
-    text: string
-    href: string
-  }[] = []
+  const result: VersionValue[] = []
 
   const {
     app: {
@@ -20,7 +22,7 @@ export const versionValues = () => {
     result.push(
       {
         text: `version: ${version}`,
-        href: `${repositoryUrl}/releases/tag/${version}`,
+        href: `${repositoryUrl}/releases/tag/v${version}`,
       },
       {
         text: `commit: ${commit}`,

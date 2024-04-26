@@ -16,8 +16,12 @@ export type Project = {
   namespace: {
     id: number
     name: string
+    path: string
     url: string
     avatar: string | null
   }
   tags: string[]
+  isQuote: boolean
+  isPentest: boolean
+  chatUrl: string | null
 }

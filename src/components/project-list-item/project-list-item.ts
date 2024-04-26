@@ -54,7 +54,7 @@ export class ProjectListItem extends LitElement {
 
       #namespace {
         font-size: var(--sl-font-size-small);
-        color: var(--sl-color-gray-500);
+        color: var(--sl-color-gray-600);
       }
     `,
   ]
