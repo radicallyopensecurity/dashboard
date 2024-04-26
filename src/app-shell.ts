@@ -4,8 +4,8 @@ import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.j
 import { html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
-import { registerTheme } from '@/theme/register-theme'
 import { theme } from '@/theme/theme'
+import { registerTheme } from '@/theme/utils/register-theme'
 
 import { routes } from '@/routes'
 
@@ -24,14 +24,13 @@ import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js'
 import '@shoelace-style/shoelace/dist/components/input/input.js'
 import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js'
 
-import '@/pages/auth/callback'
-import '@/pages/not-found'
-
-import '@/components/secure-iframe/secure-iframe'
-import '@/components/version-footer/version-footer'
+import '@/elements/secure-iframe/secure-iframe'
+import '@/elements/version-footer/version-footer'
 
 import '@/features/side-bar/side-bar'
 import '@/features/top-bar/top-bar'
+
+import '@/pages/not-found'
 
 import '@/theme/light.css'
 import '@/theme/dark.css'

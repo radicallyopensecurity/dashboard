@@ -1,6 +1,6 @@
 import { css } from 'lit'
 
-export const pageBase = [
+export const pageFlex = [
   css`
     :host {
       display: flex;

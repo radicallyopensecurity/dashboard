@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-import { createIframe } from '@/components/secure-iframe/utils/create-iframe'
+import { createIframe } from '@/elements/secure-iframe/utils/create-iframe'
 
 const ELEMENT_NAME = 'secure-iframe'
 

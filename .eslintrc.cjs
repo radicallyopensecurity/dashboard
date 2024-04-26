@@ -85,7 +85,7 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
-            pattern: '@/components/**',
+            pattern: '@/elements/**',
             group: 'external',
             position: 'after',
           },

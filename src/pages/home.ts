@@ -2,13 +2,13 @@ import { MobxLitElement } from '@adobe/lit-mobx'
 import { html, css } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
-import { pageBase } from '@/theme/page-base'
+import { pageFlex } from '@/theme/shared/page'
 import { theme } from '@/theme/theme'
 
 import { projects } from '@/modules/projects/projects-store'
 import { user } from '@/modules/user/user-store'
 
-import '@/components/project-list-item-large/project-list-item-large'
+import '@/elements/project-list-item-large/project-list-item-large'
 
 const ELEMENT_NAME = 'home-page'
 
@@ -19,7 +19,7 @@ export class HomePage extends MobxLitElement {
 
   static styles = [
     ...theme,
-    ...pageBase,
+    ...pageFlex,
     css`
       #recently-updated {
         margin-top: var(--sl-spacing-medium);
@@ -43,7 +43,6 @@ export class HomePage extends MobxLitElement {
 
     return html`<sl-card>
         <h2>Hi ${name}!</h2>
-
         <p>
           You have access to ${countPentestProjects} pentest ${countSuffix}.
         </p>

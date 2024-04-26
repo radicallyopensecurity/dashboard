@@ -37,6 +37,10 @@ export const routes: RouteConfig[] = [
   {
     path: AppRoute.AuthCallback,
     render: () => html`<auth-callback></auth-callback>`,
+    enter: async () => {
+      await import('@/pages/auth/callback')
+      return true
+    },
   },
   {
     path: '/*',
