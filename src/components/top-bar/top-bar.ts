@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-import { user } from '@/state/user'
+import { user } from '@/modules/user/user-store'
 
 const ELEMENT_NAME = 'top-bar'
 
@@ -48,8 +48,8 @@ export class TopBar extends MobxLitElement {
       h1 {
         margin: 0;
         font-size: var(--sl-font-size-large);
-        color: var(--sl-color-neutral-0);
         font-weight: var(--sl-font-weight-normal);
+        color: var(--sl-color-neutral-0);
       }
 
       #brand {

@@ -3,7 +3,7 @@ import { html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { toJS } from 'mobx'
 
-import { projects } from '@/state/projects'
+import { projects } from '@/modules/projects/projects-store'
 
 import '@/features/project-detail/project-detail'
 

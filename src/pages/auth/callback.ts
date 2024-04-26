@@ -1,41 +1,28 @@
 import { LitElement, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-
-import { authClient } from '@/auth/auth-client'
-
-import { createLogger } from '@/utils/logging/create-logger'
+import { customElement } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-const ELEMENT_NAME = 'auth-callback'
+import { authService } from '@/modules/auth/auth-service'
+import { auth } from '@/modules/auth/auth-store'
 
-const logger = createLogger(ELEMENT_NAME)
+const ELEMENT_NAME = 'auth-callback'
 
 @customElement(ELEMENT_NAME)
 export class AuthCallback extends LitElement {
-  @property({ type: Boolean || null })
-  private isAuthenticated: boolean | null = null
+  private auth = auth
 
   protected async firstUpdated() {
-    logger.info('executing eyedp callback')
-    const { callbackPath } = await authClient.loginCallbackAsync()
-    if (authClient.tokens) {
-      logger.info('callback successful')
-      this.isAuthenticated = true
-      // TODO: proper client side navigation
-      window.location.href = callbackPath
-      return
-    }
-
-    logger.info('callback unsuccessful. see development console')
-    this.isAuthenticated = false
+    await authService.loginCallback()
   }
 
   static styles = [...theme]
 
   render() {
+    const { isAuthenticated } = this.auth
+
     let text = ''
-    switch (this.isAuthenticated) {
+    switch (isAuthenticated) {
       case false:
         text = 'Oops. An error occured while authenticating...'
         break

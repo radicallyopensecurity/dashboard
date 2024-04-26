@@ -1,6 +1,6 @@
 import { QUOTE_PROJECT_TAG, QUOTE_PROJECT_PREFIX } from '@/constants/projects'
 
-import { Project } from '@/state/types/project'
+import { type Project } from '@/modules/projects/types/project'
 
 export function isQuote(project: Project): boolean
 export function isQuote(tags: string[], name: string): boolean

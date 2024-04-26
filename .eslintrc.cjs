@@ -28,7 +28,8 @@ module.exports = defineConfig({
     'src/**/*.css',
   ],
   rules: {
-    '@typescript-eslint/consistent-type-definitions': 0,
+    '@typescript-eslint/consistent-type-definitions': [0],
+    'import/no-duplicates': [2],
     'import/order': [
       1,
       {
@@ -49,11 +50,6 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
-            pattern: '@/auth/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
             pattern: '@/pages/**',
             group: 'external',
             position: 'after',
@@ -64,7 +60,27 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
-            pattern: '@/api/**',
+            pattern: '@/routes',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/modules/auth',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/modules/gitlab',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/modules/projects',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@/modules/user',
             group: 'external',
             position: 'after',
           },
@@ -75,11 +91,6 @@ module.exports = defineConfig({
           },
           {
             pattern: '@/features/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
-            pattern: '@/state/**',
             group: 'external',
             position: 'after',
           },
@@ -96,6 +107,5 @@ module.exports = defineConfig({
         ],
       },
     ],
-    'import/no-duplicates': [2],
   },
 })

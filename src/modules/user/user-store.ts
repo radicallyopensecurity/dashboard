@@ -1,9 +1,9 @@
 import { OidcUserInfo } from '@axa-fr/oidc-client'
 import { observable, action, makeAutoObservable } from 'mobx'
 
-import { GitLabUser } from '@/api/gitlab/types/gitlab-user'
+import { GitLabUser } from '@/modules/gitlab/types/gitlab-user'
 
-class UserState {
+export class UserStore {
   @observable
   public name = ''
   @observable
@@ -11,8 +11,16 @@ class UserState {
   @observable
   public avatar: string | null = null
 
+  @observable
+  public isLoading = true
+
   constructor() {
     makeAutoObservable(this)
+  }
+
+  @action
+  public setIsLoading(value: boolean) {
+    this.isLoading = value
   }
 
   @action
@@ -27,4 +35,4 @@ class UserState {
   }
 }
 
-export const user = new UserState()
+export const user = new UserStore()

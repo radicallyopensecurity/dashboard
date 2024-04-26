@@ -1,9 +1,16 @@
 import { RouteConfig } from '@lit-labs/router'
 import { html } from 'lit'
 
+export enum AppRoute {
+  Home = '/',
+  NewProject = '/projects/new',
+  ProjectDetail = '/projects/:id',
+  AuthCallback = '/auth/callback',
+}
+
 export const routes: RouteConfig[] = [
   {
-    path: '/',
+    path: AppRoute.Home,
     render: () => html`<home-page></home-page>`,
     enter: async () => {
       await import('@/pages/home')
@@ -11,7 +18,7 @@ export const routes: RouteConfig[] = [
     },
   },
   {
-    path: '/projects/new',
+    path: AppRoute.NewProject,
     render: () => html`<project-new-page></project-new-page>`,
     enter: async () => {
       await import('@/pages/projects/new')
@@ -19,7 +26,7 @@ export const routes: RouteConfig[] = [
     },
   },
   {
-    path: '/projects/:id',
+    path: AppRoute.ProjectDetail,
     render: ({ id }) =>
       html`<project-detail-page .projectId=${id}></project-detail-page>`,
     enter: async () => {
@@ -28,7 +35,7 @@ export const routes: RouteConfig[] = [
     },
   },
   {
-    path: '/auth/callback',
+    path: AppRoute.AuthCallback,
     render: () => html`<auth-callback></auth-callback>`,
   },
   {

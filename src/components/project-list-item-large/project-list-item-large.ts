@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-import { Project } from '@/state/types/project'
+import { type Project } from '@/modules/projects/types/project'
 
 const ELEMENT_NAME = 'project-list-item-large'
 

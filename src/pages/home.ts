@@ -5,8 +5,8 @@ import { customElement } from 'lit/decorators.js'
 import { pageBase } from '@/theme/page-base'
 import { theme } from '@/theme/theme'
 
-import { projects } from '@/state/projects'
-import { user } from '@/state/user'
+import { projects } from '@/modules/projects/projects-store'
+import { user } from '@/modules/user/user-store'
 
 import '@/components/project-list-item-large/project-list-item-large'
 

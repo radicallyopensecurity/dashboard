@@ -1,9 +1,9 @@
+import { config } from '@/config'
+
 import { handleResponse } from '@/utils/fetch/handle-response'
 import { createLogger } from '@/utils/logging/create-logger'
 
 import { GitLabProject } from '../types/gitlab-project'
-
-import { config } from '@/config'
 
 const logger = createLogger('gitlab-projects')
 

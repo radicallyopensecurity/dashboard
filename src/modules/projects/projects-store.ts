@@ -1,17 +1,15 @@
 import { action, makeAutoObservable, observable } from 'mobx'
 
-import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
-
-import { normalizeProject } from '@/state/normalizers/normalize-project'
-import { Project } from '@/state/types/project'
 
 import { groupBy } from '@/utils/array/group-by'
 import { uniqueBy } from '@/utils/array/unique-by'
 import { createLogger } from '@/utils/logging/create-logger'
 
-const logger = createLogger('projects-state')
+import { Project } from '@/modules/projects/types/project'
 
-class ProjectsState {
+const logger = createLogger('projects-store')
+
+export class ProjectsStore {
   @observable
   public quotes: Project[] = []
   @observable
@@ -34,14 +32,10 @@ class ProjectsState {
   }
 
   @action
-  public fromAllProjects(gitlabProjects: GitLabProject[]) {
-    logger.info('normalizing gitlab projects')
-    const normalized = gitlabProjects.map(normalizeProject)
-    logger.debug('normalized result', normalized)
-
+  public set(projects: Project[]) {
     logger.info('filtering normalized projects')
-    const quotes = normalized.filter((x) => x.isQuote)
-    const pentests = normalized.filter((x) => x.isPentest)
+    const quotes = projects.filter((x) => x.isQuote)
+    const pentests = projects.filter((x) => x.isPentest)
     const all = uniqueBy((x) => x.id, quotes.concat(pentests))
     const allById = groupBy((x) => x.id, all)
 
@@ -59,4 +53,6 @@ class ProjectsState {
   }
 }
 
-export const projects = new ProjectsState()
+export const projects = new ProjectsStore()
+
+export type ProjectsStoreType = typeof projects

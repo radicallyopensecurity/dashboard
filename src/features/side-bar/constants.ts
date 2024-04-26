@@ -1,6 +1,12 @@
 import { config } from '@/config'
 
-export const SERVICES = [
+export type Service = {
+  title: string
+  icon: string
+  href: string
+}
+
+export const SERVICES: Service[] = [
   {
     title: 'Rocket.Chat',
     icon: 'rocket-takeoff',

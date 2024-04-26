@@ -1,7 +1,7 @@
 import { createLogger } from '@/utils/logging/create-logger'
 
-import { projects } from '@/api/gitlab/functions/projects'
-import { type GitLabProject } from '@/api/gitlab/types/gitlab-project'
+import { projects } from '@/modules/gitlab/functions/projects'
+import { type GitLabProject } from '@/modules/gitlab/types/gitlab-project'
 
 const logger = createLogger('all-projects')
 

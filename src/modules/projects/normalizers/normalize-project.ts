@@ -1,14 +1,13 @@
 import { config } from '@/config'
 
-import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
-
-import { Project } from '@/state/types/project'
-import { isPentest } from '@/state/utils/is-pentest'
-
 import { getChannelName } from '@/utils/rocket-chat/get-channel-name'
 import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
-import { isQuote } from '../utils/is-quote'
+import { GitLabProject } from '@/modules/gitlab/types/gitlab-project'
+import { Project } from '@/modules/projects/types/project'
+import { isPentest } from '@/modules/projects/utils/is-pentest'
+import { isQuote } from '@/modules/projects/utils/is-quote'
+
 
 export const normalizeProject = (raw: GitLabProject): Project => {
   const tags = raw.tag_list.map((x) => x.toLowerCase())
