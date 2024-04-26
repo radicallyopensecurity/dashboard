@@ -16,7 +16,6 @@ import { authService } from '@/modules/auth/auth-service'
 import { projectsService } from '@/modules/projects/projects-service'
 import { userService } from '@/modules/user/user-service'
 
-
 import '@shoelace-style/shoelace/dist/components/avatar/avatar.js'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/card/card.js'
@@ -28,11 +27,11 @@ import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js'
 import '@/pages/auth/callback'
 import '@/pages/not-found'
 
-import '@/components/top-bar/top-bar'
 import '@/components/secure-iframe/secure-iframe'
 import '@/components/version-footer/version-footer'
 
 import '@/features/side-bar/side-bar'
+import '@/features/top-bar/top-bar'
 
 import '@/theme/light.css'
 import '@/theme/dark.css'
