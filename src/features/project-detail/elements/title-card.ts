@@ -25,10 +25,10 @@ export class TitleCard extends LitElement {
       }
 
       #toolbar {
-        margin-top: var(--sl-spacing-x-large);
         display: flex;
-        gap: var(--sl-spacing-x-small);
         flex-wrap: wrap;
+        gap: var(--sl-spacing-x-small);
+        margin-top: var(--sl-spacing-x-large);
       }
 
       #avatar-container {
@@ -58,6 +58,10 @@ export class TitleCard extends LitElement {
         <div>
           <h2>${title}</h2>
           <div id="toolbar">
+            <sl-button variant="default">
+              <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
+              Reload
+            </sl-button>
             <sl-button variant="default">
               <sl-icon slot="prefix" name="gitlab"></sl-icon>
               <sl-icon slot="suffix" name="box-arrow-up-right"></sl-icon>

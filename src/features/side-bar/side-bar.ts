@@ -6,11 +6,10 @@ import { theme } from '@/theme/theme'
 
 import { AppRoute } from '@/routes'
 
-import { SERVICES } from '@/features/side-bar/constants'
-
 import { projectsService } from '@/modules/projects/projects-service'
 import { projects } from '@/modules/projects/projects-store'
 
+import { SERVICES } from '@/features/side-bar/constants'
 
 import '@/features/side-bar/elements/ros-services'
 import '@/features/side-bar/elements/ros-projects'

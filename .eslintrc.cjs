@@ -65,22 +65,22 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
-            pattern: '@/modules/auth',
+            pattern: '@/modules/auth/**',
             group: 'external',
             position: 'after',
           },
           {
-            pattern: '@/modules/gitlab',
+            pattern: '@/modules/gitlab/**',
             group: 'external',
             position: 'after',
           },
           {
-            pattern: '@/modules/projects',
+            pattern: '@/modules/projects/**',
             group: 'external',
             position: 'after',
           },
           {
-            pattern: '@/modules/user',
+            pattern: '@/modules/user/**',
             group: 'external',
             position: 'after',
           },

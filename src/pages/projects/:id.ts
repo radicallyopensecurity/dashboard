@@ -3,38 +3,57 @@ import { html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { toJS } from 'mobx'
 
+import { projectDetails } from '@/modules/projects/project-details-store'
 import { projects } from '@/modules/projects/projects-store'
 
 import '@/features/project-detail/project-detail'
+import '@/features/project-detail/project-detail.skeleton'
 
 @customElement('project-detail-page')
-export class ProjectNewPage extends MobxLitElement {
+export class ProjectDetailPage extends MobxLitElement {
   private projects = projects
+  private projectDetails = projectDetails
 
   @property({ type: String })
-  projectId = ''
+  private projectId = ''
 
   render() {
     if (!this.projectId) {
       return html`<not-found-page></not-found-page>`
     }
 
-    const { allById, isLoading } = this.projects
-    const project = toJS(allById)[Number(this.projectId)] ?? {}
+    const projectId = Number(this.projectId)
 
-    if (!project?.id && !isLoading) {
+    const project = toJS(this.projects.allById)[projectId] ?? null
+    const projectDetailsMap = toJS(this.projectDetails.byId)[projectId] ?? null
+
+    const notFound =
+      !this.projects.isLoading &&
+      !project &&
+      !projectDetailsMap?.isLoading &&
+      !projectDetailsMap?.data
+
+    if (notFound) {
       return html`<not-found-page></not-found-page>`
+    }
+
+    if (
+      this.projects.isLoading ||
+      !projectDetailsMap ||
+      projectDetailsMap.isLoading
+    ) {
+      return html`<project-detail-skeleton></project-detail-skeleton>`
     }
 
     return html`<project-detail
       .project=${project}
-      .isLoading=${isLoading}
+      .projectDetail=${projectDetailsMap.data}
     ></project-detail>`
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'project-detail-page': ProjectNewPage
+    'project-detail-page': ProjectDetailPage
   }
 }

@@ -14,3 +14,22 @@ export const groupBy = <T>(fn: GroupByFn<T>, arr: T[]): GroupByResult<T> => {
 
   return result
 }
+
+export const groupByMultiple = <T>(
+  fn: GroupByFn<T>,
+  arr: T[]
+): GroupByResult<T[]> => {
+  const result: GroupByResult<T[]> = {}
+
+  for (const val of arr) {
+    const key = fn(val)
+
+    if (!result[key]) {
+      result[key] = []
+    }
+
+    result[key].push(val)
+  }
+
+  return result
+}

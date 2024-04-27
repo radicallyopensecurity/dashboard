@@ -14,38 +14,43 @@ export class ProjectChat extends LitElement {
     ...theme,
     css`
       sl-card::part(base) {
-        min-height: 300px;
         display: flex;
-        resize: vertical;
-        overflow: auto;
         flex-direction: column;
+        min-height: 300px;
+        overflow: auto;
+        resize: vertical;
       }
 
       sl-card::part(body) {
         display: flex;
         flex: 1;
-        width: 100%;
         align-self: stretch;
+        width: 100%;
       }
 
       section {
         display: flex;
-        flex-direction: column;
         flex: 1;
+        flex-direction: column;
       }
 
       secure-iframe {
-        margin-top: var(--sl-spacing-x-small);
         width: 100%;
         height: 100%;
       }
 
       p {
-        margin: 0;
         display: flex;
         flex: 1;
+        gap: var(--sl-spacing-x-small);
         align-items: center;
         justify-content: center;
+        margin: 0;
+      }
+
+      p sl-icon {
+        position: relative;
+        bottom: 2px;
       }
     `,
   ]
@@ -56,7 +61,11 @@ export class ProjectChat extends LitElement {
     return html`<sl-card>
       <section>
         ${chatUrl && html`<secure-iframe .src=${chatUrl}></secure-iframe>`}
-        ${!chatUrl && html`<p>Could not find chat room</p>`}
+        ${!chatUrl &&
+        html`<p>
+          <sl-icon name="exclamation-triangle"></sl-icon> Could not find chat
+          room
+        </p>`}
       </section>
     </sl-card>`
   }

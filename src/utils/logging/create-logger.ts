@@ -1,6 +1,6 @@
-import { LogFn, LogLevel, Logger } from '@/utils/logging//types'
-
 import { config } from '@/config'
+
+import { LogFn, LogLevel, Logger } from '@/utils/logging//types'
 
 const noOp = () => undefined
 

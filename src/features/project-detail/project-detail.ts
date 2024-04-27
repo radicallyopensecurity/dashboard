@@ -1,11 +1,11 @@
-import { LitElement, html, css } from 'lit'
+import { MobxLitElement } from '@adobe/lit-mobx'
+import { html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
 import { type Project } from '@/modules/projects/types/project'
-
-const ELEMENT_NAME = 'project-detail'
+import { ProjectDetails } from '@/modules/projects/types/project-details'
 
 import '@/features/project-detail/elements/crew-card'
 import '@/features/project-detail/elements/findings-card'
@@ -14,12 +14,13 @@ import '@/features/project-detail/elements/project-chat'
 import '@/features/project-detail/elements/recent-changes-card'
 import '@/features/project-detail/elements/title-card'
 
+const ELEMENT_NAME = 'project-detail'
 @customElement(ELEMENT_NAME)
-export class ProjectDetail extends LitElement {
+export class ProjectDetail extends MobxLitElement {
   @property()
   private project!: Project
   @property()
-  private isLoading = true
+  private projectDetail!: ProjectDetails
 
   static styles = [
     ...theme,
@@ -56,25 +57,19 @@ export class ProjectDetail extends LitElement {
     `,
   ]
 
-  // render() {
-  //   return html`
-  //     <title-card-skeleton id="title"></title-card-skeleton>
-  //     <project-chat-skeleton id="chat"></project-chat-skeleton>
-  //   `
-  // }
-
   render() {
-    const {
-      project: { nameWithNamespace, avatar, chatUrl },
-      isLoading,
-    } = this
+    const { project, projectDetail } = this
 
-    if (isLoading) {
-      return html`
-        <title-card-skeleton id="title"></title-card-skeleton>
-        <project-chat-skeleton id="chat"></project-chat-skeleton>
-      `
-    }
+    const { nameWithNamespace, avatar, chatUrl, url } = project
+
+    const recentChanges = projectDetail.allFindings
+      .slice()
+      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+      .slice(0, 5)
+
+    const { staff, customers, history } = projectDetail
+
+    const now = new Date()
 
     return html`
       <title-card
@@ -84,10 +79,18 @@ export class ProjectDetail extends LitElement {
       >
       </title-card>
       <project-chat id="chat" .chatUrl=${chatUrl}></project-chat>
-      <recent-changes-card id="changes"></recent-changes-card>
-      <crew-card id="crew"></crew-card>
+      <recent-changes-card
+        id="changes"
+        .findings=${recentChanges}
+        .now=${now}
+      ></recent-changes-card>
+      <crew-card id="crew" .staff=${staff} .customers=${customers}></crew-card>
       <findings-card id="findings"></findings-card>
-      <history-card id="history"></history-card>
+      <history-card
+        id="history"
+        .history=${history}
+        .baseUrl=${url}
+      ></history-card>
     `
   }
 }

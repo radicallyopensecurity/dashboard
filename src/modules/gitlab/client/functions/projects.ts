@@ -1,11 +1,8 @@
 import { config } from '@/config'
 
+import { GitLabProject } from '@/modules/gitlab/types/gitlab-project'
+
 import { handleResponse } from '@/utils/fetch/handle-response'
-import { createLogger } from '@/utils/logging/create-logger'
-
-import { GitLabProject } from '../types/gitlab-project'
-
-const logger = createLogger('gitlab-projects')
 
 type GetGitLabProjectsParams = {
   perPage?: number
@@ -19,8 +16,6 @@ export const projects = async (
 
   url.searchParams.set('per_page', params.perPage?.toString() ?? '')
   url.searchParams.set('page', params.page?.toString() ?? '')
-
-  logger.info(`${url.toString()} fetching...`)
 
   const response = await fetch(url)
   return handleResponse(response)

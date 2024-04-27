@@ -1,6 +1,8 @@
 import { RouteConfig } from '@lit-labs/router'
 import { html } from 'lit'
 
+import { projectsService } from './modules/projects/projects-service'
+
 export enum AppRoute {
   Home = '/',
   NewProject = '/projects/new',
@@ -29,8 +31,12 @@ export const routes: RouteConfig[] = [
     path: AppRoute.ProjectDetail,
     render: ({ id }) =>
       html`<project-detail-page .projectId=${id}></project-detail-page>`,
-    enter: async () => {
+    enter: async ({ id }) => {
       await import('@/pages/projects/:id')
+      const projectId = Number(id)
+      if (!Number.isNaN(id)) {
+        void projectsService.syncProjectDetails(projectId)
+      }
       return true
     },
   },

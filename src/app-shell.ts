@@ -9,18 +9,20 @@ import { registerTheme } from '@/theme/utils/register-theme'
 
 import { routes } from '@/routes'
 
+import { authService } from '@/modules/auth/auth-service'
+
+import { projectsService } from '@/modules/projects/projects-service'
+
+import { userService } from '@/modules/user/user-service'
+
 import { createLogger } from '@/utils/logging/create-logger'
 import { versionValues } from '@/utils/version/version-values'
-
-import { authService } from '@/modules/auth/auth-service'
-import { projectsService } from '@/modules/projects/projects-service'
-import { userService } from '@/modules/user/user-service'
 
 import '@shoelace-style/shoelace/dist/components/avatar/avatar.js'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/card/card.js'
+import '@shoelace-style/shoelace/dist/components/details/details.js'
 import '@shoelace-style/shoelace/dist/components/icon/icon.js'
-import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js'
 import '@shoelace-style/shoelace/dist/components/input/input.js'
 import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js'
 
@@ -31,6 +33,7 @@ import '@/features/side-bar/side-bar'
 import '@/features/top-bar/top-bar'
 
 import '@/pages/not-found'
+import '@/pages/projects/:id'
 
 import '@/theme/light.css'
 import '@/theme/dark.css'

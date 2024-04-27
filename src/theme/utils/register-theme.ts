@@ -4,6 +4,7 @@ const logger = createLogger('register-theme')
 
 const DARK_THEME_CLASS = 'sl-theme-dark'
 const LIGHT_THEME_CLASS = 'sl-theme-light'
+const LOCAL_STORAGE_KEY = 'theme'
 
 enum Theme {
   Light = 'light',
@@ -21,8 +22,6 @@ const setTheme = (theme: Theme.Light | Theme.Dark): void => {
   htmlElement?.classList.add(toAdd)
 }
 
-const LOCAL_STORAGE_KEY = 'theme'
-
 const parseTheme = (value: string): Theme => {
   switch (value.toLowerCase()) {
     case Theme.Light.toString():
@@ -35,8 +34,6 @@ const parseTheme = (value: string): Theme => {
 }
 
 const fromLocalStorage = (): Theme => {
-  logger.info('parsing theme from localStorage')
-
   const value = localStorage.getItem(LOCAL_STORAGE_KEY)
   if (!value) {
     logger.info('theme not saved in localStorage, setting to "system"')
@@ -46,7 +43,7 @@ const fromLocalStorage = (): Theme => {
 
   const parsed = parseTheme(value)
 
-  logger.info(`parsed theme: "${parsed}"`)
+  logger.info(`theme set in localStorage: "${parsed}"`)
   return parsed
 }
 
@@ -57,7 +54,7 @@ const supportsMatchMedia = () => {
 const fromBrowser = (): Theme.Dark | Theme.Light => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   const theme = prefersDark ? Theme.Dark : Theme.Light
-  logger.info(`user prefers ${theme} theme`)
+  logger.info(`system preference: "${theme}"`)
   return theme
 }
 
@@ -74,15 +71,9 @@ const watchForPreferenceChanges = () => {
 }
 
 export const registerTheme = (): void => {
-  logger.info('check localStorage for theme preference')
   const valueFromLocalStorage = fromLocalStorage()
 
-  logger.info(`localStorage theme: "${valueFromLocalStorage}"`)
-
-  if (
-    valueFromLocalStorage === Theme.Light ||
-    valueFromLocalStorage === Theme.Dark
-  ) {
+  if (valueFromLocalStorage !== Theme.System) {
     setTheme(valueFromLocalStorage)
     return
   }
@@ -93,7 +84,6 @@ export const registerTheme = (): void => {
     return
   }
 
-  logger.info('check system for color preferences')
   const valueFromBrowser = fromBrowser()
   setTheme(valueFromBrowser)
 
