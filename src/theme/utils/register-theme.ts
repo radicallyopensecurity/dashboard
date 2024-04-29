@@ -6,13 +6,20 @@ const DARK_THEME_CLASS = 'sl-theme-dark'
 const LIGHT_THEME_CLASS = 'sl-theme-light'
 const LOCAL_STORAGE_KEY = 'theme'
 
-enum Theme {
+export enum Theme {
   Light = 'light',
   Dark = 'dark',
   System = 'system',
 }
 
-const setTheme = (theme: Theme.Light | Theme.Dark): void => {
+export const getTheme = (): Theme.Light | Theme.Dark => {
+  const htmlElement = document.querySelector('html')
+  return htmlElement?.classList.contains(LIGHT_THEME_CLASS)
+    ? Theme.Light
+    : Theme.Dark
+}
+
+export const setTheme = (theme: Theme.Light | Theme.Dark): void => {
   logger.info(`setting theme to ${theme}`)
   const toRemove = theme === Theme.Dark ? LIGHT_THEME_CLASS : DARK_THEME_CLASS
   const toAdd = theme === Theme.Dark ? DARK_THEME_CLASS : LIGHT_THEME_CLASS
@@ -33,7 +40,11 @@ const parseTheme = (value: string): Theme => {
   }
 }
 
-const fromLocalStorage = (): Theme => {
+export const setLocalStorage = (value: Theme): void => {
+  localStorage.setItem(LOCAL_STORAGE_KEY, value)
+}
+
+export const fromLocalStorage = (): Theme => {
   const value = localStorage.getItem(LOCAL_STORAGE_KEY)
   if (!value) {
     logger.info('theme not saved in localStorage, setting to "system"')
@@ -70,7 +81,7 @@ const watchForPreferenceChanges = () => {
     })
 }
 
-export const registerTheme = (): void => {
+export const registerTheme = (mode: 'watch' | 'once' = 'watch'): void => {
   const valueFromLocalStorage = fromLocalStorage()
 
   if (valueFromLocalStorage !== Theme.System) {
@@ -87,5 +98,7 @@ export const registerTheme = (): void => {
   const valueFromBrowser = fromBrowser()
   setTheme(valueFromBrowser)
 
-  watchForPreferenceChanges()
+  if (mode === 'watch') {
+    watchForPreferenceChanges()
+  }
 }
