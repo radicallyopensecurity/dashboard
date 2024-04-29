@@ -1,11 +1,11 @@
 import type {
   ProjectDetailsEvent,
-  StateEvent,
+  ProjectDetailsStateEvent,
 } from '@/modules/projects/types/project-details'
 
 export const isStateEvent = (
   event: ProjectDetailsEvent
-): event is ProjectDetailsEvent & StateEvent => {
+): event is ProjectDetailsEvent & ProjectDetailsStateEvent => {
   return (
     event.action === 'opened' ||
     event.action === 'closed' ||

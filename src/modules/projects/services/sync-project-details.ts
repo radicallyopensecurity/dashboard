@@ -11,8 +11,8 @@ const logger = createLogger('sync-project-details')
 
 export const syncProjectDetails =
   (service: GitLabService, store: ProjectDetailsStore) =>
-  async (id: number, mode: 'default' | 'force' = 'default') => {
-    if (mode === 'default' && toJS(store.byId)[id]?.data) {
+  async (id: number, mode: 'cache' | 'network' = 'cache') => {
+    if (mode === 'cache' && toJS(store.data)[id]?.data) {
       return
     }
 

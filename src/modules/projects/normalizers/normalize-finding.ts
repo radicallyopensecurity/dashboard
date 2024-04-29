@@ -1,14 +1,17 @@
-import { GitLabIssue } from '@/modules/gitlab/types/gitlab-issue'
+import type { GitLabIssue } from '@/modules/gitlab/types/gitlab-issue'
 
-import { ProjectDetailsFinding } from '@/modules/projects/types/project-details'
+import type { ProjectDetailsFinding } from '@/modules/projects/types/project-details'
+
+import { normalizeFindingLabel } from '@/modules/projects/normalizers/normalize-finding-label'
 
 export const normalizeFinding = (raw: GitLabIssue): ProjectDetailsFinding => {
   return {
     id: raw.id,
     iid: raw.iid,
     title: raw.title,
-    labels: raw.labels,
+    label: normalizeFindingLabel(raw.labels),
     updatedAt: new Date(raw.updated_at),
-    severity: 1,
+    url: raw.web_url,
+    description: raw.description,
   }
 }

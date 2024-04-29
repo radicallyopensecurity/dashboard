@@ -1,9 +1,10 @@
 import { OidcClient } from '@axa-fr/oidc-client'
 
-import { createLogger } from '@/utils/logging/create-logger'
 
 import { AuthStore } from '@/modules/auth/auth-store'
 import { authClient } from '@/modules/auth/client/auth-client'
+
+import { createLogger } from '@/utils/logging/create-logger'
 
 
 const logger = createLogger('login-callback')

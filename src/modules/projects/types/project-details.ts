@@ -1,4 +1,4 @@
-export enum FindingSeverity {
+export enum ProjectDetailsFindingLabel {
   ToDo = 'ToDo',
   Extreme = 'Extreme',
   High = 'High',
@@ -14,41 +14,53 @@ export type ProjectDetailsMember = {
   url: string
 }
 
-export type ProjectDetailsFinding = {
+export type ProjectDetailsFindingBase = {
   id: number
   iid: number
   title: string
-  labels: string[]
   updatedAt: Date
-  severity: number
+  url: string
+  description: string
 }
 
-export type PushEvent = {
-  action: 'pushed_to'
+export type ProjectDetailsFindingFinding = ProjectDetailsFindingBase & {
+  label: ProjectDetailsFindingLabel
+}
+
+export type ProjectDetailsFindingNonFinding = ProjectDetailsFindingBase & {
+  label: null
+}
+
+export type ProjectDetailsFinding =
+  | ProjectDetailsFindingFinding
+  | ProjectDetailsFindingNonFinding
+
+export type ProjectDetailsPushEvent = {
+  action: 'pushed to'
   commitFrom: string
   commitTo: string
   commitCount: number
   commitTitle: string
 }
 
-export type StateEvent = {
+export type ProjectDetailsStateEvent = {
   action: 'opened' | 'closed' | 'updated'
   targetTitle: string
   targetIid: string
 }
 
-export type CommentEvent = {
+export type ProjectDetailsCommentEvent = {
   action: 'commented on'
   noteId: string
   targetTitle: string
   targetIid: string
 }
 
-export type CreatedEvent = {
+export type ProjectDetailsCreatedEvent = {
   action: 'created'
 }
 
-type UnknownEvent = {
+type ProjectDetailsUnknownEvent = {
   action: string
 }
 
@@ -60,7 +72,13 @@ export type ProjectDetailsEvent = {
   avatar: string
   action: string
   path: string
-} & (PushEvent | StateEvent | CommentEvent | CreatedEvent | UnknownEvent)
+} & (
+  | ProjectDetailsPushEvent
+  | ProjectDetailsStateEvent
+  | ProjectDetailsCommentEvent
+  | ProjectDetailsCreatedEvent
+  | ProjectDetailsUnknownEvent
+)
 
 export type ProjectDetailsHistory = {
   date: string
@@ -68,12 +86,17 @@ export type ProjectDetailsHistory = {
   events: ProjectDetailsEvent[]
 }
 
+export type ProjectDetailsGroupedFindings = {
+  group: ProjectDetailsFindingLabel
+  findings: ProjectDetailsFindingFinding[]
+}
+
 export type ProjectDetails = {
   id: number
   staff: ProjectDetailsMember[]
   customers: ProjectDetailsMember[]
   allFindings: ProjectDetailsFinding[]
-  findings: ProjectDetailsFinding[]
-  nonFindings: ProjectDetailsFinding[]
+  findings: ProjectDetailsGroupedFindings[]
+  nonFindings: ProjectDetailsFindingNonFinding[]
   history: ProjectDetailsHistory[]
 }

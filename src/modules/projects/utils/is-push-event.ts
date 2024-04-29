@@ -1,10 +1,10 @@
 import type {
   ProjectDetailsEvent,
-  PushEvent,
+  ProjectDetailsPushEvent,
 } from '@/modules/projects/types/project-details'
 
 export const isPushEvent = (
   event: ProjectDetailsEvent
-): event is ProjectDetailsEvent & PushEvent => {
-  return event.action === 'pushed_to'
+): event is ProjectDetailsEvent & ProjectDetailsPushEvent => {
+  return event.action === 'pushed to'
 }

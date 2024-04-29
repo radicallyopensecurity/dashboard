@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js'
 import { toJS } from 'mobx'
 
 import { projectDetails } from '@/modules/projects/project-details-store'
+import { projectsService } from '@/modules/projects/projects-service'
 import { projects } from '@/modules/projects/projects-store'
 
 import '@/features/project-detail/project-detail'
@@ -25,7 +26,7 @@ export class ProjectDetailPage extends MobxLitElement {
     const projectId = Number(this.projectId)
 
     const project = toJS(this.projects.allById)[projectId] ?? null
-    const projectDetailsMap = toJS(this.projectDetails.byId)[projectId] ?? null
+    const projectDetailsMap = toJS(this.projectDetails.data)[projectId] ?? null
 
     const notFound =
       !this.projects.isLoading &&
@@ -48,6 +49,8 @@ export class ProjectDetailPage extends MobxLitElement {
     return html`<project-detail
       .project=${project}
       .projectDetail=${projectDetailsMap.data}
+      .onClickReload=${() =>
+        projectsService.syncProjectDetails(projectId, 'network')}
     ></project-detail>`
   }
 }

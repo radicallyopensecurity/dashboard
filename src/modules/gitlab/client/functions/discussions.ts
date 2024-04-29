@@ -1,19 +1,23 @@
 import { config } from '@/config'
 
-import { GitLabEvent } from '@/modules/gitlab/types/gitlab-event'
+import { type GitLabDiscussion } from '@/modules/gitlab/types/gitlab-discussion'
 
 import { type FetchPaginatedParameters } from '@/modules/gitlab/utils/fetch-paginated'
 
 import { handleResponse } from '@/utils/fetch/handle-response'
 
-export const events = async ({
+export const discussions = async ({
   perPage,
   page,
-  id,
-}: FetchPaginatedParameters & { id: number }): Promise<GitLabEvent[]> => {
-  const url = new URL(`${config.app.gitlabBaseUrl}/projects/${id}/events`)
+  projectId,
+  issueId,
+}: FetchPaginatedParameters & { projectId: number; issueId: number }): Promise<
+  GitLabDiscussion[]
+> => {
+  const url = new URL(
+    `${config.app.gitlabBaseUrl}/projects/${projectId}/issues/${issueId}/discussions`
+  )
 
-  url.searchParams.set('target', 'issue')
   url.searchParams.set('per_page', perPage?.toString() ?? '')
   url.searchParams.set('page', page?.toString() ?? '')
 

@@ -1,30 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { format } from 'date-fns'
 
-import { type GitLabEvent } from '@/modules/gitlab/types/gitlab-event'
-import { type GitLabIssue } from '@/modules/gitlab/types/gitlab-issue'
-import { type GitLabLabel } from '@/modules/gitlab/types/gitlab-label'
-import { type GitLabMember } from '@/modules/gitlab/types/gitlab-member'
-import { type GitLabVariable } from '@/modules/gitlab/types/gitlab-variable'
+import type { GitLabEvent } from '@/modules/gitlab/types/gitlab-event'
+import type { GitLabIssue } from '@/modules/gitlab/types/gitlab-issue'
+import type { GitLabLabel } from '@/modules/gitlab/types/gitlab-label'
+import type { GitLabMember } from '@/modules/gitlab/types/gitlab-member'
+import type { GitLabVariable } from '@/modules/gitlab/types/gitlab-variable'
+
+import type { ProjectDetails } from '@/modules/projects/types/project-details'
 
 import { normalizeFinding } from '@/modules/projects/normalizers/normalize-finding'
+import { normalizeGroupedFindings } from '@/modules/projects/normalizers/normalize-grouped-findings'
+import { normalizeHistory } from '@/modules/projects/normalizers/normalize-history'
 import { normalizeMember } from '@/modules/projects/normalizers/normalize-member'
-import { type ProjectDetails } from '@/modules/projects/types/project-details'
+import { isNonFinding } from '@/modules/projects/utils/is-non-finding'
 
-import { groupByMultiple } from '@/utils/array/group-by'
-
-import { normalizeEvent } from './normalize-event'
-
-const FINDING_LABEL = 'finding'
-const NON_FINDING_LABEL = 'non-finding'
+import { FINDING_LABEL, NON_FINDING_LABEL } from '../constants/labels'
+import { isFinding } from '../utils/is-finding'
 
 const isEitherFinding = ({ labels }: { labels: string[] }) =>
   labels.some((label) => label === FINDING_LABEL || label === NON_FINDING_LABEL)
 
-const isFinding = ({ labels }: { labels: string[] }) =>
+const isFindingRaw = ({ labels }: { labels: string[] }) =>
   labels.some((label) => label === FINDING_LABEL)
 
-const isNonFinding = ({ labels }: { labels: string[] }) =>
+const isNonFindingRaw = ({ labels }: { labels: string[] }) =>
   labels.some((label) => label === NON_FINDING_LABEL)
 
 const isHuman = (member: GitLabMember) => member.name !== 'CI'
@@ -39,28 +38,27 @@ export const normalizeProjectDetails = (
   members: GitLabMember[],
   _variables: GitLabVariable[]
 ): ProjectDetails => {
-  const allFindings = issues.filter(isEitherFinding).map(normalizeFinding)
-  const crew = members.filter(isHuman)
+  const allFindingsRaw = issues.filter(isEitherFinding)
 
-  const history = Object.entries(
-    groupByMultiple((x) => format(new Date(x.created_at), 'yyyy-MM-dd'), events)
-  )
-    .map(([date, events]) => ({
-      date,
-      dateDisplay: format(new Date(date), 'eeee, dd-MM-yyyy'),
-      events: events
-        .map(normalizeEvent)
-        .sort((a, b) => b.date.getTime() - a.date.getTime()),
-    }))
-    .sort((a, b) => b.date.localeCompare(a.date))
+  const findingsFindings = allFindingsRaw
+    .filter(isFindingRaw)
+    .map(normalizeFinding)
+
+  const findingsNonFindings = allFindingsRaw
+    .filter(isNonFindingRaw)
+    .map(normalizeFinding)
+
+  const allFindings = findingsFindings.concat(findingsNonFindings)
+
+  const crew = members.filter(isHuman)
 
   return {
     id,
+    findings: normalizeGroupedFindings(findingsFindings.filter(isFinding)),
+    history: normalizeHistory(events),
     staff: crew.filter(isStaff).map(normalizeMember),
     customers: crew.filter(isCustomer).map(normalizeMember),
     allFindings,
-    findings: allFindings.filter(isFinding),
-    nonFindings: allFindings.filter(isNonFinding),
-    history,
+    nonFindings: findingsNonFindings.filter(isNonFinding),
   }
 }

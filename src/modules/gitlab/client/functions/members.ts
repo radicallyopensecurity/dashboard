@@ -1,6 +1,7 @@
 import { config } from '@/config'
 
 import { GitLabMember } from '@/modules/gitlab/types/gitlab-member'
+
 import { type FetchPaginatedParameters } from '@/modules/gitlab/utils/fetch-paginated'
 
 import { handleResponse } from '@/utils/fetch/handle-response'

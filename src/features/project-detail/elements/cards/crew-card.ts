@@ -18,7 +18,7 @@ export class CrewCard extends LitElement {
     ...theme,
     css`
       :host {
-        --avatar-size: 20px;
+        --avatar-size: 24px;
       }
 
       sl-card::part(body) {
@@ -27,20 +27,32 @@ export class CrewCard extends LitElement {
         gap: var(--sl-spacing-x-large);
       }
 
+      p {
+        margin: 0;
+      }
+
+      sl-card h2 {
+        margin-bottom: var(--sl-spacing-medium);
+      }
+
       .list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sl-spacing-medium);
         margin-top: var(--sl-spacing-medium);
       }
 
       .item {
         display: flex;
-        gap: var(--sl-spacing-small);
+        gap: var(--sl-spacing-x-small);
         align-items: center;
       }
 
-      .avatar {
+      .avatar,
+      .avatar::part(base) {
         width: var(--avatar-size);
         height: var(--avatar-size);
-        color: var(--sl-color-primary-500);
+        color: var(--sl-color-neutral-500);
       }
     `,
   ]
@@ -54,7 +66,7 @@ export class CrewCard extends LitElement {
         list: staff,
       },
       {
-        title: 'Customers',
+        title: 'Stakeholders',
         list: customers,
       },
     ]
@@ -64,9 +76,8 @@ export class CrewCard extends LitElement {
       name="person-circle"
     ></sl-icon>`
 
-    return html`
-      <sl-card>
-        ${lists
+    const content = lists.some((x) => x.list.length > 0)
+      ? html` ${lists
           .filter((x) => x.list.length)
           .map(
             ({ title, list }) =>
@@ -78,11 +89,11 @@ export class CrewCard extends LitElement {
                       <a class="item" href="${url}" target="__blank">
                         ${avatar
                           ? html`
-                                <sl-avatar
-                                  class="avatar"
-                                  image="${avatar}"
-                                ></sl-avatar
-                              ></a>`
+                            <sl-avatar
+                              class="avatar"
+                              image="${avatar}"
+                            ></sl-avatar
+                          ></a>`
                           : defaultAvatar}
                         <span>${name}</span>
                       </a>
@@ -90,9 +101,13 @@ export class CrewCard extends LitElement {
                   )}
                 </div>
               </section>`
-          )}
-      </sl-card>
-    `
+          )}`
+      : html`<section>
+          <h2>Staff</h2>
+          <p>This project doesn't have members yet.</p>
+        </section>`
+
+    return html` <sl-card> ${content} </sl-card> `
   }
 }
 

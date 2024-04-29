@@ -6,6 +6,7 @@ import { pageFlex } from '@/theme/shared/page'
 import { theme } from '@/theme/theme'
 
 import { projects } from '@/modules/projects/projects-store'
+
 import { user } from '@/modules/user/user-store'
 
 import '@/elements/project-list-item-large/project-list-item-large'

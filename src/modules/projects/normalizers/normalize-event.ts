@@ -15,10 +15,10 @@ export const normalizeEvent = (raw: GitLabEvent): ProjectDetailsEvent => {
     path: '/',
   }
 
-  if (raw.action_name === 'pushed_to') {
+  if (raw.action_name === 'pushed to') {
     return {
       ...base,
-      action: 'pushed_to',
+      action: 'pushed to',
       commitFrom: raw.push_data.commit_from,
       commitTo: raw.push_data.commit_to,
       commitCount: raw.push_data.commit_count,

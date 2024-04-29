@@ -4,12 +4,12 @@ import { customElement } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-import '@/features/project-detail/elements/crew-card.skeleton'
-import '@/features/project-detail/elements/findings-card.skeleton'
-import '@/features/project-detail/elements/history-card.skeleton'
-import '@/features/project-detail/elements/project-chat.skeleton'
-import '@/features/project-detail/elements/recent-changes-card.skeleton'
-import '@/features/project-detail/elements/title-card.skeleton'
+import '@/features/project-detail/elements/cards/crew-card.skeleton'
+import '@/features/project-detail/elements/cards/findings-card.skeleton'
+import '@/features/project-detail/elements/cards/history-card.skeleton'
+import '@/features/project-detail/elements/cards/project-chat.skeleton'
+import '@/features/project-detail/elements/cards/recent-changes-card.skeleton'
+import '@/features/project-detail/elements/cards/title-card.skeleton'
 
 const ELEMENT_NAME = 'project-detail-skeleton'
 

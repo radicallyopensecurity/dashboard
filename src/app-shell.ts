@@ -15,10 +15,10 @@ import { projectsService } from '@/modules/projects/projects-service'
 
 import { userService } from '@/modules/user/user-service'
 
-import { createLogger } from '@/utils/logging/create-logger'
 import { versionValues } from '@/utils/version/version-values'
 
 import '@shoelace-style/shoelace/dist/components/avatar/avatar.js'
+import '@shoelace-style/shoelace/dist/components/badge/badge.js'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
 import '@shoelace-style/shoelace/dist/components/card/card.js'
 import '@shoelace-style/shoelace/dist/components/details/details.js'
@@ -33,7 +33,6 @@ import '@/features/side-bar/side-bar'
 import '@/features/top-bar/top-bar'
 
 import '@/pages/not-found'
-import '@/pages/projects/:id'
 
 import '@/theme/light.css'
 import '@/theme/dark.css'
@@ -45,8 +44,6 @@ setBasePath('/')
 
 const ELEMENT_NAME = 'app-shell'
 
-const logger = createLogger(ELEMENT_NAME)
-
 @customElement(ELEMENT_NAME)
 export class AppShell extends MobxLitElement {
   private router = new Router(this, routes)
@@ -54,8 +51,6 @@ export class AppShell extends MobxLitElement {
   protected async firstUpdated() {
     registerTheme()
     await authService.ensureAuth(window.location.pathname)
-
-    logger.info('getting base app data')
     await Promise.all([userService.syncUser(), projectsService.syncProjects()])
   }
 

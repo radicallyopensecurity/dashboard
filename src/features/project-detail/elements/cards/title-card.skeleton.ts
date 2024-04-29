@@ -10,9 +10,6 @@ export class TitleCardSkeleton extends LitElement {
   static styles = [
     ...theme,
     css`
-      :host {
-      }
-
       header {
         display: flex;
         justify-content: space-between;
@@ -29,16 +26,16 @@ export class TitleCardSkeleton extends LitElement {
       }
 
       #avatar {
-        height: 128px;
-        min-width: 128px;
         width: 128px;
+        min-width: 128px;
+        height: 128px;
         border-radius: var(--sl-border-radius-medium);
       }
 
       #toolbar {
-        margin-top: var(--sl-spacing-3x-large);
-        height: 41px;
         width: 400px;
+        height: 41px;
+        margin-top: var(--sl-spacing-3x-large);
       }
 
       #toolbar sl-skeleton {

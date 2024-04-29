@@ -2,6 +2,10 @@ import { gitlabClient } from '@/modules/gitlab/client/gitlab-client'
 import { fetchPaginated } from '@/modules/gitlab/utils/fetch-paginated'
 
 export const gitlabService = {
+  discussions: (projectId: number, issueId: number) =>
+    fetchPaginated(({ perPage, page }) =>
+      gitlabClient.discussions({ perPage, page, projectId, issueId })
+    ),
   events: (id: number) =>
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.events({ perPage, page, id })

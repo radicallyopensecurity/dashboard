@@ -8,9 +8,13 @@ const ELEMENT_NAME = 'title-card'
 @customElement(ELEMENT_NAME)
 export class TitleCard extends LitElement {
   @property()
-  private projectTitle = ''
+  private projectTitle!: string
   @property()
-  private avatar = ''
+  private avatar!: string
+  @property()
+  private url!: string
+  @property()
+  private onClickReload!: () => void
 
   static styles = [
     ...theme,
@@ -47,7 +51,7 @@ export class TitleCard extends LitElement {
   ]
 
   render() {
-    const { projectTitle: title, avatar } = this
+    const { projectTitle: title, avatar, url, onClickReload } = this
 
     const avatarElement = avatar
       ? html`<img id="avatar" src="${avatar}" />`
@@ -58,11 +62,11 @@ export class TitleCard extends LitElement {
         <div>
           <h2>${title}</h2>
           <div id="toolbar">
-            <sl-button variant="default">
+            <sl-button variant="default" @click=${onClickReload}>
               <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
               Reload
             </sl-button>
-            <sl-button variant="default">
+            <sl-button variant="default" href=${url} target="_blank">
               <sl-icon slot="prefix" name="gitlab"></sl-icon>
               <sl-icon slot="suffix" name="box-arrow-up-right"></sl-icon>
               GitLab

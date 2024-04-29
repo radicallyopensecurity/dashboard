@@ -3,6 +3,7 @@ import { config } from '@/config'
 import { GitLabProject } from '@/modules/gitlab/types/gitlab-project'
 
 import { Project } from '@/modules/projects/types/project'
+
 import { isPentest } from '@/modules/projects/utils/is-pentest'
 import { isQuote } from '@/modules/projects/utils/is-quote'
 

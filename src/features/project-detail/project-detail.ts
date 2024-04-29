@@ -7,20 +7,23 @@ import { theme } from '@/theme/theme'
 import { type Project } from '@/modules/projects/types/project'
 import { ProjectDetails } from '@/modules/projects/types/project-details'
 
-import '@/features/project-detail/elements/crew-card'
-import '@/features/project-detail/elements/findings-card'
-import '@/features/project-detail/elements/history-card'
-import '@/features/project-detail/elements/project-chat'
-import '@/features/project-detail/elements/recent-changes-card'
-import '@/features/project-detail/elements/title-card'
+import '@/features/project-detail/elements/cards/crew-card'
+import '@/features/project-detail/elements/cards/findings-card'
+import '@/features/project-detail/elements/cards/history-card'
+import '@/features/project-detail/elements/cards/project-chat'
+import '@/features/project-detail/elements/cards/recent-changes-card'
+import '@/features/project-detail/elements/cards/title-card'
 
 const ELEMENT_NAME = 'project-detail'
+
 @customElement(ELEMENT_NAME)
 export class ProjectDetail extends MobxLitElement {
   @property()
   private project!: Project
   @property()
   private projectDetail!: ProjectDetails
+  @property()
+  private onClickReload!: () => void
 
   static styles = [
     ...theme,
@@ -32,6 +35,7 @@ export class ProjectDetail extends MobxLitElement {
           'chat chat chat'
           'changes changes crew'
           'findings findings history';
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
         gap: var(--sl-spacing-large);
       }
 
@@ -58,16 +62,17 @@ export class ProjectDetail extends MobxLitElement {
   ]
 
   render() {
-    const { project, projectDetail } = this
+    const { project, projectDetail, onClickReload } = this
 
     const { nameWithNamespace, avatar, chatUrl, url } = project
+    const { staff, customers, history, findings, nonFindings, allFindings } =
+      projectDetail
 
-    const recentChanges = projectDetail.allFindings
+    // #TODO: Fix grid
+    const recentChanges = allFindings
       .slice()
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
-      .slice(0, 5)
-
-    const { staff, customers, history } = projectDetail
+      .slice(0, 7)
 
     const now = new Date()
 
@@ -76,6 +81,8 @@ export class ProjectDetail extends MobxLitElement {
         id="title"
         .projectTitle=${nameWithNamespace}
         .avatar=${avatar}
+        .url=${url}
+        .onClickReload=${onClickReload}
       >
       </title-card>
       <project-chat id="chat" .chatUrl=${chatUrl}></project-chat>
@@ -85,7 +92,13 @@ export class ProjectDetail extends MobxLitElement {
         .now=${now}
       ></recent-changes-card>
       <crew-card id="crew" .staff=${staff} .customers=${customers}></crew-card>
-      <findings-card id="findings"></findings-card>
+      <findings-card
+        id="findings"
+        .count=${allFindings.length}
+        .findings=${findings}
+        .nonFindings=${nonFindings}
+        .projectId=${project.id}
+      ></findings-card>
       <history-card
         id="history"
         .history=${history}

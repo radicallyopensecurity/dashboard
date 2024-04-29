@@ -29,6 +29,8 @@ export class VersionFooter extends LitElement {
         text-decoration: none;
       }
 
+      a,
+      a:link,
       a:visited,
       a:active {
         color: var(--sl-color-neutral-600);

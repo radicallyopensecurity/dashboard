@@ -15,7 +15,8 @@ export const textStyles = css`
   h5,
   h6 {
     margin-top: 0;
-    font-weight: var(--sl-font-weight-bold);
+    font-weight: var(--sl-font-weight-normal);
+    color: var(--sl-color-primary-600);
   }
 
   h1 {

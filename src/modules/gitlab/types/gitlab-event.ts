@@ -1,5 +1,5 @@
 type GitLabPushEvent = {
-  action_name: 'pushed_to'
+  action_name: 'pushed to'
   push_data: {
     commit_count: number
     action: string

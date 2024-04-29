@@ -141,13 +141,31 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [ ] Features
   - [~] Sidebar
   - [x] Homepage
-  - [ ] Project detail
+  - [~] Project detail
   - [ ] Project new
   - [~] Top bar
 - [ ] Meta tags
 - [ ] CI/CD
 - [ ] Staging
 - [ ] Responsive
+- [ ] Eslint rules
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unresolved.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-self-import.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-packages.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/namespace.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-import-module-exports.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unused-modules.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-mutable-exports.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-extraneous-dependencies.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-empty-named-blocks.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/export.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/consistent-type-specifier-style.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/first.md
+  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-default-export.md
+  - [ ] https://github.com/dword-design/eslint-plugin-import-alias
+  - [ ]
 - [ ] Documentation
   - [ ] SSL
   - [ ] Security

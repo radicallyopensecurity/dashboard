@@ -10,7 +10,7 @@ export type ProjectDetailsMap = {
 
 export class ProjectDetailsStore {
   @observable
-  public byId: Record<number, ProjectDetailsMap> = {}
+  public data: Record<number, ProjectDetailsMap> = {}
 
   constructor() {
     makeAutoObservable(this)
@@ -18,9 +18,9 @@ export class ProjectDetailsStore {
 
   @action
   public setIsLoading(id: number, value: boolean) {
-    if (!this.byId[id]) {
-      this.byId = {
-        ...this.byId,
+    if (!this.data[id]) {
+      this.data = {
+        ...this.data,
         [id]: {
           isLoading: value,
           error: null,
@@ -30,10 +30,10 @@ export class ProjectDetailsStore {
       return
     }
 
-    this.byId = {
-      ...this.byId,
+    this.data = {
+      ...this.data,
       [id]: {
-        ...this.byId[id],
+        ...this.data[id],
         isLoading: value,
         error: null,
       },
@@ -42,10 +42,10 @@ export class ProjectDetailsStore {
 
   @action
   public set(project: ProjectDetails) {
-    this.byId = {
-      ...this.byId,
+    this.data = {
+      ...this.data,
       [project.id]: {
-        ...this.byId[project.id],
+        ...this.data[project.id],
         data: project,
       },
     }
