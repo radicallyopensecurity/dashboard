@@ -46,19 +46,28 @@ export class ProjectDetail extends MobxLitElement {
       }
 
       #chat {
+        z-index: 10;
         grid-area: chat;
       }
 
       #changes {
+        z-index: 10;
         grid-area: changes;
       }
 
       #findings {
+        z-index: 10;
         grid-area: findings;
       }
 
       #history {
+        z-index: 10;
         grid-area: history;
+      }
+
+      #crew {
+        z-index: 10;
+        grid-area: crew;
       }
     `,
   ]
@@ -83,6 +92,7 @@ export class ProjectDetail extends MobxLitElement {
       <title-card
         id="title"
         .project=${project}
+        .projectDetail=${projectDetail}
         .isLoading=${isLoading}
         .onClickReload=${onClickReload}
       >

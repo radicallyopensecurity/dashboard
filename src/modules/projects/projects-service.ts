@@ -7,6 +7,7 @@ import { projects } from '@/modules/projects/projects-store'
 import { syncProjects } from '@/modules/projects/services/sync-projects'
 
 import { projectFindingsStore } from './project-findings-store'
+import { createVariable } from './services/create-variable'
 import { syncProjectDetails } from './services/sync-project-details'
 import { syncProjectFinding } from './services/sync-project-finding'
 import { updateProject } from './services/update-project'
@@ -20,4 +21,5 @@ export const projectsService = {
     config.services.gitlabUrl
   ),
   updateProject: updateProject(gitlabService, projects, projectDetails),
+  createVariable: createVariable(gitlabService, projectDetails),
 }

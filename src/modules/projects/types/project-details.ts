@@ -93,6 +93,7 @@ export type ProjectDetailsGroupedFindings = {
 
 export type ProjectDetails = {
   id: number
+  pdfPassword: string | null
   staff: ProjectDetailsMember[]
   customers: ProjectDetailsMember[]
   allFindings: ProjectDetailsFinding[]

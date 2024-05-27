@@ -29,14 +29,14 @@ export const gitlabService = {
 
   projects: () => fetchPaginated(gitlabClient.projects),
 
-  user: gitlabClient.user,
-
   variables: (id: number) =>
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.variables({ perPage, page, id })
     ),
 
+  user: gitlabClient.user,
   updateProject: gitlabClient.updateProject,
+  createVariable: gitlabClient.createVariable,
 }
 
 export type GitLabService = typeof gitlabService

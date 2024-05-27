@@ -15,6 +15,7 @@ import { normalizeMember } from '@/modules/projects/normalizers/normalize-member
 import { isNonFinding } from '@/modules/projects/utils/is-non-finding'
 
 import { FINDING_LABEL, NON_FINDING_LABEL } from '../constants/labels'
+import { PDF_PASSWORD_KEY } from '../constants/variables'
 import { isFinding } from '../utils/is-finding'
 
 const isEitherFinding = ({ labels }: { labels: string[] }) =>
@@ -36,7 +37,7 @@ export const normalizeProjectDetails = (
   issues: GitLabIssue[],
   _labels: GitLabLabel[],
   members: GitLabMember[],
-  _variables: GitLabVariable[]
+  variables: GitLabVariable[]
 ): ProjectDetails => {
   const allFindingsRaw = issues.filter(isEitherFinding)
 
@@ -52,8 +53,12 @@ export const normalizeProjectDetails = (
 
   const crew = members.filter(isHuman)
 
+  const pdfPassword =
+    variables.find((x) => x.key === PDF_PASSWORD_KEY)?.value ?? null
+
   return {
     id,
+    pdfPassword,
     findings: normalizeGroupedFindings(findingsFindings.filter(isFinding)),
     history: normalizeHistory(events),
     staff: crew.filter(isStaff).map(normalizeMember),

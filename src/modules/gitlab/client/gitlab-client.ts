@@ -7,6 +7,7 @@ import { projects } from '@/modules/gitlab/client/functions/projects'
 import { user } from '@/modules/gitlab/client/functions/user'
 import { variables } from '@/modules/gitlab/client/functions/variables'
 
+import { createVariable } from './functions/create-variable'
 import { updateProject } from './functions/update-project'
 
 export const gitlabClient = {
@@ -19,6 +20,7 @@ export const gitlabClient = {
   user,
   variables,
   updateProject,
+  createVariable,
 }
 
 export type GitlabClient = typeof gitlabClient

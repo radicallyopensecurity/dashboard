@@ -1,0 +1,1 @@
+export const PDF_PASSWORD_KEY = 'PDF_PASSWORD'
