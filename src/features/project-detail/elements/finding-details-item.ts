@@ -54,7 +54,7 @@ export class FindingDetailsItem extends MobxLitElement {
     await value?.updateComplete
 
     if (!value) {
-      logger.info(
+      logger.debug(
         `Could not register finding details element for findings`,
         this.finding,
         this.projectId

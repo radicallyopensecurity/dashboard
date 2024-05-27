@@ -20,7 +20,7 @@ export const getTheme = (): Theme.Light | Theme.Dark => {
 }
 
 export const setTheme = (theme: Theme.Light | Theme.Dark): void => {
-  logger.info(`setting theme to ${theme}`)
+  logger.debug(`setting theme to ${theme}`)
   const toRemove = theme === Theme.Dark ? LIGHT_THEME_CLASS : DARK_THEME_CLASS
   const toAdd = theme === Theme.Dark ? DARK_THEME_CLASS : LIGHT_THEME_CLASS
 
@@ -47,14 +47,14 @@ export const setLocalStorage = (value: Theme): void => {
 export const fromLocalStorage = (): Theme => {
   const value = localStorage.getItem(LOCAL_STORAGE_KEY)
   if (!value) {
-    logger.info('theme not saved in localStorage, setting to "system"')
+    logger.debug('theme not saved in localStorage, setting to "system"')
     localStorage.setItem(LOCAL_STORAGE_KEY, Theme.System)
     return Theme.System
   }
 
   const parsed = parseTheme(value)
 
-  logger.info(`theme set in localStorage: "${parsed}"`)
+  logger.debug(`theme set in localStorage: "${parsed}"`)
   return parsed
 }
 
@@ -65,17 +65,17 @@ const supportsMatchMedia = () => {
 const fromBrowser = (): Theme.Dark | Theme.Light => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   const theme = prefersDark ? Theme.Dark : Theme.Light
-  logger.info(`system preference: "${theme}"`)
+  logger.debug(`system preference: "${theme}"`)
   return theme
 }
 
 const watchForPreferenceChanges = () => {
-  logger.info('watching for preference changes...')
+  logger.debug('watching for preference changes...')
   window
     .matchMedia('(prefers-color-scheme: dark)')
     .addEventListener('change', (event) => {
       const theme = event.matches ? Theme.Dark : Theme.Light
-      logger.info(`theme preference changed to ${theme}, setting theme...`)
+      logger.debug(`theme preference changed to ${theme}, setting theme...`)
       setTheme(theme)
       return
     })
@@ -90,7 +90,7 @@ export const registerTheme = (mode: 'watch' | 'once' = 'watch'): void => {
   }
 
   if (!supportsMatchMedia) {
-    logger.info(`browser doesn't support matchmedia`)
+    logger.debug(`browser doesn't support matchmedia`)
     setTheme(Theme.Light)
     return
   }

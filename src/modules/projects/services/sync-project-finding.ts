@@ -14,13 +14,13 @@ export const syncProjectFinding =
   (service: GitLabService, store: ProjectFindingsStore, baseUrl: string) =>
   async (projectId: number, issueId: number) => {
     if (toJS(store.data)[projectFindingKey(projectId, issueId)]) {
-      logger.info(
+      logger.debug(
         `project finding already synced. project: ${projectId}, issue: ${issueId}`
       )
       return
     }
 
-    logger.info(`syncing project: ${projectId} and issue: ${issueId}`)
+    logger.debug(`syncing project: ${projectId} and issue: ${issueId}`)
 
     store.setIsLoading(projectId, issueId, true)
 

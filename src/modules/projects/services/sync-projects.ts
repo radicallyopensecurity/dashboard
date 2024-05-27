@@ -9,7 +9,7 @@ const logger = createLogger('sync-projects')
 
 export const syncProjects =
   (service: GitLabService, store: ProjectsStore) => async () => {
-    logger.info('syncing...')
+    logger.debug('syncing...')
     store.setIsLoading(true)
     const result = await service.projects()
     const normalized = result.map(normalizeProject)

@@ -16,7 +16,7 @@ export const syncProjectDetails =
       return
     }
 
-    logger.info(`syncing project with name: ${id}...`)
+    logger.debug(`syncing project with name: ${id}...`)
 
     store.setIsLoading(id, true)
 

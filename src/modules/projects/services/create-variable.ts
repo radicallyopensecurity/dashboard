@@ -12,7 +12,7 @@ const logger = createLogger('create-variable')
 export const createVariable =
   (service: GitLabService, detailsStore: ProjectDetailsStore) =>
   async (id: number, payload: CreateGitLabVariable, token: string) => {
-    logger.info('creating...')
+    logger.debug('creating...')
     detailsStore.setIsLoading(id, true)
     await service.createVariable(id, payload, token)
     await Promise.all([

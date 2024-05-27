@@ -18,7 +18,7 @@ export const updateProject =
     detailsStore: ProjectDetailsStore
   ) =>
   async (id: number, payload: UpdateGitLabProject, token: string) => {
-    logger.info('updating...')
+    logger.debug('updating...')
     detailsStore.setIsLoading(id, true)
     const project = await service.updateProject(id, payload, token)
     await Promise.all([

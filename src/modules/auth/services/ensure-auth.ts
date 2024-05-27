@@ -4,31 +4,29 @@ import { isCallbackRoute } from '@/modules/auth/utils/is-callback-route'
 
 import { createLogger } from '@/utils/logging/create-logger'
 
-
-
 const logger = createLogger('ensure-auth')
 
 export const ensureAuth =
   (client: OidcClient) =>
   async (redirectTo: string): Promise<boolean> => {
-    logger.info('checking auth')
+    logger.debug('checking auth')
 
     if (isCallbackRoute()) {
-      logger.info('is callback route, do nothing')
+      logger.debug('is callback route, do nothing')
       return false
     }
 
-    logger.info('is not callback route, checking auth session')
+    logger.debug('is not callback route, checking auth session')
 
     const sessionStatus = await client.tryKeepExistingSessionAsync()
-    logger.info(`session found: ${sessionStatus}`)
+    logger.debug(`session found: ${sessionStatus}`)
 
     if (!client.tokens) {
-      logger.info(`not authenticated, authenticating...`)
+      logger.debug(`not authenticated, authenticating...`)
       await client.loginAsync(redirectTo)
       return false
     }
 
-    logger.info('is authenticated')
+    logger.debug('is authenticated')
     return true
   }
