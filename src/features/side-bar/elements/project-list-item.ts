@@ -60,7 +60,7 @@ export class ProjectListItem extends LitElement {
   ]
 
   render() {
-    const { id, avatar, namespace, name } = this.project
+    const { pathWithNamespace, avatar, namespace, name } = this.project
 
     const image = avatar || namespace.avatar
 
@@ -69,7 +69,7 @@ export class ProjectListItem extends LitElement {
       : html`<sl-icon id="avatar" name="git"></sl-icon>`
 
     return html`
-      <a href="/projects/${id}">
+      <a href="/projects/${pathWithNamespace}">
         ${avatarElement}
         <div id="details">
           <span id="namespace">${namespace.name}</span>

@@ -16,17 +16,24 @@ export class ProjectDetailPage extends MobxLitElement {
   private projectDetails = projectDetails
 
   @property({ type: String })
-  private projectId = ''
+  private projectName = ''
+  @property({ type: String })
+  private projectNamespace = ''
 
   render() {
-    if (!this.projectId) {
+    if (!this.projectName || !this.projectNamespace) {
       return html`<not-found-page></not-found-page>`
     }
 
-    const projectId = Number(this.projectId)
+    const nameWithNamespace = `${this.projectNamespace}/${this.projectName}`
 
-    const project = toJS(this.projects.allById)[projectId] ?? null
-    const projectDetailsMap = toJS(this.projectDetails.data)[projectId] ?? null
+    const project = toJS(this.projects.allByName)[nameWithNamespace] ?? null
+
+    if (!project) {
+      return html`<not-found-page></not-found-page>`
+    }
+
+    const projectDetailsMap = toJS(this.projectDetails.data)[project.id] ?? null
 
     const notFound =
       !this.projects.isLoading &&
@@ -39,9 +46,10 @@ export class ProjectDetailPage extends MobxLitElement {
     }
 
     if (
-      this.projects.isLoading ||
-      !projectDetailsMap ||
-      projectDetailsMap.isLoading
+      !projectDetailsMap.data &&
+      (this.projects.isLoading ||
+        projectDetailsMap.isLoading ||
+        !projectDetailsMap)
     ) {
       return html`<project-detail-skeleton></project-detail-skeleton>`
     }
@@ -50,7 +58,7 @@ export class ProjectDetailPage extends MobxLitElement {
       .project=${project}
       .projectDetail=${projectDetailsMap.data}
       .onClickReload=${() =>
-        projectsService.syncProjectDetails(projectId, 'network')}
+        projectsService.syncProjectDetails(project.id, 'network')}
     ></project-detail>`
   }
 }

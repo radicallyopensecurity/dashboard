@@ -1,12 +1,14 @@
 import { RouteConfig } from '@lit-labs/router'
 import { html } from 'lit'
+import { toJS } from 'mobx'
 
 import { projectsService } from './modules/projects/projects-service'
+import { projects } from './modules/projects/projects-store'
 
 export enum AppRoute {
   Home = '/',
   NewProject = '/projects/new',
-  ProjectDetail = '/projects/:id',
+  ProjectDetail = '/projects/:namespace/:name',
   AuthCallback = '/auth/callback',
 }
 
@@ -29,14 +31,30 @@ export const routes: RouteConfig[] = [
   },
   {
     path: AppRoute.ProjectDetail,
-    render: ({ id }) =>
-      html`<project-detail-page .projectId=${id}></project-detail-page>`,
-    enter: async ({ id }) => {
-      await import('@/pages/projects/:id')
-      const projectId = Number(id)
-      if (!Number.isNaN(id)) {
-        void projectsService.syncProjectDetails(projectId)
+    render: ({ name, namespace }) =>
+      html`<project-detail-page
+        .projectName=${name}
+        .projectNamespace=${namespace}
+      ></project-detail-page>`,
+    enter: async ({ name, namespace }) => {
+      await import('@/pages/projects/:namespace,:name')
+
+      if (!name || !namespace) {
+        return true
       }
+
+      await projectsService.syncProjects()
+
+      const nameWithNamespace = `${namespace}/${name}`
+
+      const project = toJS(projects.allByName)[nameWithNamespace]
+
+      if (!project) {
+        return true
+      }
+
+      await projectsService.syncProjectDetails(project.id)
+
       return true
     },
   },

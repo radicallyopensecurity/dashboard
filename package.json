@@ -12,7 +12,7 @@
     "dev:preview": "vite preview",
     "##### TEST ##########": "###################################",
     "test": "vitest run",
-    "test:watch": "vitest watch",
+    "test:watch": "vitest watch --ui",
     "test:coverage": "vitest run --coverage",
     "##### LINT ##########": "###################################",
     "lint": "npm run lint:eslint && npm run lint:style && npm run lint:prettier",

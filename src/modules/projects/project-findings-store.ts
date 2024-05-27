@@ -47,7 +47,6 @@ export class ProjectFindingsStore {
   public set(finding: ProjectFindingDetails) {
     const { projectId, issueId } = finding
     const key = projectFindingKey(projectId, issueId)
-    console.log('key', key)
     this.data = {
       ...this.data,
       [key]: {

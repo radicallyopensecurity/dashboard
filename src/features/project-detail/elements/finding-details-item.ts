@@ -88,18 +88,22 @@ export class FindingDetailsItem extends MobxLitElement {
     if (details?.isLoading) {
       content = html`loading...`
     } else if (!details?.isLoading && details?.data) {
-      // #TODO: unsafe content iframe
-      const descriptionMarkdown = marked(description, { gfm: true })
+      const descriptionMarkdown = marked(description, { gfm: true }) as string
+
       const technicalDescriptionMarkdown = marked(
         details.data.technicalDescription,
         { gfm: true }
-      )
-      const impactMarkdown = marked(details.data.impact, { gfm: true })
+      ) as string
+
+      const impactMarkdown = marked(details.data.impact, {
+        gfm: true,
+      }) as string
+
       const recommendationMarkdown = marked(details.data.recommendation, {
         gfm: true,
-      })
+      }) as string
 
-      content = html`
+      const htmlContent = `
         <section>
           ${descriptionMarkdown}
         </section>
@@ -119,6 +123,12 @@ export class FindingDetailsItem extends MobxLitElement {
           ${recommendationMarkdown}
         </section>
       `
+
+      const iframed = html`<secure-iframe
+        .UNSAFE_html=${htmlContent}
+      ></secure-iframe>`
+
+      content = iframed
     }
 
     return html`<sl-details ${ref(this.detailsRef)} iid=${iid} summary=${title}>

@@ -7,19 +7,11 @@ import { Project } from '@/modules/projects/types/project'
 import { isPentest } from '@/modules/projects/utils/is-pentest'
 import { isQuote } from '@/modules/projects/utils/is-quote'
 
-import { getChannelName } from '@/utils/rocket-chat/get-channel-name'
 import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
 export const normalizeProject = (raw: GitLabProject): Project => {
   const tags = raw.tag_list.map((x) => x.toLowerCase())
-  const channelName = getChannelName(
-    raw.namespace.path,
-    raw.name_with_namespace
-  )
-  const chatUrl =
-    (channelName &&
-      getChannelUrl(config.services.rocketChatUrl, channelName)) ??
-    null
+  const chatUrl = getChannelUrl(config.services.rocketChatUrl, raw.name)
 
   return {
     id: raw.id,

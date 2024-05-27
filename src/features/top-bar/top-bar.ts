@@ -1,10 +1,9 @@
 import { MobxLitElement } from '@adobe/lit-mobx'
 import { SlMenu, SlMenuItem } from '@shoelace-style/shoelace'
-import { html, css } from 'lit'
+import { html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { Ref, createRef, ref } from 'lit/directives/ref.js'
 
-import { theme } from '@/theme/theme'
 import {
   Theme,
   fromLocalStorage,
@@ -15,6 +14,9 @@ import {
 
 import { user } from '@/modules/user/user-store'
 
+import { topBarStyles } from './top-bar.style'
+import { toggleCheckBoxes } from './utils/toggle-checkboxes'
+
 const ELEMENT_NAME = 'top-bar'
 
 // TODO: settings menu
@@ -23,36 +25,25 @@ const ELEMENT_NAME = 'top-bar'
 // TODO: project title
 @customElement(ELEMENT_NAME)
 export class TopBar extends MobxLitElement {
+  static styles = topBarStyles
+
   private user = user
 
+  private buttonRefs = {
+    [Theme.Dark]: createRef<SlMenuItem>(),
+    [Theme.Light]: createRef<SlMenuItem>(),
+    [Theme.System]: createRef<SlMenuItem>(),
+  }
+
   private menuRef: Ref<SlMenu> = createRef()
-  private darkRef: Ref<SlMenuItem> = createRef()
-  private lightRef: Ref<SlMenuItem> = createRef()
-  private systemRef: Ref<SlMenuItem> = createRef()
 
   private processChecked(
     theme: Theme,
-    mode: 'default' | 'register' = 'default'
+    mode: 'first-run' | 'change' = 'first-run'
   ) {
-    switch (theme) {
-      case Theme.Dark:
-        this.darkRef.value?.setAttribute('checked', 'true')
-        this.lightRef.value?.removeAttribute('checked')
-        this.systemRef.value?.removeAttribute('checked')
-        break
-      case Theme.Light:
-        this.lightRef.value?.setAttribute('checked', 'true')
-        this.darkRef.value?.removeAttribute('checked')
-        this.systemRef.value?.removeAttribute('checked')
-        break
-      case Theme.System:
-        this.systemRef.value?.setAttribute('checked', 'true')
-        this.lightRef.value?.removeAttribute('checked')
-        this.darkRef.value?.removeAttribute('checked')
-        break
-    }
+    toggleCheckBoxes(theme, this.buttonRefs)
 
-    if (mode === 'register') {
+    if (mode === 'change') {
       setLocalStorage(theme)
       registerTheme('once')
       this.requestUpdate()
@@ -64,69 +55,9 @@ export class TopBar extends MobxLitElement {
     this.processChecked(theme)
 
     this.menuRef.value?.addEventListener('sl-select', (e) => {
-      this.processChecked(e.detail.item.value as Theme, 'register')
+      this.processChecked(e.detail.item.value as Theme, 'change')
     })
   }
-
-  static styles = [
-    ...theme,
-    css`
-      :host {
-        position: relative;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        height: 80px;
-        padding: 0 var(--sl-spacing-large);
-        background: var(--sl-color-primary-500);
-        box-shadow: var(--sl-shadow-large);
-
-        --avatar-size: 42px;
-      }
-
-      #content {
-        display: flex;
-        flex-grow: 1;
-        gap: var(--sl-spacing-small);
-        align-items: center;
-        font-size: var(--sl-font-size-large);
-        color: var(--sl-color-neutral-0);
-      }
-
-      #avatar::part(base) {
-        width: var(--avatar-size);
-        height: var(--avatar-size);
-      }
-
-      h1 {
-        margin: 0;
-        font-size: var(--sl-font-size-large);
-        font-weight: var(--sl-font-weight-normal);
-        color: var(--sl-color-neutral-0);
-      }
-
-      #brand {
-        margin-right: auto;
-      }
-
-      #content a:link {
-        text-decoration: none;
-      }
-
-      sl-icon-button::part(base) {
-        justify-content: center;
-        width: var(--avatar-size);
-        height: var(--avatar-size);
-        color: var(--sl-color-neutral-0);
-        cursor: pointer;
-      }
-
-      sl-icon-button::part(base):hover {
-        color: var(--sl-color-neutral-0);
-        background: var(--sl-color-primary-600);
-      }
-    `,
-  ]
 
   render() {
     const { avatar, name } = this.user
@@ -143,17 +74,20 @@ export class TopBar extends MobxLitElement {
         <sl-icon-button name=${iconName} slot="trigger"></sl-icon-button>
         <sl-menu ref=${ref(this.menuRef)}>
           <sl-menu-item
-            ${ref(this.lightRef)}
+            ${ref(this.buttonRefs.light)}
             type="checkbox"
             value=${Theme.Light}
             >Light</sl-menu-item
           >
-          <sl-menu-item ${ref(this.darkRef)} type="checkbox" value=${Theme.Dark}
+          <sl-menu-item
+            ${ref(this.buttonRefs.dark)}
+            type="checkbox"
+            value=${Theme.Dark}
             >Dark</sl-menu-item
           >
           <sl-divider></sl-divider>
           <sl-menu-item
-            ${ref(this.systemRef)}
+            ${ref(this.buttonRefs.system)}
             type="checkbox"
             value=${Theme.System}
             >System</sl-menu-item

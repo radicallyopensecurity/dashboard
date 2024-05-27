@@ -17,6 +17,8 @@ export class ProjectsStore {
   public all: Project[] = []
   @observable
   public allById: Record<number, Project | undefined> = {}
+  @observable
+  public allByName: Record<string, Project | undefined> = {}
 
   @observable
   public isLoading = true
@@ -36,18 +38,21 @@ export class ProjectsStore {
     const pentests = projects.filter((x) => x.isPentest)
     const all = uniqueBy((x) => x.id, quotes.concat(pentests))
     const allById = groupBy((x) => x.id, all)
+    const allByName = groupBy((x) => x.pathWithNamespace, all)
 
     logger.debug('filtered result', {
       quotes,
       pentests,
       all,
       allById,
+      allByName,
     })
 
     this.quotes = quotes
     this.pentests = pentests
     this.all = all
     this.allById = allById
+    this.allByName = allByName
   }
 }
 

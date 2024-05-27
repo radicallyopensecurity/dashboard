@@ -6,6 +6,7 @@ import { theme } from '@/theme/theme'
 import { ProjectDetailsFinding } from '@/modules/projects/types/project-details'
 
 import '@/features/project-detail/elements/finding-details-item'
+import { map } from 'lit/directives/map.js'
 
 const ELEMENT_NAME = 'finding-details'
 
@@ -29,13 +30,14 @@ export class FindingDetails extends LitElement {
   render() {
     const { findings, projectId } = this
 
-    return html`${findings.map(
+    return map(
+      findings,
       (finding) =>
-        html` <finding-details-item
+        html`<finding-details-item
           .finding=${finding}
           .projectId=${projectId}
         ></finding-details-item>`
-    )}`
+    )
   }
 }
 
