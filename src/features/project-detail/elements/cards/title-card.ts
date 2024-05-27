@@ -3,18 +3,22 @@ import { customElement, property } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
+import { Project } from '@/modules/projects/types/project'
+
+import { ARCHIVED_TOPIC } from '../../constants'
+import { archiveProject } from '../../utils/archive-project'
+
 const ELEMENT_NAME = 'title-card'
 
 @customElement(ELEMENT_NAME)
 export class TitleCard extends LitElement {
   @property()
-  private projectTitle!: string
-  @property()
-  private avatar!: string
-  @property()
-  private url!: string
+  private project!: Project
+
   @property()
   private onClickReload!: () => void
+  @property()
+  private isLoading = true
 
   static styles = [
     ...theme,
@@ -47,22 +51,43 @@ export class TitleCard extends LitElement {
         height: var(--avatar-size);
         color: var(--sl-color-primary-500);
       }
+
+      .pending-archive {
+        font-size: var(--sl-font-size-x-large);
+        color: var(--sl-color-gray-500);
+      }
     `,
   ]
 
   render() {
-    const { projectTitle: title, avatar, url, onClickReload } = this
+    const { onClickReload, isLoading } = this
+
+    const { topics, nameWithNamespace, avatar, url, quotePdf, reportPdf } =
+      this.project
 
     const avatarElement = avatar
       ? html`<img id="avatar" src="${avatar}" />`
       : html`<sl-icon id="avatar" name="git"></sl-icon>`
 
+    const isArchived = topics.includes(ARCHIVED_TOPIC)
+
     return html`<sl-card>
       <section>
         <div>
-          <h2>${title}</h2>
+          <h2>
+            ${nameWithNamespace}${
+              isArchived
+                ? html` <span class="pending-archive">(pending archival)</span>`
+                : ''
+            }
+          </h2>
           <div id="toolbar">
-            <sl-button variant="default" @click=${onClickReload}>
+            <sl-button
+              variant="default"
+              @click=${onClickReload}
+              ?loading=${isLoading}
+              ?disabled=${isLoading}
+            >
               <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
               Reload
             </sl-button>
@@ -71,11 +96,11 @@ export class TitleCard extends LitElement {
               <sl-icon slot="suffix" name="box-arrow-up-right"></sl-icon>
               GitLab
             </sl-button>
-            <sl-button variant="default">
+            <sl-button variant="default" href=${quotePdf} target="_blank">
               <sl-icon slot="prefix" name="filetype-pdf"></sl-icon>
               Quote
             </sl-button>
-            <sl-button variant="default">
+            <sl-button variant="default" href=${reportPdf} target="_blank">
               <sl-icon slot="prefix" name="filetype-pdf"></sl-icon>
               Report
             </sl-button>
@@ -83,9 +108,21 @@ export class TitleCard extends LitElement {
               <sl-icon slot="prefix" name="key"></sl-icon>
               PDF Password
             </sl-button>
-            <sl-button variant="danger">
-              <sl-icon slot="prefix" name="archive"></sl-icon>
-              Archive
+            <sl-button
+              variant=${isArchived ? 'warning' : 'danger'}
+              // #TODO: get token
+              @click=${() =>
+                archiveProject(this.project.id, this.project.topics, '')}
+              ?loading=${isLoading}
+              ?disabled=${isLoading}
+            >
+              ${
+                isArchived
+                  ? html`<sl-icon slot="prefix" name="arrow-up-left"></sl-icon>
+                      Unarchive`
+                  : html`<sl-icon slot="prefix" name="archive"></sl-icon>
+                      Archive`
+              }
             </sl-button>
           </div>
         </div>

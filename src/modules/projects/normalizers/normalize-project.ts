@@ -9,6 +9,8 @@ import { isQuote } from '@/modules/projects/utils/is-quote'
 
 import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
+import { normalizePdf } from './normalize-pdf'
+
 export const normalizeProject = (raw: GitLabProject): Project => {
   const tags = raw.tag_list.map((x) => x.toLowerCase())
   const chatUrl = getChannelUrl(config.services.rocketChatUrl, raw.name)
@@ -38,6 +40,9 @@ export const normalizeProject = (raw: GitLabProject): Project => {
     tags,
     isQuote: isQuote(tags, raw.name),
     isPentest: isPentest(tags, raw.name),
+    quotePdf: normalizePdf(raw, 'quote'),
+    reportPdf: normalizePdf(raw, 'report'),
     chatUrl,
+    topics: raw.topics,
   }
 }

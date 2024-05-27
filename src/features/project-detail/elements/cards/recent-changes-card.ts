@@ -54,7 +54,9 @@ export class RecentChangesCard extends LitElement {
               ({ iid, title, updatedAt, url }) =>
                 html`<div class="finding">
                   <span>#${iid}</span>
-                  <a href="${url}">${title}</a>
+                  <a href="${url}"
+                    >${title} <sl-icon name="box-arrow-up-right"></sl-icon
+                  ></a>
                   <span class="time"
                     >${formatDistance(now, updatedAt)} ago</span
                   >

@@ -59,6 +59,7 @@ export class ProjectDetailPage extends MobxLitElement {
       .projectDetail=${projectDetailsMap.data}
       .onClickReload=${() =>
         projectsService.syncProjectDetails(project.id, 'network')}
+      .isLoading=${projectDetailsMap.isLoading}
     ></project-detail>`
   }
 }

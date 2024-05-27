@@ -760,12 +760,19 @@ const handleFetch = async (event) => {
       if (authorization) {
         authenticationMode = authorization.split(' ')[0]
       }
+
       headers = {
         ...serializeHeaders(originalRequest.headers),
-        authorization:
-          authenticationMode +
-          ' ' +
-          currentDatabaseForRequestAccessToken.tokens.access_token,
+      }
+
+      if (!originalRequest.headers.get('PRIVATE-TOKEN')) {
+        headers = {
+          ...headers,
+          authorization:
+            authenticationMode +
+            ' ' +
+            currentDatabaseForRequestAccessToken.tokens.access_token,
+        }
       }
     }
     let init

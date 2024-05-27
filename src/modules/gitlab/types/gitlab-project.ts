@@ -21,4 +21,5 @@ export type GitLabProject = {
     avatar_url: string | null
   }
   tag_list: string[]
+  topics: string[]
 }

@@ -32,8 +32,7 @@ export class ProjectsStore {
     this.isLoading = value
   }
 
-  @action
-  public set(projects: Project[]) {
+  storeProjects(projects: Project[]) {
     const quotes = projects.filter((x) => x.isQuote)
     const pentests = projects.filter((x) => x.isPentest)
     const all = uniqueBy((x) => x.id, quotes.concat(pentests))
@@ -53,6 +52,18 @@ export class ProjectsStore {
     this.all = all
     this.allById = allById
     this.allByName = allByName
+  }
+
+  @action
+  update(project: Project) {
+    const filtered = this.all.filter((x) => x.id !== project.id)
+    const newList = [...filtered, project]
+    this.storeProjects(newList)
+  }
+
+  @action
+  public set(projects: Project[]) {
+    this.storeProjects(projects)
   }
 }
 

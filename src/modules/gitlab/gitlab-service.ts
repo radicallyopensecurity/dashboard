@@ -6,28 +6,37 @@ export const gitlabService = {
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.discussions({ perPage, page, projectId, issueId })
     ),
+
   events: (id: number) =>
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.events({ perPage, page, id })
     ),
+
   issues: (id: number) =>
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.issues({ perPage, page, id })
     ),
+
   labels: (id: number) =>
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.labels({ perPage, page, id })
     ),
+
   members: (id: number) =>
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.members({ perPage, page, id })
     ),
+
   projects: () => fetchPaginated(gitlabClient.projects),
+
   user: gitlabClient.user,
+
   variables: (id: number) =>
     fetchPaginated(({ perPage, page }) =>
       gitlabClient.variables({ perPage, page, id })
     ),
+
+  updateProject: gitlabClient.updateProject,
 }
 
 export type GitLabService = typeof gitlabService

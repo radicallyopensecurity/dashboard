@@ -21,7 +21,10 @@ export type Project = {
     avatar: string | null
   }
   tags: string[]
+  topics: string[]
   isQuote: boolean
   isPentest: boolean
+  quotePdf: string
+  reportPdf: string
   chatUrl: string | null
 }

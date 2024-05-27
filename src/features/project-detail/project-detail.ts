@@ -24,6 +24,8 @@ export class ProjectDetail extends MobxLitElement {
   private projectDetail!: ProjectDetails
   @property()
   private onClickReload!: () => void
+  @property()
+  private isLoading = true
 
   static styles = [
     ...theme,
@@ -62,13 +64,14 @@ export class ProjectDetail extends MobxLitElement {
   ]
 
   render() {
-    const { project, projectDetail, onClickReload } = this
+    const { project, projectDetail, onClickReload, isLoading } = this
 
-    const { nameWithNamespace, avatar, chatUrl, url } = project
+    const { chatUrl, url } = project
     const { staff, customers, history, findings, nonFindings, allFindings } =
       projectDetail
 
-    // #TODO: Fix grid
+    // #TODO: Fix grid heights when cells dont have equal height
+    // probably use flex instead of grid for the columns
     const recentChanges = allFindings
       .slice()
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
@@ -79,9 +82,8 @@ export class ProjectDetail extends MobxLitElement {
     return html`
       <title-card
         id="title"
-        .projectTitle=${nameWithNamespace}
-        .avatar=${avatar}
-        .url=${url}
+        .project=${project}
+        .isLoading=${isLoading}
         .onClickReload=${onClickReload}
       >
       </title-card>
