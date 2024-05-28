@@ -1,8 +1,8 @@
 import { config } from '@/config'
 
-import { GitLabProject } from '@/modules/gitlab/types/gitlab-project'
-
 import { handleResponse } from '@/utils/fetch/handle-response'
+
+import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
 
 type GetGitLabProjectsParams = {
   perPage?: number

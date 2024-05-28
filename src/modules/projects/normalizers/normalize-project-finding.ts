@@ -1,6 +1,6 @@
-import { GitLabDiscussion } from '@/modules/gitlab/types/gitlab-discussion'
-
 import { ProjectFindingDetails } from '../types/project-findings'
+
+import { GitLabDiscussion } from '@/api/gitlab/types/gitlab-discussion'
 
 const TO_DO = 'ToDo'
 

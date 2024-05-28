@@ -6,12 +6,14 @@ import { createRef, ref } from 'lit/directives/ref.js'
 import { theme } from '@/theme/theme'
 
 import { Project } from '@/modules/projects/types/project'
+import { ProjectDetails } from '@/modules/projects/types/project-details'
 
 import { ARCHIVED_TOPIC } from '../../constants'
 import { archiveProject } from '../../utils/archive-project'
 
+import { appStore } from '@/modules/app/app-store'
+
 import '../pdf-password-dialog'
-import { ProjectDetails } from '@/modules/projects/types/project-details'
 
 const ELEMENT_NAME = 'title-card'
 
@@ -27,6 +29,7 @@ export class TitleCard extends LitElement {
   private isLoading = true
 
   private dialogRef = createRef<SlDialog>()
+  private appStore = appStore
 
   static styles = [
     ...theme,
@@ -83,11 +86,9 @@ export class TitleCard extends LitElement {
       <section>
         <div>
           <h2>
-            ${nameWithNamespace}${
-              isArchived
-                ? html` <span class="pending-archive">(pending archival)</span>`
-                : ''
-            }
+            ${nameWithNamespace}${isArchived
+              ? html` <span class="pending-archive">(pending archival)</span>`
+              : ''}
           </h2>
           <div id="toolbar">
             <sl-button
@@ -116,34 +117,56 @@ export class TitleCard extends LitElement {
               Report
             </sl-button>
 
-            <sl-button variant="warning" @click=${() => this.dialogRef.value?.show()}>
+            <sl-button
+              variant="warning"
+              @click=${() => this.dialogRef.value?.show()}
+            >
               <sl-icon slot="prefix" name="key"></sl-icon>
               PDF Password
             </sl-button>
-            <sl-dialog id="pdf-dialog" ${ref(this.dialogRef)} label="PDF password" class="dialog-overview">
-              <pdf-password-dialog 
+            <sl-dialog
+              id="pdf-dialog"
+              ${ref(this.dialogRef)}
+              label="PDF password"
+              class="dialog-overview"
+            >
+              <pdf-password-dialog
                 .projectId=${this.project.id}
-                .isLoading=${isLoading} 
+                .isLoading=${isLoading}
                 .password=${this.projectDetail.pdfPassword}
               ></pdf-password-dialog>
-              <sl-button slot="footer" variant="primary" @click=${() => this.dialogRef.value?.hide()}>Close</sl-button>
+              <sl-button
+                slot="footer"
+                variant="primary"
+                @click=${() => this.dialogRef.value?.hide()}
+                >Close</sl-button
+              >
             </sl-dialog>
 
             <sl-button
               variant=${isArchived ? 'warning' : 'danger'}
-              // #TODO: get token
-              @click=${() =>
-                archiveProject(this.project.id, this.project.topics, '')}
+              @click=${async () => {
+                const token = this.appStore.gitlabToken
+
+                if (!token) {
+                  this.appStore.setGitlabTokenDialog(true)
+                  return
+                }
+
+                await archiveProject(
+                  this.project.id,
+                  this.project.topics,
+                  this.appStore.gitlabToken
+                )
+              }}
               ?loading=${isLoading}
               ?disabled=${isLoading}
             >
-              ${
-                isArchived
-                  ? html`<sl-icon slot="prefix" name="arrow-up-left"></sl-icon>
-                      Unarchive`
-                  : html`<sl-icon slot="prefix" name="archive"></sl-icon>
-                      Archive`
-              }
+              ${isArchived
+                ? html`<sl-icon slot="prefix" name="arrow-up-left"></sl-icon>
+                    Unarchive`
+                : html`<sl-icon slot="prefix" name="archive"></sl-icon>
+                    Archive`}
             </sl-button>
           </div>
         </div>

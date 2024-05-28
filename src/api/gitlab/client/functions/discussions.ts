@@ -1,10 +1,9 @@
 import { config } from '@/config'
 
-import { type GitLabDiscussion } from '@/modules/gitlab/types/gitlab-discussion'
-
-import { type FetchPaginatedParameters } from '@/modules/gitlab/utils/fetch-paginated'
-
 import { handleResponse } from '@/utils/fetch/handle-response'
+
+import { type GitLabDiscussion } from '@/api/gitlab/types/gitlab-discussion'
+import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 
 export const discussions = async ({
   perPage,

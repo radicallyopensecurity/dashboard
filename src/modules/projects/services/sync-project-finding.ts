@@ -1,12 +1,12 @@
 import { toJS } from 'mobx'
 
-import { type GitLabService } from '@/modules/gitlab/gitlab-service'
-
 import { createLogger } from '@/utils/logging/create-logger'
 
 import { normalizeProjectFinding } from '../normalizers/normalize-project-finding'
 import { ProjectFindingsStore } from '../project-findings-store'
 import { projectFindingKey } from '../utils/project-finding-key'
+
+import { type GitLabService } from '@/api/gitlab/gitlab-service'
 
 const logger = createLogger('sync-project-discussion')
 

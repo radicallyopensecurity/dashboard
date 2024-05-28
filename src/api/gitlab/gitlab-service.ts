@@ -1,5 +1,5 @@
-import { gitlabClient } from '@/modules/gitlab/client/gitlab-client'
-import { fetchPaginated } from '@/modules/gitlab/utils/fetch-paginated'
+import { gitlabClient } from '@/api/gitlab/client/gitlab-client'
+import { fetchPaginated } from '@/api/gitlab/utils/fetch-paginated'
 
 export const gitlabService = {
   discussions: (projectId: number, issueId: number) =>

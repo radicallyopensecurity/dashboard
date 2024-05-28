@@ -1,9 +1,9 @@
-import { type GitLabService } from '@/modules/gitlab/gitlab-service'
-
 import { normalizeProject } from '@/modules/projects/normalizers/normalize-project'
 import { type ProjectsStore } from '@/modules/projects/projects-store'
 
 import { createLogger } from '@/utils/logging/create-logger'
+
+import { type GitLabService } from '@/api/gitlab/gitlab-service'
 
 const logger = createLogger('sync-projects')
 

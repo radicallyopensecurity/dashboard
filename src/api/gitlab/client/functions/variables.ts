@@ -1,10 +1,9 @@
 import { config } from '@/config'
 
-import { GitLabVariable } from '@/modules/gitlab/types/gitlab-variable'
-
-import { type FetchPaginatedParameters } from '@/modules/gitlab/utils/fetch-paginated'
-
 import { handleResponse } from '@/utils/fetch/handle-response'
+
+import { GitLabVariable } from '@/api/gitlab/types/gitlab-variable'
+import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 
 export const variables = async ({
   perPage,

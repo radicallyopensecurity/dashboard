@@ -1,11 +1,11 @@
 import { toJS } from 'mobx'
 
-import { GitLabService } from '@/modules/gitlab/gitlab-service'
-
 import { normalizeProjectDetails } from '@/modules/projects/normalizers/normalize-project-details'
 import { ProjectDetailsStore } from '@/modules/projects/project-details-store'
 
 import { createLogger } from '@/utils/logging/create-logger'
+
+import { GitLabService } from '@/api/gitlab/gitlab-service'
 
 const logger = createLogger('sync-project-details')
 

@@ -1,6 +1,6 @@
 import { config } from '@/config'
 
-import { GitLabProject } from '@/modules/gitlab/types/gitlab-project'
+import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
 
 const PDF_TYPE_MAP = {
   quote: 'offerte',

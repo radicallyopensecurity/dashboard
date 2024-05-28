@@ -1,10 +1,9 @@
 import { config } from '@/config'
 
-import { GitLabEvent } from '@/modules/gitlab/types/gitlab-event'
-
-import { type FetchPaginatedParameters } from '@/modules/gitlab/utils/fetch-paginated'
-
 import { handleResponse } from '@/utils/fetch/handle-response'
+
+import { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
+import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 
 export const events = async ({
   perPage,

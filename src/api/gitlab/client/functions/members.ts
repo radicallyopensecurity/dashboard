@@ -1,10 +1,9 @@
 import { config } from '@/config'
 
-import { GitLabMember } from '@/modules/gitlab/types/gitlab-member'
-
-import { type FetchPaginatedParameters } from '@/modules/gitlab/utils/fetch-paginated'
-
 import { handleResponse } from '@/utils/fetch/handle-response'
+
+import { GitLabMember } from '@/api/gitlab/types/gitlab-member'
+import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 
 export const members = async ({
   perPage,

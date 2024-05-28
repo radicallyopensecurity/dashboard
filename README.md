@@ -100,7 +100,7 @@ sh .internal/docker/npm-build.sh
 
 ### CLI
 
-[`.internal/docker/npm-build.sh`](/.internal/docker/npm-build.sh)
+[`.internal/docker/npm-cli.sh`](/.internal/docker/npm-cli.sh)
 
 ```sh
 sh .internal/docker/npm-cli.sh
@@ -143,7 +143,7 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
   - [x] Homepage
   - [~] Project detail
   - [ ] Project new
-  - [~] Top bar
+  - [x] Top bar
 - [ ] Meta tags
 - [ ] CI/CD
 - [ ] Staging

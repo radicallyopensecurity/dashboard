@@ -1,11 +1,11 @@
-import { CreateGitLabVariable } from '@/modules/gitlab/client/functions/create-variable'
-import { GitLabService } from '@/modules/gitlab/gitlab-service'
-
 import { createLogger } from '@/utils/logging/create-logger'
 
 import { ProjectDetailsStore } from '../project-details-store'
 
 import { syncProjectDetails } from './sync-project-details'
+
+import { CreateGitLabVariable } from '@/api/gitlab/client/functions/create-variable'
+import { GitLabService } from '@/api/gitlab/gitlab-service'
 
 const logger = createLogger('create-variable')
 

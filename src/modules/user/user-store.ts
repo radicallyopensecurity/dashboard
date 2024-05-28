@@ -1,7 +1,7 @@
 import { OidcUserInfo } from '@axa-fr/oidc-client'
 import { observable, action, makeAutoObservable } from 'mobx'
 
-import { GitLabUser } from '@/modules/gitlab/types/gitlab-user'
+import { GitLabUser } from '@/api/gitlab/types/gitlab-user'
 
 export class UserStore {
   @observable

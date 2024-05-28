@@ -1,12 +1,12 @@
 import { format } from 'date-fns'
 
-import { GitLabEvent } from '@/modules/gitlab/types/gitlab-event'
-
 import { groupByMultiple } from '@/utils/array/group-by'
 
 import { ProjectDetailsHistory } from '../types/project-details'
 
 import { normalizeEvent } from './normalize-event'
+
+import { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
 
 export const normalizeHistory = (
   events: GitLabEvent[]
