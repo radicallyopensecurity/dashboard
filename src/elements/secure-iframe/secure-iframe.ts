@@ -28,7 +28,7 @@ export class SecureIframe extends LitElement {
 
     setTimeout(() => {
       this.ref.value!.style.height = offset
-    }, 5) // timeout value discovered empirically
+    }, 100) // timeout value discovered empirically
     // 5 bucks if you can get rid of the timeout
   }
 

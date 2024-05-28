@@ -37,6 +37,11 @@ export const gitlabService = {
   user: gitlabClient.user,
   updateProject: gitlabClient.updateProject,
   createVariable: gitlabClient.createVariable,
+  group: gitlabClient.group,
+  groups: gitlabClient.groups,
+  groupProjects: gitlabClient.groupProjects,
+  createProject: gitlabClient.createProject,
+  createAccessToken: gitlabClient.createAccessToken,
 }
 
 export type GitLabService = typeof gitlabService

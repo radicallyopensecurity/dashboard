@@ -26,6 +26,10 @@ export const routes: RouteConfig[] = [
     render: () => html`<project-new-page></project-new-page>`,
     enter: async () => {
       await import('@/pages/projects/new')
+      await Promise.all([
+        projectsService.syncNamespaces(),
+        projectsService.syncTemplates(),
+      ])
       return true
     },
   },

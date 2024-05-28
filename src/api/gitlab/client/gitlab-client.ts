@@ -1,4 +1,9 @@
+import { createAccessToken } from './functions/create-access-token'
+import { createProject } from './functions/create-project'
 import { createVariable } from './functions/create-variable'
+import { group } from './functions/group'
+import { groupProjects } from './functions/group-projects'
+import { groups } from './functions/groups'
 import { updateProject } from './functions/update-project'
 
 import { discussions } from '@/api/gitlab/client/functions/discussions'
@@ -21,6 +26,11 @@ export const gitlabClient = {
   variables,
   updateProject,
   createVariable,
+  groups,
+  group,
+  groupProjects,
+  createProject,
+  createAccessToken,
 }
 
 export type GitlabClient = typeof gitlabClient

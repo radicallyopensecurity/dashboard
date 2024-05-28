@@ -120,7 +120,7 @@ export class RosProjects extends LitElement {
         <sl-input
           ${ref(this.inputRef)}
           id="search-input"
-          placeholder="pen-ie11..."
+          placeholder="pen-ie11"
           size="medium"
           clearable
         >

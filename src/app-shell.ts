@@ -32,6 +32,8 @@ import '@shoelace-style/shoelace/dist/components/input/input.js'
 import '@shoelace-style/shoelace/dist/components/menu/menu.js'
 import '@shoelace-style/shoelace/dist/components/menu-item/menu-item.js'
 import '@shoelace-style/shoelace/dist/components/menu-label/menu-label.js'
+import '@shoelace-style/shoelace/dist/components/option/option.js'
+import '@shoelace-style/shoelace/dist/components/select/select.js'
 import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js'
 
 import '@/elements/secure-iframe/secure-iframe'
