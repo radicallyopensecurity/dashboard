@@ -56,6 +56,7 @@ export class SideBar extends MobxLitElement {
         .projects=${sorted}
         .newProjectHref=${AppRoute.NewProject}
         .onReload=${projectsService.syncProjects}
+        .isLoading=${projects.isLoading}
       ></ros-projects>
     `
   }

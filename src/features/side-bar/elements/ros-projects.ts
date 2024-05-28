@@ -1,11 +1,14 @@
+import { SlInput } from '@shoelace-style/shoelace'
 import { LitElement, html, css } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement, property, state } from 'lit/decorators.js'
+import { Ref, createRef, ref } from 'lit/directives/ref.js'
 
 import { theme } from '@/theme/theme'
 
 import { type Project } from '@/modules/projects/types/project'
 
 import '@/features/side-bar/elements/project-list-item'
+import { filterProjects } from '../utils'
 
 const ELEMENT_NAME = 'ros-projects'
 
@@ -19,6 +22,31 @@ export class RosProjects extends LitElement {
 
   @property()
   private onReload!: () => undefined
+
+  @property()
+  private isLoading = true
+
+  @state()
+  private search = ''
+
+  private inputRef: Ref<SlInput> = createRef()
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.inputRef.value?.removeEventListener('sl-input', () =>
+      this.onChangeSearch()
+    )
+  }
+
+  private onChangeSearch() {
+    this.search = this.inputRef.value?.value ?? ''
+  }
+
+  protected firstUpdated(): void {
+    this.inputRef.value?.addEventListener('sl-input', () => {
+      this.onChangeSearch()
+    })
+  }
 
   static styles = [
     ...theme,
@@ -66,11 +94,18 @@ export class RosProjects extends LitElement {
   render() {
     const { projects, newProjectHref, onReload } = this
 
+    const filtered = filterProjects(projects, this.search)
+
     return html`
       <header id="projects-header">
         <h2 part="heading">Projects</h2>
         <div>
-          <sl-button size="small" @click=${onReload}>
+          <sl-button
+            ?loading=${this.isLoading}
+            ?disabled=${this.isLoading}
+            size="small"
+            @click=${onReload}
+          >
             <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon
             >Reload
           </sl-button>
@@ -82,12 +117,18 @@ export class RosProjects extends LitElement {
       </header>
 
       <div id="search">
-        <sl-input id="search-input" placeholder="pen-ie11..." size="medium">
-          <sl-icon name="search" slot="suffix"></sl-icon>
+        <sl-input
+          ${ref(this.inputRef)}
+          id="search-input"
+          placeholder="pen-ie11..."
+          size="medium"
+          clearable
+        >
+          <sl-icon value=${this.search} name="search" slot="suffix"></sl-icon>
         </sl-input>
 
         <div id="search-results">
-          ${projects.map(
+          ${filtered.map(
             (project) =>
               html`<project-list-item
                 .project="${project}"
