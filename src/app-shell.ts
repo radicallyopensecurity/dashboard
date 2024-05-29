@@ -1,3 +1,4 @@
+import './polyfills'
 import { MobxLitElement } from '@adobe/lit-mobx'
 import { provide } from '@lit/context'
 import { Router } from '@lit-labs/router'
