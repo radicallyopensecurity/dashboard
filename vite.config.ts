@@ -45,14 +45,17 @@ export default defineConfig(({ mode }) => {
     server: {
       host: 'ros-dashboard.test',
       port: PORT,
-      https: {
-        cert: readFileSync(
-          env.DEV_VITE_SERVER_CRT_PATH || '.internal/certs/crt.pem'
-        ),
-        key: readFileSync(
-          env.DEV_VITE_SERVER_KEY_PATH || '.internal/certs/key.pem'
-        ),
-      },
+      https:
+        mode === 'production'
+          ? undefined
+          : {
+              cert: readFileSync(
+                env.DEV_VITE_SERVER_CRT_PATH || '.internal/certs/crt.pem'
+              ),
+              key: readFileSync(
+                env.DEV_VITE_SERVER_KEY_PATH || '.internal/certs/key.pem'
+              ),
+            },
       headers: {
         'Content-Security-Policy': [
           // 'script-src self' prevents service worker unregister and token retrieval through iframes
