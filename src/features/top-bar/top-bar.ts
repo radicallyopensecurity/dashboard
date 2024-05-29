@@ -127,7 +127,8 @@ export class TopBar extends MobxLitElement {
             <sl-icon name="sliders"></sl-icon>
           </div>
           <sl-menu>
-            <sl-menu-label>
+            <sl-menu-label class="menu-label">
+              <sl-icon name="gitlab"></sl-icon>
               GitLab
               <sl-badge
                 variant=${gitlabMode}
@@ -139,8 +140,9 @@ export class TopBar extends MobxLitElement {
             <sl-menu-item
               @click=${() => this.appStore.setGitlabTokenDialog(true)}
             >
-              ${gitlabToken ? 'Change token' : 'Set token'}</sl-menu-item
-            >
+              <sl-icon name="pen" slot="prefix"></sl-icon>
+              ${gitlabToken ? 'Change token' : 'Set token'}
+            </sl-menu-item>
             ${gitlabToken
               ? html`<sl-menu-item
                   @click=${() => {
@@ -148,6 +150,7 @@ export class TopBar extends MobxLitElement {
                     this.appStore.setGitlabTokenDialog(false)
                   }}
                 >
+                  <sl-icon name="x-lg" slot="prefix"></sl-icon>
                   Clear token
                 </sl-menu-item>`
               : ''}
@@ -201,25 +204,32 @@ export class TopBar extends MobxLitElement {
             <sl-icon-button id="menu-button" name=${iconName}></sl-icon-button>
           </div>
           <sl-menu ref=${ref(this.menuRef)}>
+            <sl-menu-label class="menu-label"> Theme </sl-menu-label>
             <sl-menu-item
               ${ref(this.buttonRefs.light)}
               type="checkbox"
               value=${Theme.Light}
-              >Light</sl-menu-item
             >
+              <sl-icon slot="prefix" name="sun"></sl-icon>
+              Light
+            </sl-menu-item>
             <sl-menu-item
               ${ref(this.buttonRefs.dark)}
               type="checkbox"
               value=${Theme.Dark}
-              >Dark</sl-menu-item
             >
+              <sl-icon slot="prefix" name="moon-stars"></sl-icon>
+              Dark
+            </sl-menu-item>
             <sl-divider></sl-divider>
             <sl-menu-item
               ${ref(this.buttonRefs.system)}
               type="checkbox"
               value=${Theme.System}
-              >System</sl-menu-item
             >
+              <sl-icon slot="prefix" name="laptop"></sl-icon>
+              System
+            </sl-menu-item>
           </sl-menu>
         </sl-dropdown>
       </div>

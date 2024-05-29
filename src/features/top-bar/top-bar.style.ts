@@ -119,5 +119,11 @@ export const topBarStyles: CSSResult[] = [
     #gitlab-top-badge::part(base):hover {
       background: var(--danger-hover-color);
     }
+
+    .menu-label::part(base) {
+      display: flex;
+      gap: var(--sl-spacing-x-small);
+      align-items: center;
+    }
   `,
 ]
