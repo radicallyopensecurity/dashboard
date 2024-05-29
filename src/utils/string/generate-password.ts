@@ -26,10 +26,18 @@ export const generatePassword = (
   while (password.length < length) {
     const array = new Uint8Array(1)
     const [randomInt] = crypto.getRandomValues(array)
-    const char = characters[randomInt]
-    if (char) {
-      password += char
+
+    if (randomInt > length - 1) {
+      continue
     }
+
+    const char = characters[randomInt]
+
+    if (!char) {
+      continue
+    }
+
+    password += char
   }
 
   return password

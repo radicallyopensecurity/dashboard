@@ -1,9 +1,12 @@
-import { RouteConfig } from '@lit-labs/router'
+import { createContext } from '@lit/context'
+import { RouteConfig, Router } from '@lit-labs/router'
 import { html } from 'lit'
 import { toJS } from 'mobx'
 
 import { projectsService } from './modules/projects/projects-service'
 import { projects } from './modules/projects/projects-store'
+
+export const routerContext = createContext<Router>('router')
 
 export enum AppRoute {
   Home = '/',

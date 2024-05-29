@@ -6,6 +6,6 @@ export const normalizeTemplate = (project: GitLabProject): Template => {
   return {
     name: project.name,
     tagList: project.tag_list,
-    url: project.web_url,
+    url: project.http_url_to_repo,
   }
 }

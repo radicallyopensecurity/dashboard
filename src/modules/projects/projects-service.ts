@@ -17,6 +17,7 @@ import { createProject } from './services/create-project'
 import { syncTemplates } from './services/sync-templates'
 import { templatesStore } from './templates-store'
 
+import { gitlabClient } from '@/api/gitlab/client/gitlab-client'
 import { gitlabService } from '@/api/gitlab/gitlab-service'
 
 export const projectsService = {
@@ -31,5 +32,5 @@ export const projectsService = {
   createVariable: createVariable(gitlabService, projectDetails),
   syncNamespaces: syncNamespaces(gitlabService, namespacesStore),
   syncTemplates: syncTemplates(gitlabService, templatesStore),
-  createProject: createProject(gitlabService, projects, appStore),
+  createProject: createProject(gitlabClient, projects, appStore),
 }

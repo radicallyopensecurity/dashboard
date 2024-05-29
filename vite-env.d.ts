@@ -11,6 +11,7 @@ interface ImportMetaEnv {
   readonly VITE_REPOSITORY_URL?: string
   readonly VITE_PUBLIC_ISSUE_TRACKER?: string
   readonly VITE_INTERNAL_ISSUE_TRACKER?: string
+  readonly VITE_SECRET_GITLAB_TOKEN?: string
 }
 
 interface ImportMeta {

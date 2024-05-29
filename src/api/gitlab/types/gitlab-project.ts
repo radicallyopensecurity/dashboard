@@ -22,4 +22,5 @@ export type GitLabProject = {
   }
   tag_list: string[]
   topics: string[]
+  http_url_to_repo: string
 }

@@ -9,7 +9,7 @@ import { projects } from '@/modules/projects/projects-store'
 
 import { user } from '@/modules/user/user-store'
 
-import '@/elements/project-list-item-large/project-list-item-large'
+import '@/features/project-list-item-large/project-list-item-large'
 
 const ELEMENT_NAME = 'home-page'
 

@@ -1,23 +1,28 @@
 import { generatePassword } from '@/utils/string/generate-password'
 
+import { IMPORT_URL_USERNAME } from '../constants/projects'
 import { ProjectsStore } from '../projects-store'
 
-import { GitLabService } from '@/api/gitlab/gitlab-service'
+import { GitlabClient } from '@/api/gitlab/client/gitlab-client'
 import { AppStore } from '@/modules/app/app-store'
 
 export const createProject =
-  (service: GitLabService, projectsStore: ProjectsStore, appStore: AppStore) =>
+  (client: GitlabClient, projectsStore: ProjectsStore, appStore: AppStore) =>
   async (
-    importUrl: string,
+    templateUrl: string,
     path: string,
     topic: string,
     namespaceId: number
-  ) => {
+  ): Promise<string> => {
     projectsStore.setIsLoading(true)
 
-    const project = await service.createProject(
+    const importUrl = new URL(templateUrl)
+    importUrl.username = IMPORT_URL_USERNAME
+    importUrl.password = appStore.gitlabToken
+
+    const project = await client.createProject(
       {
-        import_url: importUrl,
+        import_url: importUrl.toString(),
         path,
         topics: [topic],
         namespace_id: namespaceId,
@@ -28,18 +33,18 @@ export const createProject =
     const nextYear = new Date()
     nextYear.setDate(nextYear.getDate() + 365)
 
-    const accessToken = await service.createAccessToken(
+    const accessToken = await client.createAccessToken(
       project.id,
       {
         name: 'CI',
         scopes: ['api'],
-        expiresAt: nextYear,
+        expires_at: nextYear,
       },
       appStore.gitlabToken
     )
 
     await Promise.all([
-      service.createVariable(
+      client.createVariable(
         project.id,
         {
           key: 'PROJECT_ACCESS_TOKEN',
@@ -49,7 +54,7 @@ export const createProject =
         },
         appStore.gitlabToken
       ),
-      service.createVariable(
+      client.createVariable(
         project.id,
         {
           key: 'PDF_PASSWORD',
@@ -62,4 +67,6 @@ export const createProject =
     ])
 
     projectsStore.setIsLoading(false)
+
+    return project.path_with_namespace
   }

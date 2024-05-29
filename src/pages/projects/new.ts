@@ -1,10 +1,14 @@
+import { consume } from '@lit/context'
+import { Router } from '@lit-labs/router'
 import { SlInput, SlSelect } from '@shoelace-style/shoelace'
 import { LitElement, css, html } from 'lit'
-import { customElement } from 'lit/decorators.js'
+import { customElement, property } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { Ref, createRef, ref } from 'lit/directives/ref.js'
 
 import { theme } from '@/theme/theme'
+
+import { routerContext } from '@/routes'
 
 import { namespacesStore } from '@/modules/projects/namespaces-store'
 import { projectsService } from '@/modules/projects/projects-service'
@@ -23,6 +27,10 @@ export class ProjectNewPage extends LitElement {
   private namespaceRef: Ref<SlSelect> = createRef()
   private nameRef: Ref<SlInput> = createRef()
   private templateRef: Ref<SlSelect> = createRef()
+
+  @consume({ context: routerContext })
+  @property({ attribute: false })
+  private router?: Router
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
@@ -85,18 +93,14 @@ export class ProjectNewPage extends LitElement {
       throw new Error('namespace or template not found')
     }
 
-    console.log({
-      namespace,
-      template,
-      name,
-    })
-
-    await projectsService.createProject(
+    const path = await projectsService.createProject(
       template.url,
       name,
       template.name.toLowerCase(),
       namespace.id
     )
+
+    await this.router?.goto(`/projects/${path}`)
   }
 
   render() {
@@ -116,7 +120,7 @@ export class ProjectNewPage extends LitElement {
             ${ref(this.nameRef)}
             label="Project name (Allowed characters: a-z and-)"
             required
-            pattern="[a-z\\-]+"
+            pattern="[a-z0-9\\-]+"
             clearable
             placeholder="pen-ie11"
           ></sl-input>

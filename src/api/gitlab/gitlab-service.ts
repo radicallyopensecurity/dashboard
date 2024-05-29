@@ -1,6 +1,10 @@
 import { gitlabClient } from '@/api/gitlab/client/gitlab-client'
 import { fetchPaginated } from '@/api/gitlab/utils/fetch-paginated'
 
+/**
+ * #TODO: remove
+ * @deprecated uneccessary layer use gitlabClient directly instead
+ */
 export const gitlabService = {
   discussions: (projectId: number, issueId: number) =>
     fetchPaginated(({ perPage, page }) =>

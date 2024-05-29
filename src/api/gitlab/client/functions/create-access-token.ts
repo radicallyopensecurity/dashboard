@@ -7,7 +7,7 @@ import { handleResponse } from '@/utils/fetch/handle-response'
 export type CreateGitLabAccessToken = {
   scopes: string[]
   name: string
-  expiresAt: Date
+  expires_at: Date
 }
 
 export const createAccessToken = async (

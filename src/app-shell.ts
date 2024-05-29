@@ -1,4 +1,5 @@
 import { MobxLitElement } from '@adobe/lit-mobx'
+import { provide } from '@lit/context'
 import { Router } from '@lit-labs/router'
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
 import { html, css } from 'lit'
@@ -7,7 +8,7 @@ import { customElement } from 'lit/decorators.js'
 import { theme } from '@/theme/theme'
 import { registerTheme } from '@/theme/utils/register-theme'
 
-import { routes } from '@/routes'
+import { routerContext, routes } from '@/routes'
 
 import { authService } from '@/modules/auth/auth-service'
 
@@ -56,6 +57,7 @@ const ELEMENT_NAME = 'app-shell'
 
 @customElement(ELEMENT_NAME)
 export class AppShell extends MobxLitElement {
+  @provide({ context: routerContext })
   private router = new Router(this, routes)
 
   protected async firstUpdated() {

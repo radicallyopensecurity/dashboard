@@ -2,7 +2,7 @@ import { action, makeAutoObservable, observable } from 'mobx'
 
 export class AppStore {
   @observable
-  public gitlabToken = ''
+  public gitlabToken = import.meta.env.VITE_SECRET_GITLAB_TOKEN ?? ''
   @observable
   public showGitlabTokenDialog = false
 
