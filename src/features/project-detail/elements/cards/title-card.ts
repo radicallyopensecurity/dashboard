@@ -11,8 +11,6 @@ import { ProjectDetails } from '@/modules/projects/types/project-details'
 import { ARCHIVED_TOPIC } from '../../constants'
 import { archiveProject } from '../../utils/archive-project'
 
-import { appStore } from '@/modules/app/app-store'
-
 import '../pdf-password-dialog'
 
 const ELEMENT_NAME = 'title-card'
@@ -29,7 +27,6 @@ export class TitleCard extends LitElement {
   private isLoading = true
 
   private dialogRef = createRef<SlDialog>()
-  private appStore = appStore
 
   static styles = [
     ...theme,
@@ -146,18 +143,7 @@ export class TitleCard extends LitElement {
             <sl-button
               variant=${isArchived ? 'warning' : 'danger'}
               @click=${async () => {
-                const token = this.appStore.gitlabToken
-
-                if (!token) {
-                  this.appStore.setGitlabTokenDialog(true)
-                  return
-                }
-
-                await archiveProject(
-                  this.project.id,
-                  this.project.topics,
-                  this.appStore.gitlabToken
-                )
+                await archiveProject(this.project.id, this.project.topics)
               }}
               ?loading=${isLoading}
               ?disabled=${isLoading}

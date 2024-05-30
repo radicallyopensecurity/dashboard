@@ -11,10 +11,10 @@ const logger = createLogger('create-variable')
 
 export const createVariable =
   (service: GitLabService, detailsStore: ProjectDetailsStore) =>
-  async (id: number, payload: CreateGitLabVariable, token: string) => {
+  async (id: number, payload: CreateGitLabVariable) => {
     logger.debug('creating...')
     detailsStore.setIsLoading(id, true)
-    await service.createVariable(id, payload, token)
+    await service.createVariable(id, payload)
     await Promise.all([
       syncProjectDetails(service, detailsStore)(id, 'network'),
     ])

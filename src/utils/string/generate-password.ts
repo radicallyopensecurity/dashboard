@@ -9,7 +9,7 @@ const PASSWORD_CHARACTERS = [
   ALPHABET.toLowerCase(),
   NUMBERS,
   SYMBOLS,
-].join()
+].join('')
 
 /**
  * Generate password
@@ -26,10 +26,6 @@ export const generatePassword = (
   while (password.length < length) {
     const array = new Uint8Array(1)
     const [randomInt] = crypto.getRandomValues(array)
-
-    if (randomInt > length - 1) {
-      continue
-    }
 
     const char = characters[randomInt]
 

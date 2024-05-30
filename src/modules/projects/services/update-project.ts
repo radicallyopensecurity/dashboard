@@ -17,10 +17,10 @@ export const updateProject =
     projectsStore: ProjectsStore,
     detailsStore: ProjectDetailsStore
   ) =>
-  async (id: number, payload: UpdateGitLabProject, token: string) => {
+  async (id: number, payload: UpdateGitLabProject) => {
     logger.debug('updating...')
     detailsStore.setIsLoading(id, true)
-    const project = await service.updateProject(id, payload, token)
+    const project = await service.updateProject(id, payload)
     await Promise.all([
       syncProjectDetails(service, detailsStore)(id, 'network'),
       projectsStore.update(normalizeProject(project)),

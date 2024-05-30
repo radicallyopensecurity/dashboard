@@ -20,50 +20,35 @@ export const createProject =
     importUrl.username = IMPORT_URL_USERNAME
     importUrl.password = appStore.gitlabToken
 
-    const project = await client.createProject(
-      {
-        import_url: importUrl.toString(),
-        path,
-        topics: [topic],
-        namespace_id: namespaceId,
-      },
-      appStore.gitlabToken
-    )
+    const project = await client.createProject({
+      import_url: importUrl.toString(),
+      path,
+      topics: [topic],
+      namespace_id: namespaceId,
+    })
 
     const nextYear = new Date()
     nextYear.setDate(nextYear.getDate() + 365)
 
-    const accessToken = await client.createAccessToken(
-      project.id,
-      {
-        name: 'CI',
-        scopes: ['api'],
-        expires_at: nextYear,
-      },
-      appStore.gitlabToken
-    )
+    const accessToken = await client.createAccessToken(project.id, {
+      name: 'CI',
+      scopes: ['api'],
+      expires_at: nextYear,
+    })
 
     await Promise.all([
-      client.createVariable(
-        project.id,
-        {
-          key: 'PROJECT_ACCESS_TOKEN',
-          value: accessToken.token,
-          protected: false,
-          masked: true,
-        },
-        appStore.gitlabToken
-      ),
-      client.createVariable(
-        project.id,
-        {
-          key: 'PDF_PASSWORD',
-          value: generatePassword(),
-          protected: false,
-          masked: true,
-        },
-        appStore.gitlabToken
-      ),
+      client.createVariable(project.id, {
+        key: 'PROJECT_ACCESS_TOKEN',
+        value: accessToken.token,
+        protected: false,
+        masked: true,
+      }),
+      client.createVariable(project.id, {
+        key: 'PDF_PASSWORD',
+        value: generatePassword(),
+        protected: false,
+        masked: true,
+      }),
     ])
 
     projectsStore.setIsLoading(false)

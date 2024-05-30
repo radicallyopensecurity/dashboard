@@ -15,8 +15,7 @@ export type CreateGitLabVariable = {
 
 export const createVariable = async (
   id: number,
-  params: CreateGitLabVariable,
-  token: string
+  params: CreateGitLabVariable
 ): Promise<GitLabProject> => {
   const url = new URL(`${config.app.gitlabBaseUrl}/projects/${id}/variables`)
 
@@ -24,7 +23,6 @@ export const createVariable = async (
     method: 'POST',
     headers: {
       [CONTENT_TYPE]: CONTENT_TYPE_JSON,
-      'PRIVATE-TOKEN': token,
     },
     body: JSON.stringify(params),
   })

@@ -40,16 +40,12 @@ export class PdfPasswordDialog extends LitElement {
           ?disabled=${this.isLoading}
           @click=${async () => {
             const password = generatePassword()
-            await projectsService.createVariable(
-              this.projectId,
-              {
-                key: PDF_PASSWORD_KEY,
-                masked: true,
-                protected: true,
-                value: password,
-              },
-              '' // #TODO: token storage
-            )
+            await projectsService.createVariable(this.projectId, {
+              key: PDF_PASSWORD_KEY,
+              masked: true,
+              protected: true,
+              value: password,
+            })
           }}
         >
           Generate

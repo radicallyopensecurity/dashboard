@@ -30,10 +30,12 @@ export class HomePage extends MobxLitElement {
 
   render() {
     const { name } = this.user
-    const { pentests } = this.projects
+    const { pentests, quotes } = this.projects
 
     const countPentestProjects = pentests.length
-    const countSuffix = `project${countPentestProjects === 1 ? '' : 's'}`
+    const countPentestSuffix = `pentest${countPentestProjects === 1 ? '' : 's'}`
+
+    const countQuoteProjects = quotes.length
 
     const byRecentlyUpdated = this.projects.all
       .slice()
@@ -45,7 +47,8 @@ export class HomePage extends MobxLitElement {
     return html`<sl-card>
         <h2>Hi ${name}!</h2>
         <p>
-          You have access to ${countPentestProjects} pentest ${countSuffix}.
+          You have access to ${countPentestProjects} ${countPentestSuffix} and
+          ${countQuoteProjects} quote projects.
         </p>
       </sl-card>
       <sl-card>

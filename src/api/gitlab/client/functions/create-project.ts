@@ -29,8 +29,7 @@ export type CreateGitLabProject = {
 }
 
 export const createProject = async (
-  params: Partial<CreateGitLabProject>,
-  token: string
+  params: Partial<CreateGitLabProject>
 ): Promise<GitLabProject> => {
   const url = new URL(`${config.app.gitlabBaseUrl}/projects`)
 
@@ -43,7 +42,6 @@ export const createProject = async (
     method: 'POST',
     headers: {
       [CONTENT_TYPE]: CONTENT_TYPE_JSON,
-      'PRIVATE-TOKEN': token,
     },
     body: JSON.stringify(body),
   })

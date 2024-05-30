@@ -10,8 +10,7 @@ export type UpdateGitLabProject = Omit<Partial<GitLabProject>, 'id'>
 
 export const updateProject = async (
   id: number,
-  params: UpdateGitLabProject,
-  token: string
+  params: UpdateGitLabProject
 ): Promise<GitLabProject> => {
   const url = new URL(`${config.app.gitlabBaseUrl}/projects/${id}`)
 
@@ -19,7 +18,6 @@ export const updateProject = async (
     method: 'PUT',
     headers: {
       [CONTENT_TYPE]: CONTENT_TYPE_JSON,
-      'PRIVATE-TOKEN': token,
     },
     body: JSON.stringify(params),
   })

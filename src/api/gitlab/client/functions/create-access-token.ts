@@ -12,8 +12,7 @@ export type CreateGitLabAccessToken = {
 
 export const createAccessToken = async (
   id: number,
-  params: CreateGitLabAccessToken,
-  token: string
+  params: CreateGitLabAccessToken
 ): Promise<{ token: string }> => {
   const url = new URL(
     `${config.app.gitlabBaseUrl}/projects/${id}/access_tokens`
@@ -23,7 +22,6 @@ export const createAccessToken = async (
     method: 'POST',
     headers: {
       [CONTENT_TYPE]: CONTENT_TYPE_JSON,
-      'PRIVATE-TOKEN': token,
     },
     body: JSON.stringify(params),
   })
