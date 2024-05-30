@@ -5,7 +5,7 @@ import { customElement } from 'lit/decorators.js'
 import { pageFlex } from '@/theme/shared/page'
 import { theme } from '@/theme/theme'
 
-import { projects } from '@/modules/projects/projects-store'
+import { projects } from '@/modules/projects/store/projects-store'
 
 import { user } from '@/modules/user/user-store'
 

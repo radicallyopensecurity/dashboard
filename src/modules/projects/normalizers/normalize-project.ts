@@ -1,5 +1,7 @@
 import { config } from '@/config'
 
+import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
+
 import { Project } from '@/modules/projects/types/project'
 
 import { isPentest } from '@/modules/projects/utils/is-pentest'
@@ -9,7 +11,6 @@ import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
 import { normalizePdf } from './normalize-pdf'
 
-import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
 
 export const normalizeProject = (raw: GitLabProject): Project => {
   const tags = raw.tag_list.map((x) => x.toLowerCase())

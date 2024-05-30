@@ -1,7 +1,7 @@
 import { action, makeAutoObservable, observable } from 'mobx'
 
-import { ProjectFindingDetails } from './types/project-findings'
-import { projectFindingKey } from './utils/project-finding-key'
+import { ProjectFindingDetails } from '../types/project-findings'
+import { projectFindingKey } from '../utils/project-finding-key'
 
 export type ProjectDiscussionsMap = {
   isLoading: boolean

@@ -1,17 +1,18 @@
 import { toJS } from 'mobx'
 
+import { GitLabClient } from '@/api/gitlab/gitlab-client'
+import { fetchPaginated } from '@/api/gitlab/utils/fetch-paginated'
+
 import { createLogger } from '@/utils/logging/create-logger'
 
 import { normalizeProjectFinding } from '../normalizers/normalize-project-finding'
-import { ProjectFindingsStore } from '../project-findings-store'
+import { ProjectFindingsStore } from '../store/project-findings-store'
 import { projectFindingKey } from '../utils/project-finding-key'
-
-import { type GitLabService } from '@/api/gitlab/gitlab-service'
 
 const logger = createLogger('sync-project-discussion')
 
 export const syncProjectFinding =
-  (service: GitLabService, store: ProjectFindingsStore, baseUrl: string) =>
+  (client: GitLabClient, store: ProjectFindingsStore, baseUrl: string) =>
   async (projectId: number, issueId: number) => {
     if (toJS(store.data)[projectFindingKey(projectId, issueId)]) {
       logger.debug(
@@ -24,7 +25,9 @@ export const syncProjectFinding =
 
     store.setIsLoading(projectId, issueId, true)
 
-    const discussions = await service.discussions(projectId, issueId)
+    const discussions = await fetchPaginated(({ perPage, page }) =>
+      client.discussions({ perPage, page, projectId, issueId })
+    )
 
     const normalized = normalizeProjectFinding(
       discussions,

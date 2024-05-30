@@ -2,7 +2,7 @@ import { config } from '@/config'
 
 import { handleResponse } from '@/utils/fetch/handle-response'
 
-import { GitLabGroup } from '../../types/gitlab-group'
+import { GitLabGroup } from '../types/gitlab-group'
 
 type GetGitLabGroups = {
   allAvailable: boolean

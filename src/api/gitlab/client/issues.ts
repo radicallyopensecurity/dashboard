@@ -1,16 +1,17 @@
 import { config } from '@/config'
 
-import { handleResponse } from '@/utils/fetch/handle-response'
 
-import { GitLabMember } from '@/api/gitlab/types/gitlab-member'
+import { GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
 import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 
-export const members = async ({
+import { handleResponse } from '@/utils/fetch/handle-response'
+
+export const issues = async ({
   perPage,
   page,
   id,
-}: FetchPaginatedParameters & { id: number }): Promise<GitLabMember[]> => {
-  const url = new URL(`${config.app.gitlabBaseUrl}/projects/${id}/members`)
+}: FetchPaginatedParameters & { id: number }): Promise<GitLabIssue[]> => {
+  const url = new URL(`${config.app.gitlabBaseUrl}/projects/${id}/issues`)
 
   url.searchParams.set('per_page', perPage?.toString() ?? '')
   url.searchParams.set('page', page?.toString() ?? '')

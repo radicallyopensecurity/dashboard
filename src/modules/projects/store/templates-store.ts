@@ -1,10 +1,10 @@
 import { action, makeAutoObservable, observable } from 'mobx'
 
-import { Namespace } from './types/namespace'
+import { Template } from '../types/template'
 
-export class NamespacesStore {
+export class TemplatesStore {
   @observable
-  public namespaces: Namespace[] = []
+  public templates: Template[] = []
 
   @observable
   public isLoading = false
@@ -14,8 +14,8 @@ export class NamespacesStore {
   }
 
   @action
-  public setGroups(namespaces: Namespace[]) {
-    this.namespaces = namespaces
+  public setTemplates(namespaces: Template[]) {
+    this.templates = namespaces
   }
 
   @action setIsLoading(value: boolean) {
@@ -23,4 +23,4 @@ export class NamespacesStore {
   }
 }
 
-export const namespacesStore = new NamespacesStore()
+export const templatesStore = new TemplatesStore()

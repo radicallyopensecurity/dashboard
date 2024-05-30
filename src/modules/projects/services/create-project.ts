@@ -1,13 +1,14 @@
+import { GitLabClient } from '@/api/gitlab/gitlab-client'
+
+import { AppStore } from '@/modules/app/app-store'
+
 import { generatePassword } from '@/utils/string/generate-password'
 
 import { IMPORT_URL_USERNAME } from '../constants/projects'
-import { ProjectsStore } from '../projects-store'
-
-import { GitlabClient } from '@/api/gitlab/client/gitlab-client'
-import { AppStore } from '@/modules/app/app-store'
+import { ProjectsStore } from '../store/projects-store'
 
 export const createProject =
-  (client: GitlabClient, projectsStore: ProjectsStore, appStore: AppStore) =>
+  (client: GitLabClient, projectsStore: ProjectsStore, appStore: AppStore) =>
   async (
     templateUrl: string,
     path: string,

@@ -1,13 +1,13 @@
-import { IGNORED_NAMESPACES_MAP } from '../constants/namespaces'
-import { NamespacesStore } from '../namespaces-store'
-import { normalizeNamespace } from '../normalizers/normalize-namespace'
+import { GitLabClient } from '@/api/gitlab/gitlab-client'
 
-import { GitLabService } from '@/api/gitlab/gitlab-service'
+import { IGNORED_NAMESPACES_MAP } from '../constants/namespaces'
+import { normalizeNamespace } from '../normalizers/normalize-namespace'
+import { NamespacesStore } from '../store/namespaces-store'
 
 export const syncNamespaces =
-  (service: GitLabService, store: NamespacesStore) => async () => {
+  (client: GitLabClient, store: NamespacesStore) => async () => {
     store.setIsLoading(true)
-    const groups = await service.groups({
+    const groups = await client.groups({
       allAvailable: true,
       minAccessLevel: 40,
     })

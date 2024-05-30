@@ -10,11 +10,12 @@ import { theme } from '@/theme/theme'
 
 import { routerContext } from '@/routes'
 
-import { namespacesStore } from '@/modules/projects/namespaces-store'
-import { projectsService } from '@/modules/projects/projects-service'
-import { templatesStore } from '@/modules/projects/templates-store'
-
 import { appStore } from '@/modules/app/app-store'
+
+import { projectsService } from '@/modules/projects/projects-service'
+import { namespacesStore } from '@/modules/projects/store/namespaces-store'
+import { templatesStore } from '@/modules/projects/store/templates-store'
+
 
 @customElement('project-new-page')
 export class ProjectNewPage extends LitElement {

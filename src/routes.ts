@@ -4,7 +4,7 @@ import { html } from 'lit'
 import { toJS } from 'mobx'
 
 import { projectsService } from './modules/projects/projects-service'
-import { projects } from './modules/projects/projects-store'
+import { projects } from './modules/projects/store/projects-store'
 
 export const routerContext = createContext<Router>('router')
 

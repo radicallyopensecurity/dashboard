@@ -1,8 +1,9 @@
 import { format } from 'date-fns'
 
+import { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
+
 import { ProjectDetailsEvent } from '../types/project-details'
 
-import { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
 
 export const normalizeEvent = (raw: GitLabEvent): ProjectDetailsEvent => {
   const base = {

@@ -2,7 +2,7 @@ import { config } from '@/config'
 
 import { handleResponse } from '@/utils/fetch/handle-response'
 
-import { GitLabProject } from '../../types/gitlab-project'
+import { GitLabProject } from '../types/gitlab-project'
 
 type GetGitLabGroupProjects = {
   path: string

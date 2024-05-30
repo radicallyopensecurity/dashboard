@@ -1,8 +1,9 @@
 import { config } from '@/config'
 
+import { GitLabLabel } from '@/api/gitlab/types/gitlab-label'
+
 import { handleResponse } from '@/utils/fetch/handle-response'
 
-import { GitLabLabel } from '@/api/gitlab/types/gitlab-label'
 
 type GetGitLabGroup = {
   id: number

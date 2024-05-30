@@ -9,8 +9,8 @@ import { theme } from '@/theme/theme'
 
 import { ProjectDetailsFinding } from '@/modules/projects/types/project-details'
 
-import { projectFindingsStore } from '@/modules/projects/project-findings-store'
 import { projectsService } from '@/modules/projects/projects-service'
+import { projectFindingsStore } from '@/modules/projects/store/project-findings-store'
 import { projectFindingKey } from '@/modules/projects/utils/project-finding-key'
 
 import { findingMarkdownHtml } from '@/features/project-detail/utils/finding-markdown-html'

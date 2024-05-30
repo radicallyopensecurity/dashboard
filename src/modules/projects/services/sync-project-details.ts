@@ -1,16 +1,16 @@
 import { toJS } from 'mobx'
 
+import { GitLabClient } from '@/api/gitlab/gitlab-client'
+
 import { normalizeProjectDetails } from '@/modules/projects/normalizers/normalize-project-details'
-import { ProjectDetailsStore } from '@/modules/projects/project-details-store'
+import { ProjectDetailsStore } from '@/modules/projects/store/project-details-store'
 
 import { createLogger } from '@/utils/logging/create-logger'
-
-import { GitLabService } from '@/api/gitlab/gitlab-service'
 
 const logger = createLogger('sync-project-details')
 
 export const syncProjectDetails =
-  (service: GitLabService, store: ProjectDetailsStore) =>
+  (client: GitLabClient, store: ProjectDetailsStore) =>
   async (id: number, mode: 'cache' | 'network' = 'cache') => {
     if (mode === 'cache' && toJS(store.data)[id]?.data) {
       return
@@ -21,11 +21,11 @@ export const syncProjectDetails =
     store.setIsLoading(id, true)
 
     const [events, issues, labels, members, variables] = await Promise.all([
-      service.events(id),
-      service.issues(id),
-      service.labels(id),
-      service.members(id),
-      service.variables(id),
+      client.events({ id }),
+      client.issues({ id }),
+      client.labels({ id }),
+      client.members({ id }),
+      client.variables({ id }),
     ])
 
     const normalized = normalizeProjectDetails(

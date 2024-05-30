@@ -1,11 +1,11 @@
+import { GitLabClient } from '@/api/gitlab/gitlab-client'
+
 import { TEMPLATE_GROUP_PATH } from '../constants/namespaces'
 import { normalizeTemplate } from '../normalizers/normalize-template'
-import { TemplatesStore } from '../templates-store'
-
-import { GitLabService } from '@/api/gitlab/gitlab-service'
+import { TemplatesStore } from '../store/templates-store'
 
 export const syncTemplates =
-  (service: GitLabService, store: TemplatesStore) => async () => {
+  (service: GitLabClient, store: TemplatesStore) => async () => {
     store.setIsLoading(true)
     const projects = await service.groupProjects({
       path: TEMPLATE_GROUP_PATH,

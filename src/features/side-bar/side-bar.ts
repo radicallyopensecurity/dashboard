@@ -7,7 +7,7 @@ import { theme } from '@/theme/theme'
 import { AppRoute } from '@/routes'
 
 import { projectsService } from '@/modules/projects/projects-service'
-import { projects } from '@/modules/projects/projects-store'
+import { projects } from '@/modules/projects/store/projects-store'
 
 import { SERVICES } from '@/features/side-bar/constants'
 

@@ -3,9 +3,9 @@ import { html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { toJS } from 'mobx'
 
-import { projectDetails } from '@/modules/projects/project-details-store'
 import { projectsService } from '@/modules/projects/projects-service'
-import { projects } from '@/modules/projects/projects-store'
+import { projectDetails } from '@/modules/projects/store/project-details-store'
+import { projects } from '@/modules/projects/store/projects-store'
 
 import '@/features/project-detail/project-detail'
 import '@/features/project-detail/project-detail.skeleton'

@@ -65,6 +65,11 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
+            pattern: '@/api/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
             pattern: '@/modules/auth/types/**',
             group: 'external',
             position: 'after',
@@ -75,12 +80,7 @@ module.exports = defineConfig({
             position: 'after',
           },
           {
-            pattern: '@/modules/gitlab/types/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
-            pattern: '@/modules/gitlab/**',
+            pattern: '@/modules/app/**',
             group: 'external',
             position: 'after',
           },

@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import type { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
+import type { GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
+import type { GitLabLabel } from '@/api/gitlab/types/gitlab-label'
+import type { GitLabMember } from '@/api/gitlab/types/gitlab-member'
+import type { GitLabVariable } from '@/api/gitlab/types/gitlab-variable'
+
 import type { ProjectDetails } from '@/modules/projects/types/project-details'
 
 import { normalizeFinding } from '@/modules/projects/normalizers/normalize-finding'
@@ -12,11 +18,6 @@ import { FINDING_LABEL, NON_FINDING_LABEL } from '../constants/labels'
 import { PDF_PASSWORD_KEY } from '../constants/variables'
 import { isFinding } from '../utils/is-finding'
 
-import type { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
-import type { GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
-import type { GitLabLabel } from '@/api/gitlab/types/gitlab-label'
-import type { GitLabMember } from '@/api/gitlab/types/gitlab-member'
-import type { GitLabVariable } from '@/api/gitlab/types/gitlab-variable'
 
 const isEitherFinding = ({ labels }: { labels: string[] }) =>
   labels.some((label) => label === FINDING_LABEL || label === NON_FINDING_LABEL)

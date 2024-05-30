@@ -4,7 +4,7 @@ import { CONTENT_TYPE, CONTENT_TYPE_JSON } from '@/constants/http'
 
 import { handleResponse } from '@/utils/fetch/handle-response'
 
-import { GitLabProject } from '../../types/gitlab-project'
+import { GitLabProject } from '../types/gitlab-project'
 
 export type CreateGitLabVariable = {
   key: string

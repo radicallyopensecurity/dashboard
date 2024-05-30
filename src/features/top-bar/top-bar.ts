@@ -18,12 +18,13 @@ import {
   setLocalStorage,
 } from '@/theme/utils/register-theme'
 
+import { appStore } from '@/modules/app/app-store'
+
 import { user } from '@/modules/user/user-store'
 
 import { topBarStyles } from './top-bar.style'
 import { toggleCheckBoxes } from './utils/toggle-checkboxes'
 
-import { appStore } from '@/modules/app/app-store'
 
 const ELEMENT_NAME = 'top-bar'
 

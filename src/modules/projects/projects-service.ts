@@ -1,36 +1,34 @@
 import { config } from '@/config'
 
-import { namespacesStore } from '@/modules/projects/namespaces-store'
-import { projectDetails } from '@/modules/projects/project-details-store'
-import { projectFindingsStore } from '@/modules/projects/project-findings-store'
-import { projects } from '@/modules/projects/projects-store'
+import { gitlabClient } from '@/api/gitlab/gitlab-client'
+
+import { appStore } from '@/modules/app/app-store'
+
+import { createProject } from '@/modules/projects/services/create-project'
 import { createVariable } from '@/modules/projects/services/create-variable'
 import { syncNamespaces } from '@/modules/projects/services/sync-namespaces'
 import { syncProjectDetails } from '@/modules/projects/services/sync-project-details'
 import { syncProjectFinding } from '@/modules/projects/services/sync-project-finding'
 import { syncProjects } from '@/modules/projects/services/sync-projects'
+import { syncTemplates } from '@/modules/projects/services/sync-templates'
 import { updateProject } from '@/modules/projects/services/update-project'
-
-import { appStore } from '../app/app-store'
-
-import { createProject } from './services/create-project'
-import { syncTemplates } from './services/sync-templates'
-import { templatesStore } from './templates-store'
-
-import { gitlabClient } from '@/api/gitlab/client/gitlab-client'
-import { gitlabService } from '@/api/gitlab/gitlab-service'
+import { namespacesStore } from '@/modules/projects/store/namespaces-store'
+import { projectDetails } from '@/modules/projects/store/project-details-store'
+import { projectFindingsStore } from '@/modules/projects/store/project-findings-store'
+import { projects } from '@/modules/projects/store/projects-store'
+import { templatesStore } from '@/modules/projects/store/templates-store'
 
 export const projectsService = {
-  syncProjects: syncProjects(gitlabService, projects),
-  syncProjectDetails: syncProjectDetails(gitlabService, projectDetails),
+  createProject: createProject(gitlabClient, projects, appStore),
+  createVariable: createVariable(gitlabClient, projectDetails),
+  syncNamespaces: syncNamespaces(gitlabClient, namespacesStore),
+  syncProjects: syncProjects(gitlabClient, projects),
+  syncProjectDetails: syncProjectDetails(gitlabClient, projectDetails),
   syncProjectFinding: syncProjectFinding(
-    gitlabService,
+    gitlabClient,
     projectFindingsStore,
     config.services.gitlabUrl
   ),
-  updateProject: updateProject(gitlabService, projects, projectDetails),
-  createVariable: createVariable(gitlabService, projectDetails),
-  syncNamespaces: syncNamespaces(gitlabService, namespacesStore),
-  syncTemplates: syncTemplates(gitlabService, templatesStore),
-  createProject: createProject(gitlabClient, projects, appStore),
+  syncTemplates: syncTemplates(gitlabClient, templatesStore),
+  updateProject: updateProject(gitlabClient, projects, projectDetails),
 }

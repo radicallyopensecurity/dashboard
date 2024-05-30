@@ -1,12 +1,12 @@
 import { LitElement, html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import { map } from 'lit/directives/map.js'
 
 import { theme } from '@/theme/theme'
 
 import { ProjectDetailsFinding } from '@/modules/projects/types/project-details'
 
 import '@/features/project-detail/elements/finding-details-item'
-import { map } from 'lit/directives/map.js'
 
 const ELEMENT_NAME = 'finding-details'
 
