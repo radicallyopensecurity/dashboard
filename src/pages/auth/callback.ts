@@ -6,6 +6,8 @@ import { theme } from '@/theme/theme'
 import { authService } from '@/modules/auth/auth-service'
 import { auth } from '@/modules/auth/auth-store'
 
+import { updateTitle } from '@/modules/app/utils/update-title'
+
 const ELEMENT_NAME = 'auth-callback'
 
 @customElement(ELEMENT_NAME)
@@ -13,6 +15,7 @@ export class AuthCallback extends LitElement {
   private auth = auth
 
   protected async firstUpdated() {
+    updateTitle('login')
     await authService.loginCallback()
   }
 

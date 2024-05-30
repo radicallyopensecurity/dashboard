@@ -5,6 +5,8 @@ import { customElement } from 'lit/decorators.js'
 import { pageFlex } from '@/theme/shared/page'
 import { theme } from '@/theme/theme'
 
+import { updateTitle } from '@/modules/app/utils/update-title'
+
 import { projects } from '@/modules/projects/store/projects-store'
 
 import { user } from '@/modules/user/user-store'
@@ -17,6 +19,10 @@ const ELEMENT_NAME = 'home-page'
 export class HomePage extends MobxLitElement {
   private user = user
   private projects = projects
+
+  protected firstUpdated() {
+    updateTitle()
+  }
 
   static styles = [
     ...theme,
