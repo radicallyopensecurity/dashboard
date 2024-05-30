@@ -146,24 +146,8 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
   - [x] Top bar
 - [x] Staging
 - [x] Meta tags
-- [ ] CI/CD
-- [ ] Eslint rules
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unresolved.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-self-import.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-restricted-paths.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-relative-packages.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/namespace.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-import-module-exports.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unused-modules.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-mutable-exports.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-extraneous-dependencies.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-empty-named-blocks.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/export.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/consistent-type-specifier-style.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/first.md
-  - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-default-export.md
-  - [ ] https://github.com/dword-design/eslint-plugin-import-alias
+- [x] CI/CD
+- [x] Eslint rules
 - [ ] Mock OAuth and GitLab API
 - [ ] PWA
 - [ ] Documentation

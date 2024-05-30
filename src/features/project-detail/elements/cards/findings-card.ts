@@ -3,9 +3,9 @@ import { customElement, property } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-import type {
-  ProjectDetailsFinding,
-  ProjectDetailsGroupedFindings,
+import  {
+  type ProjectDetailsFinding,
+  type ProjectDetailsGroupedFindings,
 } from '@/modules/projects/types/project-details'
 
 import '@/features/project-detail/elements/finding-details'

@@ -28,10 +28,21 @@ module.exports = defineConfig({
     'src/**/*.css',
   ],
   rules: {
-    '@typescript-eslint/consistent-type-definitions': [0],
-    'import/no-duplicates': [2],
+    // enable when refactoring to identify unused exports
+    // will falsely report litelement classes, not useful
+    // during development
+    // 'import/no-unused-modules': ['warn', { unusedExports: true }],
+    '@typescript-eslint/consistent-type-definitions': ['off'],
+    'import/no-duplicates': ['error'],
+    'import/no-self-import': ['error'],
+    'import/no-import-module-exports': ['error'],
+    'import/no-mutable-exports': ['error'],
+    'import/no-extraneous-dependencies': ['error'],
+    'import/no-empty-named-blocks': ['error'],
+    'import/consistent-type-specifier-style': ['error', 'prefer-inline'],
+    'import/no-default-export': [2],
     'import/order': [
-      1,
+      'warn',
       {
         'newlines-between': 'always',
         alphabetize: {

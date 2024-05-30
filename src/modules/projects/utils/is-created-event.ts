@@ -1,6 +1,6 @@
-import type {
-  ProjectDetailsCreatedEvent,
-  ProjectDetailsEvent,
+import  {
+  type ProjectDetailsCreatedEvent,
+  type ProjectDetailsEvent,
 } from '@/modules/projects/types/project-details'
 
 export const isCreatedEvent = (

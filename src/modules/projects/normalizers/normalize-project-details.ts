@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import type { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
-import type { GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
-import type { GitLabLabel } from '@/api/gitlab/types/gitlab-label'
-import type { GitLabMember } from '@/api/gitlab/types/gitlab-member'
-import type { GitLabVariable } from '@/api/gitlab/types/gitlab-variable'
+import  { type GitLabEvent } from '@/api/gitlab/types/gitlab-event'
+import  { type GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
+import  { type GitLabLabel } from '@/api/gitlab/types/gitlab-label'
+import  { type GitLabMember } from '@/api/gitlab/types/gitlab-member'
+import  { type GitLabVariable } from '@/api/gitlab/types/gitlab-variable'
 
-import type { ProjectDetails } from '@/modules/projects/types/project-details'
+import  { type ProjectDetails } from '@/modules/projects/types/project-details'
 
 import { normalizeFinding } from '@/modules/projects/normalizers/normalize-finding'
 import { normalizeGroupedFindings } from '@/modules/projects/normalizers/normalize-grouped-findings'

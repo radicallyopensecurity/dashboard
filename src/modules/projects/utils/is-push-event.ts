@@ -1,6 +1,6 @@
-import type {
-  ProjectDetailsEvent,
-  ProjectDetailsPushEvent,
+import  {
+  type ProjectDetailsEvent,
+  type ProjectDetailsPushEvent,
 } from '@/modules/projects/types/project-details'
 
 export const isPushEvent = (
