@@ -145,9 +145,8 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
   - [x] Project new
   - [x] Top bar
 - [x] Staging
-- [ ] Meta tags
+- [x] Meta tags
 - [ ] CI/CD
-- [ ] Responsive
 - [ ] Eslint rules
   - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unresolved.md
   - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-self-import.md
@@ -165,14 +164,15 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
   - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/first.md
   - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-default-export.md
   - [ ] https://github.com/dword-design/eslint-plugin-import-alias
-  - [ ]
+- [ ] Mock OAuth and GitLab API
+- [ ] PWA
 - [ ] Documentation
   - [ ] SSL
   - [ ] Security
   - [ ] Proxy config
   - [ ] Badges
-- [ ] Security Audit
 - [ ] Unit Tests
-- [ ] ESLint no unused exports
+- [ ] Responsive
+- [ ] Security Audit
 - [ ] Cypress
 - [ ] Production
