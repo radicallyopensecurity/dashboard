@@ -1,9 +1,8 @@
 import { MobxLitElement } from '@adobe/lit-mobx'
 import { type SlDetails } from '@shoelace-style/shoelace'
 import { css, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement, property, state } from 'lit/decorators.js'
 import { createRef, ref, type Ref } from 'lit/directives/ref.js'
-import { marked } from 'marked'
 import { toJS } from 'mobx'
 
 import { theme } from '@/theme/theme'
@@ -14,6 +13,8 @@ import { projectFindingsStore } from '@/modules/projects/project-findings-store'
 import { projectsService } from '@/modules/projects/projects-service'
 import { projectFindingKey } from '@/modules/projects/utils/project-finding-key'
 
+import { findingMarkdownHtml } from '@/features/project-detail/utils/finding-markdown-html'
+
 import { createLogger } from '@/utils/logging/create-logger'
 
 const ELEMENT_NAME = 'finding-details-item'
@@ -23,15 +24,43 @@ const logger = createLogger(ELEMENT_NAME)
 @customElement(ELEMENT_NAME)
 export class FindingDetailsItem extends MobxLitElement {
   private projectFindingsStore = projectFindingsStore
+  private detailsRef: Ref<SlDetails> = createRef()
 
   @property()
   private finding!: ProjectDetailsFinding
   @property()
   private projectId = 0
-
+  @state()
   private fetched = false
 
-  private detailsRef: Ref<SlDetails> = createRef()
+  public disconnectedCallback() {
+    super.disconnectedCallback()
+    this.detailsRef.value?.removeEventListener('sl-show', () => this.onExpand())
+  }
+
+  protected async firstUpdated() {
+    const value = this.detailsRef.value
+
+    await value?.updateComplete
+
+    if (!value) {
+      logger.debug(
+        `Could not register finding details element for findings`,
+        this.finding,
+        this.projectId
+      )
+      return
+    }
+
+    value.addEventListener('sl-show', () => this.onExpand())
+  }
+
+  private onExpand() {
+    if (!this.fetched) {
+      void projectsService.syncProjectFinding(this.projectId, this.finding.iid)
+      this.fetched = true
+    }
+  }
 
   static styles = [
     ...theme,
@@ -48,91 +77,30 @@ export class FindingDetailsItem extends MobxLitElement {
     `,
   ]
 
-  protected async firstUpdated() {
-    const value = this.detailsRef.value
-
-    await value?.updateComplete
-
-    if (!value) {
-      logger.debug(
-        `Could not register finding details element for findings`,
-        this.finding,
-        this.projectId
-      )
-      return
-    }
-
-    value.addEventListener('sl-show', () => {
-      if (!this.fetched) {
-        void projectsService.syncProjectFinding(
-          this.projectId,
-          this.finding.iid
-        )
-        this.fetched = true
-      }
-    })
-  }
-
   render() {
-    const {
-      projectId,
-      finding: { iid, title, description },
-      projectFindingsStore,
-    } = this
+    const { projectId, finding, projectFindingsStore } = this
+    const { iid, title } = finding
 
     const details = toJS(projectFindingsStore.data)[
       projectFindingKey(projectId, iid)
     ]
 
-    let content = html`error`
+    let iframe = html`error`
+
     if (details?.isLoading) {
-      content = html`loading...`
+      iframe = html`loading...`
     } else if (!details?.isLoading && details?.data) {
-      const descriptionMarkdown = marked(description, { gfm: true }) as string
-
-      const technicalDescriptionMarkdown = marked(
-        details.data.technicalDescription,
-        { gfm: true }
-      ) as string
-
-      const impactMarkdown = marked(details.data.impact, {
-        gfm: true,
-      }) as string
-
-      const recommendationMarkdown = marked(details.data.recommendation, {
-        gfm: true,
-      }) as string
-
-      const htmlContent = `
-        <section>
-          ${descriptionMarkdown}
-        </section>
-
-        </section>
-        <h3>Technical Description</h3>
-          ${technicalDescriptionMarkdown}
-        </section>
-
-        </section>
-          <h3>Impact</h3>
-          ${impactMarkdown}
-        </section>
-
-        </section>
-          <h3>Recommendation</h3>
-          ${recommendationMarkdown}
-        </section>
-      `
-
-      const iframed = html`<secure-iframe
-        .UNSAFE_html=${htmlContent}
+      iframe = html`<secure-iframe
+        .UNSAFE_html=${findingMarkdownHtml(finding, details.data)}
       ></secure-iframe>`
-
-      content = iframed
     }
 
-    return html`<sl-details ${ref(this.detailsRef)} iid=${iid} summary=${title}>
-      ${content}
+    return html`<sl-details
+      ${ref(this.detailsRef)}
+      .iid=${iid}
+      .summary=${title}
+    >
+      ${iframe}
     </sl-details>`
   }
 }
