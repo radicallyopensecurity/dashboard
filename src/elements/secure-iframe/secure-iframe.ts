@@ -1,17 +1,21 @@
-import { LitElement, html, css } from 'lit'
+import { MobxLitElement } from '@adobe/lit-mobx'
+import { html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { createRef, ref, Ref } from 'lit/directives/ref.js'
 
 import { theme } from '@/theme/theme'
 
+import { themeStore } from '@/modules/app/theme-store'
+
 const ELEMENT_NAME = 'secure-iframe'
 
 @customElement(ELEMENT_NAME)
-export class SecureIframe extends LitElement {
+export class SecureIframe extends MobxLitElement {
+  private themeStore = themeStore
+  private ref: Ref<HTMLIFrameElement> = createRef()
+
   @property()
   private UNSAFE_html = ''
-
-  private ref: Ref<HTMLIFrameElement> = createRef()
 
   private observer: MutationObserver = new MutationObserver(() => {
     this.onContentChange()
@@ -22,17 +26,8 @@ export class SecureIframe extends LitElement {
     this.observer.disconnect()
   }
 
-  protected onContentChange() {
-    const offset =
-      this.ref.value!.contentDocument?.documentElement.offsetHeight + 'px'
-
-    setTimeout(() => {
-      this.ref.value!.style.height = offset
-    }, 100) // timeout value discovered empirically
-    // 5 bucks if you can get rid of the timeout
-  }
-
-  protected firstUpdated(): void {
+  protected updated(): void {
+    console.log('UPDATE')
     if (!this.ref.value) {
       return
     }
@@ -45,12 +40,24 @@ export class SecureIframe extends LitElement {
 
     this.ref.value.srcdoc = `
       <html>
-        <head></head>
-        <body>
+        <head>
+          <link rel="stylesheet" href="/iframe.css">
+        </head>
+        <body class="${themeStore.theme}">
           ${this.UNSAFE_html}
         </body>
       </html>
     `
+  }
+
+  protected onContentChange() {
+    const offset =
+      this.ref.value!.contentDocument?.documentElement.offsetHeight + 'px'
+
+    setTimeout(() => {
+      this.ref.value!.style.height = offset
+    }, 100) // timeout value discovered empirically
+    // 5 bucks if you can get rid of the timeout
   }
 
   static styles = [
@@ -65,6 +72,8 @@ export class SecureIframe extends LitElement {
   ]
 
   render() {
+    console.log('THEME', this.themeStore.theme)
+
     return html`<iframe ${ref(this.ref)} sandbox="allow-same-origin"></iframe>`
   }
 }

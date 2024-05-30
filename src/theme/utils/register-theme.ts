@@ -1,3 +1,5 @@
+import { themeStore } from '@/modules/app/theme-store'
+
 import { createLogger } from '@/utils/logging/create-logger'
 
 const logger = createLogger('register-theme')
@@ -27,6 +29,7 @@ export const setTheme = (theme: Theme.Light | Theme.Dark): void => {
   const htmlElement = document.querySelector('html')
   htmlElement?.classList.remove(toRemove)
   htmlElement?.classList.add(toAdd)
+  themeStore.setTheme(theme)
 }
 
 const parseTheme = (value: string): Theme => {

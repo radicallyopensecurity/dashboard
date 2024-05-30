@@ -138,15 +138,15 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] CSS Library
 - [x] App layout
 - [x] Stylelint
-- [ ] Features
+- [x] Features
   - [x] Sidebar
   - [x] Homepage
   - [x] Project detail
-  - [ ] Project new
+  - [x] Project new
   - [x] Top bar
+- [x] Staging
 - [ ] Meta tags
 - [ ] CI/CD
-- [ ] Staging
 - [ ] Responsive
 - [ ] Eslint rules
   - [ ] https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unresolved.md
