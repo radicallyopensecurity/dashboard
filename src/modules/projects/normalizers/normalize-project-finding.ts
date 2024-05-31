@@ -2,10 +2,9 @@ import { GitLabDiscussion } from '@/api/gitlab/types/gitlab-discussion'
 
 import { ProjectFindingDetails } from '../types/project-findings'
 
-
 const TO_DO = 'ToDo'
 
-const getTopic = (topic: string, raw: GitLabDiscussion[], baseUrl: string) => {
+const getTopic = (topic: string, raw: GitLabDiscussion[]) => {
   const issueDiscussionComments = raw.filter((comment) =>
     comment.notes[0].body.toLowerCase().startsWith(topic.toLowerCase())
   )
@@ -19,20 +18,25 @@ const getTopic = (topic: string, raw: GitLabDiscussion[], baseUrl: string) => {
     .filter((line: string) => !line.match(/^\s*$/)) // remove empty lines
 
   const joined = lines.join('\n')
-  const replaced = joined.replaceAll('(/uploads/', `(${baseUrl}/uploads/`)
-
-  return replaced
+  return joined
 }
 
 export const normalizeProjectFinding = (
   raw: GitLabDiscussion[],
   projectId: number,
-  issueId: number,
-  baseUrl: string
+  issueId: number
 ): ProjectFindingDetails => {
-  const recommendation = getTopic('recommendation', raw, baseUrl)
-  const impact = getTopic('impact', raw, baseUrl)
-  const technicalDescription = raw[0]?.notes[0]?.body ?? TO_DO
+  const recommendation = getTopic('recommendation', raw)
+  const impact = getTopic('impact', raw)
+  const type = getTopic('type', raw)
+  const technicalDescriptionTopic = getTopic('technical description', raw)
+
+  const firstRaw = raw[0]?.notes[0]?.body
+  const first = firstRaw?.length ? firstRaw : TO_DO
+
+  // in case technical description is undefined try to use the first comment
+  const technicalDescription =
+    technicalDescriptionTopic === TO_DO ? first : technicalDescriptionTopic
 
   return {
     projectId,
@@ -40,5 +44,6 @@ export const normalizeProjectFinding = (
     recommendation,
     impact,
     technicalDescription,
+    type,
   }
 }

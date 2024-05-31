@@ -69,7 +69,6 @@ export class ProjectNewPage extends LitElement {
   ]
 
   protected async onSubmit(e: Event) {
-    console.log(e)
     e.preventDefault()
     e.stopPropagation()
 

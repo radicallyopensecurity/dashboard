@@ -16,6 +16,8 @@ export class FindingDetails extends LitElement {
   private findings: ProjectDetailsFinding[] = []
   @property()
   private projectId = 0
+  @property()
+  private baseUrl = ''
 
   static styles = [
     ...theme,
@@ -28,7 +30,7 @@ export class FindingDetails extends LitElement {
   ]
 
   render() {
-    const { findings, projectId } = this
+    const { findings, projectId, baseUrl } = this
 
     return map(
       findings,
@@ -36,6 +38,7 @@ export class FindingDetails extends LitElement {
         html`<finding-details-item
           .finding=${finding}
           .projectId=${projectId}
+          .baseUrl=${baseUrl}
         ></finding-details-item>`
     )
   }

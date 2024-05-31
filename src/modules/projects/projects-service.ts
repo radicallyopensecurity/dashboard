@@ -1,5 +1,3 @@
-import { config } from '@/config'
-
 import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
 import { appStore } from '@/modules/app/app-store'
@@ -24,11 +22,7 @@ export const projectsService = {
   syncNamespaces: syncNamespaces(gitlabClient, namespacesStore),
   syncProjects: syncProjects(gitlabClient, projects),
   syncProjectDetails: syncProjectDetails(gitlabClient, projectDetails),
-  syncProjectFinding: syncProjectFinding(
-    gitlabClient,
-    projectFindingsStore,
-    config.services.gitlabUrl
-  ),
+  syncProjectFinding: syncProjectFinding(gitlabClient, projectFindingsStore),
   syncTemplates: syncTemplates(gitlabClient, templatesStore),
   updateProject: updateProject(gitlabClient, projects, projectDetails),
 }

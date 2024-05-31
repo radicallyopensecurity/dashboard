@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-import  {
+import {
   type ProjectDetailsFinding,
   type ProjectDetailsGroupedFindings,
 } from '@/modules/projects/types/project-details'
@@ -22,6 +22,8 @@ export class FindingsCard extends LitElement {
   private nonFindings: ProjectDetailsFinding[] = []
   @property()
   private projectId = 0
+  @property()
+  private baseUrl = ''
 
   static styles = [
     ...theme,
@@ -124,6 +126,7 @@ export class FindingsCard extends LitElement {
                       <finding-details
                         .findings=${findings}
                         .projectId=${projectId}
+                        .baseUrl=${this.baseUrl}
                       ></finding-details>
                     </section>
                   `
@@ -144,6 +147,7 @@ export class FindingsCard extends LitElement {
           ? html`<finding-details
               .findings=${nonFindings}
               .projectId=${projectId}
+              .baseUrl=${this.baseUrl}
             ></finding-details>`
           : html`<p>${emptyText('non-findings')}</p>`}
       </section>

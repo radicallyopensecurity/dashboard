@@ -1,9 +1,8 @@
-import  { type GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
+import { type GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
 
-import  { type ProjectDetailsFinding } from '@/modules/projects/types/project-details'
+import { type ProjectDetailsFinding } from '@/modules/projects/types/project-details'
 
 import { normalizeFindingLabel } from '@/modules/projects/normalizers/normalize-finding-label'
-
 
 export const normalizeFinding = (raw: GitLabIssue): ProjectDetailsFinding => {
   return {

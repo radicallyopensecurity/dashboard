@@ -12,7 +12,6 @@ export class ThemeStore {
 
   @action
   public setTheme(theme: Theme) {
-    console.log('SET', theme)
     this.theme = theme
   }
 }

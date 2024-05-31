@@ -17,33 +17,38 @@ export class SecureIframe extends MobxLitElement {
   @property()
   private UNSAFE_html = ''
 
-  private observer: MutationObserver = new MutationObserver(() => {
+  private mutationObserver: MutationObserver = new MutationObserver(() => {
+    this.onContentChange()
+  })
+  private resizeObserver: ResizeObserver = new ResizeObserver(() => {
     this.onContentChange()
   })
 
   disconnectedCallback() {
     super.disconnectedCallback()
-    this.observer.disconnect()
+    this.mutationObserver.disconnect()
+    this.resizeObserver.disconnect()
   }
 
   protected updated(): void {
-    console.log('UPDATE')
     if (!this.ref.value) {
       return
     }
 
-    this.observer.observe(this.ref.value, {
+    this.mutationObserver.observe(this.ref.value, {
       attributes: true,
       childList: true,
       subtree: true,
     })
+
+    this.resizeObserver.observe(this.ref.value)
 
     this.ref.value.srcdoc = `
       <html>
         <head>
           <link rel="stylesheet" href="/iframe.css">
         </head>
-        <body class="${themeStore.theme}">
+        <body class="${this.themeStore.theme}">
           ${this.UNSAFE_html}
         </body>
       </html>
@@ -51,8 +56,9 @@ export class SecureIframe extends MobxLitElement {
   }
 
   protected onContentChange() {
-    const offset =
-      this.ref.value!.contentDocument?.documentElement.offsetHeight + 'px'
+    const offsetHeight =
+      this.ref.value!.contentDocument?.documentElement.offsetHeight ?? 0
+    const offset = `${offsetHeight + 18}px`
 
     setTimeout(() => {
       this.ref.value!.style.height = offset
@@ -72,9 +78,11 @@ export class SecureIframe extends MobxLitElement {
   ]
 
   render() {
-    console.log('THEME', this.themeStore.theme)
-
-    return html`<iframe ${ref(this.ref)} sandbox="allow-same-origin"></iframe>`
+    return html`<iframe
+      class=${this.themeStore.theme}
+      ${ref(this.ref)}
+      sandbox="allow-same-origin"
+    ></iframe>`
   }
 }
 

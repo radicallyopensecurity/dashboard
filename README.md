@@ -150,12 +150,12 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] Eslint rules
 - [ ] Mock OAuth and GitLab API
 - [ ] PWA
+- [ ] Unit Tests
 - [ ] Documentation
   - [ ] SSL
   - [ ] Security
   - [ ] Proxy config
   - [ ] Badges
-- [ ] Unit Tests
 - [ ] Responsive
 - [ ] Security Audit
 - [ ] Cypress

@@ -2,6 +2,8 @@ import { MobxLitElement } from '@adobe/lit-mobx'
 import { html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
+import { config } from '@/config'
+
 import { theme } from '@/theme/theme'
 
 import { type Project } from '@/modules/projects/types/project'
@@ -88,6 +90,8 @@ export class ProjectDetail extends MobxLitElement {
 
     const now = new Date()
 
+    const baseUrl = `${config.services.gitlabUrl}/${project.pathWithNamespace}`
+
     return html`
       <title-card
         id="title"
@@ -110,6 +114,7 @@ export class ProjectDetail extends MobxLitElement {
         .findings=${findings}
         .nonFindings=${nonFindings}
         .projectId=${project.id}
+        .baseUrl=${baseUrl}
       ></findings-card>
       <history-card
         id="history"

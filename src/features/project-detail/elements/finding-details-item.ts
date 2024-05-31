@@ -30,6 +30,8 @@ export class FindingDetailsItem extends MobxLitElement {
   private finding!: ProjectDetailsFinding
   @property()
   private projectId = 0
+  @property()
+  private baseUrl = ''
   @state()
   private fetched = false
 
@@ -91,7 +93,7 @@ export class FindingDetailsItem extends MobxLitElement {
       iframe = html`loading...`
     } else if (!details?.isLoading && details?.data) {
       iframe = html`<secure-iframe
-        .UNSAFE_html=${findingMarkdownHtml(finding, details.data)}
+        .UNSAFE_html=${findingMarkdownHtml(finding, details.data, this.baseUrl)}
       ></secure-iframe>`
     }
 

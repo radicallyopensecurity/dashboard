@@ -4,4 +4,5 @@ export type ProjectFindingDetails = {
   recommendation: string
   impact: string
   technicalDescription: string
+  type: string
 }

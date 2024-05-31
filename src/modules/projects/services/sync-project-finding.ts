@@ -12,7 +12,7 @@ import { projectFindingKey } from '../utils/project-finding-key'
 const logger = createLogger('sync-project-discussion')
 
 export const syncProjectFinding =
-  (client: GitLabClient, store: ProjectFindingsStore, baseUrl: string) =>
+  (client: GitLabClient, store: ProjectFindingsStore) =>
   async (projectId: number, issueId: number) => {
     if (toJS(store.data)[projectFindingKey(projectId, issueId)]) {
       logger.debug(
@@ -29,12 +29,7 @@ export const syncProjectFinding =
       client.discussions({ perPage, page, projectId, issueId })
     )
 
-    const normalized = normalizeProjectFinding(
-      discussions,
-      projectId,
-      issueId,
-      baseUrl
-    )
+    const normalized = normalizeProjectFinding(discussions, projectId, issueId)
 
     logger.debug(
       `normalized finding for project: ${projectId} and issue: ${issueId}`,
