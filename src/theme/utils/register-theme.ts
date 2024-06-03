@@ -1,4 +1,4 @@
-import { themeStore } from '@/modules/app/theme-store'
+import { themeSignal } from '@/modules/app/signals/theme-signal'
 
 import { createLogger } from '@/utils/logging/create-logger'
 
@@ -29,7 +29,7 @@ export const setTheme = (theme: Theme.Light | Theme.Dark): void => {
   const htmlElement = document.querySelector('html')
   htmlElement?.classList.remove(toRemove)
   htmlElement?.classList.add(toAdd)
-  themeStore.setTheme(theme)
+  themeSignal.set(theme)
 }
 
 const parseTheme = (value: string): Theme => {

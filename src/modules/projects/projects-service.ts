@@ -1,7 +1,5 @@
 import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
-import { appStore } from '@/modules/app/app-store'
-
 import { createProject } from '@/modules/projects/services/create-project'
 import { createVariable } from '@/modules/projects/services/create-variable'
 import { syncNamespaces } from '@/modules/projects/services/sync-namespaces'
@@ -16,8 +14,10 @@ import { projectFindingsStore } from '@/modules/projects/store/project-findings-
 import { projects } from '@/modules/projects/store/projects-store'
 import { templatesStore } from '@/modules/projects/store/templates-store'
 
+import { appSignal } from '../app/signals/app-signal'
+
 export const projectsService = {
-  createProject: createProject(gitlabClient, projects, appStore),
+  createProject: createProject(gitlabClient, projects, appSignal),
   createVariable: createVariable(gitlabClient, projectDetails),
   syncNamespaces: syncNamespaces(gitlabClient, namespacesStore),
   syncProjects: syncProjects(gitlabClient, projects),

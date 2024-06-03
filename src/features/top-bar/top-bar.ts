@@ -1,4 +1,4 @@
-import { MobxLitElement } from '@adobe/lit-mobx'
+import { SignalWatcher } from '@lit-labs/preact-signals'
 import {
   SlDialog,
   SlInput,
@@ -6,7 +6,7 @@ import {
   SlMenuItem,
   SlRequestCloseEvent,
 } from '@shoelace-style/shoelace'
-import { html } from 'lit'
+import { LitElement, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { Ref, createRef, ref } from 'lit/directives/ref.js'
 
@@ -18,22 +18,18 @@ import {
   setLocalStorage,
 } from '@/theme/utils/register-theme'
 
-import { appStore } from '@/modules/app/app-store'
+import { appSignal } from '@/modules/app/signals/app-signal'
 
-import { user } from '@/modules/user/user-store'
+import { userQuery } from '@/modules/user/queries/user-query'
 
 import { topBarStyles } from './top-bar.style'
 import { toggleCheckBoxes } from './utils/toggle-checkboxes'
 
-
 const ELEMENT_NAME = 'top-bar'
 
 @customElement(ELEMENT_NAME)
-export class TopBar extends MobxLitElement {
+export class TopBar extends SignalWatcher(LitElement) {
   static styles = topBarStyles
-
-  private user = user
-  private appStore = appStore
 
   private buttonRefs = {
     [Theme.Dark]: createRef<SlMenuItem>(),
@@ -67,7 +63,7 @@ export class TopBar extends MobxLitElement {
 
   onOverlayClose(e: SlRequestCloseEvent) {
     if (e.detail.source === 'overlay') {
-      this.appStore.setGitlabTokenDialog(false)
+      appSignal.setShowGitLabTokenDialog(false)
     }
   }
 
@@ -85,12 +81,12 @@ export class TopBar extends MobxLitElement {
   }
 
   render() {
-    const { avatar, name } = this.user
+    const { avatar, name } = userQuery.data ?? {}
 
     const currentTheme = getTheme()
     const iconName = currentTheme === Theme.Light ? 'sun' : 'moon-stars'
 
-    const { gitlabToken } = this.appStore
+    const gitlabToken = appSignal.gitLabToken
 
     const gitlabMode = gitlabToken ? 'danger' : 'warning'
     const gitlabModeText = gitlabToken ? 'ELEVATED ACCESS' : 'Read Access'
@@ -108,7 +104,7 @@ export class TopBar extends MobxLitElement {
         ${gitlabMode === 'danger'
           ? html`<sl-badge
               @click=${() => {
-                this.appStore.setGitlabToken('')
+                appSignal.setGitLabToken('')
               }}
               id="gitlab-top-badge"
               variant="danger"
@@ -139,7 +135,7 @@ export class TopBar extends MobxLitElement {
               </sl-badge>
             </sl-menu-label>
             <sl-menu-item
-              @click=${() => this.appStore.setGitlabTokenDialog(true)}
+              @click=${() => appSignal.setShowGitLabTokenDialog(true)}
             >
               <sl-icon name="pen" slot="prefix"></sl-icon>
               ${gitlabToken ? 'Change token' : 'Set token'}
@@ -147,8 +143,10 @@ export class TopBar extends MobxLitElement {
             ${gitlabToken
               ? html`<sl-menu-item
                   @click=${() => {
-                    this.appStore.setGitlabToken('')
-                    this.appStore.setGitlabTokenDialog(false)
+                    appSignal.set({
+                      gitLabToken: '',
+                      showGitLabTokenDialog: false,
+                    })
                   }}
                 >
                   <sl-icon name="x-lg" slot="prefix"></sl-icon>
@@ -162,7 +160,7 @@ export class TopBar extends MobxLitElement {
           id="gitlab-dialog"
           class="dialog-overview"
           label="Set GitLab token"
-          ?open=${this.appStore.showGitlabTokenDialog}
+          ?open=${appSignal.showGitLabTokenDialog}
         >
           <sl-alert variant="danger" open>
             <sl-icon slot="icon" name="exclamation-octagon"></sl-icon>
@@ -180,21 +178,23 @@ export class TopBar extends MobxLitElement {
             <sl-button
               variant="primary"
               @click=${() => {
-                this.appStore.setGitlabToken(
-                  this.gitlabTokenRef.value?.value ?? ''
-                )
-                this.appStore.setGitlabTokenDialog(false)
+                appSignal.set({
+                  gitLabToken: this.gitlabTokenRef.value?.value ?? '',
+                  showGitLabTokenDialog: false,
+                })
               }}
               >Save</sl-button
             >
             <sl-button
               @click=${() => {
-                this.appStore.setGitlabToken('')
-                this.appStore.setGitlabTokenDialog(false)
+                appSignal.set({
+                  gitLabToken: '',
+                  showGitLabTokenDialog: false,
+                })
               }}
               >Remove</sl-button
             >
-            <sl-button @click=${() => this.appStore.setGitlabTokenDialog(false)}
+            <sl-button @click=${() => appSignal.setShowGitLabTokenDialog(false)}
               >Close</sl-button
             >
           </div>

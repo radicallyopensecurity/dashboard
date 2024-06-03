@@ -4,8 +4,8 @@ import { customElement } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
-import { authService } from '@/modules/auth/auth-service'
-import { auth } from '@/modules/auth/auth-signal'
+import { authCallbackQuery } from '@/modules/auth/queries/auth-callback-query'
+import { authEnsureQuery } from '@/modules/auth/queries/auth-ensure-query'
 
 import { updateTitle } from '@/modules/app/utils/update-title'
 
@@ -16,7 +16,7 @@ export class AuthCallback extends SignalWatcher(LitElement) {
   protected async firstUpdated() {
     updateTitle('login')
 
-    const callbackPath = await authService.loginCallback()
+    const callbackPath = await authCallbackQuery.fetch()
     if (callbackPath) {
       // router.navigate doesn't navigate parent routes
       window.location.href = callbackPath
@@ -26,7 +26,7 @@ export class AuthCallback extends SignalWatcher(LitElement) {
   static styles = [...theme]
 
   render() {
-    const { isAuthenticated } = auth.signal.value
+    const isAuthenticated = authEnsureQuery.data
 
     let text = ''
     switch (isAuthenticated) {

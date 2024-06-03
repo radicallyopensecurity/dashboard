@@ -1,29 +1,30 @@
-import { MobxLitElement } from '@adobe/lit-mobx'
-import { html, css } from 'lit'
+import { SignalWatcher } from '@lit-labs/preact-signals'
+import { html, css, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { createRef, ref, Ref } from 'lit/directives/ref.js'
 
 import { theme } from '@/theme/theme'
 
-import { themeStore } from '@/modules/app/theme-store'
+import { themeSignal } from '@/modules/app/signals/theme-signal'
 
 const ELEMENT_NAME = 'secure-iframe'
 
 @customElement(ELEMENT_NAME)
-export class SecureIframe extends MobxLitElement {
-  private themeStore = themeStore
+export class SecureIframe extends SignalWatcher(LitElement) {
   private ref: Ref<HTMLIFrameElement> = createRef()
 
   @property()
   private sandbox = ''
+
   @property()
   private UNSAFE_html = ''
 
   private mutationObserver: MutationObserver = new MutationObserver(() => {
-    this.onContentChange()
+    this.resizeIframe()
   })
+
   private resizeObserver: ResizeObserver = new ResizeObserver(() => {
-    this.onContentChange()
+    this.resizeIframe()
   })
 
   disconnectedCallback() {
@@ -50,14 +51,14 @@ export class SecureIframe extends MobxLitElement {
         <head>
           <link rel="stylesheet" href="/iframe.css">
         </head>
-        <body class="${this.themeStore.theme}">
+        <body class="${themeSignal.theme}">
           ${this.UNSAFE_html}
         </body>
       </html>
     `
   }
 
-  protected onContentChange() {
+  protected resizeIframe() {
     const offsetHeight =
       this.ref.value!.contentDocument?.documentElement.offsetHeight ?? 0
     const offset = `${offsetHeight + 18}px`
@@ -80,11 +81,7 @@ export class SecureIframe extends MobxLitElement {
   ]
 
   render() {
-    return html`<iframe
-      ${ref(this.ref)}
-      class=${this.themeStore.theme}
-      sandbox=${this.sandbox}
-    ></iframe>`
+    return html`<iframe ${ref(this.ref)} sandbox=${this.sandbox}></iframe>`
   }
 }
 

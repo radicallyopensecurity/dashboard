@@ -1,19 +1,18 @@
-import { type OidcClient } from '@axa-fr/oidc-client'
+import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
-import { type GitLabClient } from '@/api/gitlab/gitlab-client'
+import { authClient } from '@/modules/auth/client/auth-client'
 
-import { type UserStore } from '@/modules/user/user-store'
+import { User } from '@/modules/user/types/user'
 
+export const getUser = async (): Promise<User> => {
+  const [userInfo, gitlabUser] = await Promise.all([
+    authClient.userInfoAsync(),
+    gitlabClient.user(),
+  ])
 
-export const syncUser =
-  (authClient: OidcClient, gitlabClient: GitLabClient, store: UserStore) =>
-  async () => {
-    store.setIsLoading(true)
-    const [userInfo, gitlabUser] = await Promise.all([
-      authClient.userInfoAsync(),
-      gitlabClient.user(),
-    ])
-    store.fromUserInfo(userInfo)
-    store.fromGitLabUser(gitlabUser)
-    store.setIsLoading(false)
+  return {
+    name: userInfo.preferred_username ?? 'username_undefined',
+    groups: userInfo.groups ?? [],
+    avatar: gitlabUser.avatar_url,
   }
+}

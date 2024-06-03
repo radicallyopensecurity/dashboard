@@ -3,10 +3,10 @@ import { RouteConfig, Router } from '@lit-labs/router'
 import { html } from 'lit'
 import { toJS } from 'mobx'
 
-import { ensureAuth } from './modules/auth/services/ensure-auth'
+import { authEnsureQuery } from './modules/auth/queries/auth-ensure-query'
 import { projectsService } from './modules/projects/projects-service'
 import { projects } from './modules/projects/store/projects-store'
-import { userService } from './modules/user/user-service'
+import { userQuery } from './modules/user/queries/user-query'
 
 export const routerContext = createContext<Router>('router')
 
@@ -23,14 +23,11 @@ export const routes: RouteConfig[] = [
     render: () => html`<home-page></home-page>`,
     enter: async () => {
       await import('@/pages/home')
-      if (!(await ensureAuth())) {
+      if (!(await authEnsureQuery.fetch())) {
         return true
       }
 
-      await Promise.all([
-        userService.syncUser(),
-        projectsService.syncProjects(),
-      ])
+      await Promise.all([userQuery.fetch(), projectsService.syncProjects()])
 
       return true
     },
@@ -41,12 +38,12 @@ export const routes: RouteConfig[] = [
     enter: async () => {
       await import('@/pages/projects/new')
 
-      if (!(await ensureAuth())) {
+      if (!(await authEnsureQuery.fetch())) {
         return true
       }
 
       await Promise.all([
-        userService.syncUser(),
+        userQuery.fetch(),
         projectsService.syncNamespaces(),
         projectsService.syncTemplates(),
         projectsService.syncProjects(),
@@ -64,7 +61,7 @@ export const routes: RouteConfig[] = [
     enter: async ({ name, namespace }) => {
       await import('@/pages/projects/:namespace,:name')
 
-      if (!(await ensureAuth())) {
+      if (!(await authEnsureQuery.fetch())) {
         return true
       }
 
@@ -72,10 +69,7 @@ export const routes: RouteConfig[] = [
         return true
       }
 
-      await Promise.all([
-        userService.syncUser(),
-        projectsService.syncProjects(),
-      ])
+      await Promise.all([userQuery.fetch(), projectsService.syncProjects()])
 
       const nameWithNamespace = `${namespace}/${name}`
 

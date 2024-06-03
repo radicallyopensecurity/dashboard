@@ -1,6 +1,6 @@
 import { GitLabClient } from '@/api/gitlab/gitlab-client'
 
-import { AppStore } from '@/modules/app/app-store'
+import { AppSignal } from '@/modules/app/signals/app-signal'
 
 import { generatePassword } from '@/utils/string/generate-password'
 
@@ -8,7 +8,7 @@ import { IMPORT_URL_USERNAME } from '../constants/projects'
 import { ProjectsStore } from '../store/projects-store'
 
 export const createProject =
-  (client: GitLabClient, projectsStore: ProjectsStore, appStore: AppStore) =>
+  (client: GitLabClient, projectsStore: ProjectsStore, appStore: AppSignal) =>
   async (
     templateUrl: string,
     path: string,
@@ -19,7 +19,7 @@ export const createProject =
 
     const importUrl = new URL(templateUrl)
     importUrl.username = IMPORT_URL_USERNAME
-    importUrl.password = appStore.gitlabToken
+    importUrl.password = appStore.gitLabToken
 
     const project = await client.createProject({
       import_url: importUrl.toString(),

@@ -1,5 +1,5 @@
-import { MobxLitElement } from '@adobe/lit-mobx'
-import { html, css } from 'lit'
+import { SignalWatcher } from '@lit-labs/preact-signals'
+import { html, css, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 import { pageFlex } from '@/theme/shared/page'
@@ -9,15 +9,14 @@ import { updateTitle } from '@/modules/app/utils/update-title'
 
 import { projects } from '@/modules/projects/store/projects-store'
 
-import { user } from '@/modules/user/user-store'
+import { userQuery } from '@/modules/user/queries/user-query'
 
 import '@/features/project-list-item-large/project-list-item-large'
 
 const ELEMENT_NAME = 'home-page'
 
 @customElement(ELEMENT_NAME)
-export class HomePage extends MobxLitElement {
-  private user = user
+export class HomePage extends SignalWatcher(LitElement) {
   private projects = projects
 
   protected firstUpdated() {
@@ -35,7 +34,7 @@ export class HomePage extends MobxLitElement {
   ]
 
   render() {
-    const { name } = this.user
+    const name = userQuery.data?.name
     const { pentests, quotes } = this.projects
 
     const countPentestProjects = pentests.length

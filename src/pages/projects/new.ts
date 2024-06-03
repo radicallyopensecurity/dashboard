@@ -10,7 +10,7 @@ import { theme } from '@/theme/theme'
 
 import { routerContext } from '@/routes'
 
-import { appStore } from '@/modules/app/app-store'
+import { appSignal } from '@/modules/app/signals/app-signal'
 import { updateTitle } from '@/modules/app/utils/update-title'
 
 import { projectsService } from '@/modules/projects/projects-service'
@@ -21,7 +21,6 @@ import { templatesStore } from '@/modules/projects/store/templates-store'
 export class ProjectNewPage extends LitElement {
   private namespacesStore = namespacesStore
   private templatesStore = templatesStore
-  private appStore = appStore
 
   private formRef: Ref<HTMLFormElement> = createRef()
 
@@ -72,8 +71,8 @@ export class ProjectNewPage extends LitElement {
     e.preventDefault()
     e.stopPropagation()
 
-    if (!this.appStore.gitlabToken) {
-      return this.appStore.setGitlabTokenDialog(true)
+    if (!appSignal.gitLabToken) {
+      return appSignal.setShowGitLabTokenDialog(true)
     }
 
     const namespaceValue = this.namespaceRef.value?.value
