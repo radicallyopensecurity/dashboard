@@ -9,7 +9,7 @@ export const syncNamespaces =
     store.setIsLoading(true)
     const groups = await client.groups({
       allAvailable: true,
-      minAccessLevel: 40,
+      minAccessLevel: 10,
     })
     const filtered = groups.filter(
       (group) => !IGNORED_NAMESPACES_MAP[group.full_path]

@@ -1,6 +1,7 @@
 import { type GitLabClient } from '@/api/gitlab/gitlab-client'
 import { fetchPaginated } from '@/api/gitlab/utils/fetch-paginated'
 
+import { IGNORED_NAMESPACES_MAP } from '@/modules/projects/constants/namespaces'
 import { normalizeProject } from '@/modules/projects/normalizers/normalize-project'
 import { type ProjectsStore } from '@/modules/projects/store/projects-store'
 
@@ -13,7 +14,9 @@ export const syncProjects =
     logger.debug('syncing...')
     store.setIsLoading(true)
     const result = await fetchPaginated(client.projects)
-    const normalized = result.map(normalizeProject)
+    const normalized = result
+      .filter((x) => !IGNORED_NAMESPACES_MAP[x.namespace.path])
+      .map(normalizeProject)
     logger.debug('data', normalized)
     store.set(normalized)
     store.setIsLoading(false)

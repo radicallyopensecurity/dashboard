@@ -4,7 +4,6 @@ import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
 
 import { handleResponse } from '@/utils/fetch/handle-response'
 
-
 type GetGitLabProjectsParams = {
   perPage?: number
   page?: number
