@@ -57,6 +57,17 @@ export class FindingDetailsItem extends MobxLitElement {
     value.addEventListener('sl-show', () => this.onExpand())
   }
 
+  protected async updated(changed: Map<PropertyKey, unknown>): Promise<void> {
+    if (this.fetched) {
+      if (changed.has('projectId')) {
+        this.fetched = false
+        if (!this.detailsRef.value?.hidden) {
+          await this.detailsRef.value?.hide()
+        }
+      }
+    }
+  }
+
   private onExpand() {
     if (!this.fetched) {
       void projectsService.syncProjectFinding(this.projectId, this.finding.iid)
@@ -87,12 +98,13 @@ export class FindingDetailsItem extends MobxLitElement {
       projectFindingKey(projectId, iid)
     ]
 
-    let iframe = html`error`
+    let iframe = html``
 
     if (details?.isLoading) {
       iframe = html`loading...`
     } else if (!details?.isLoading && details?.data) {
       iframe = html`<secure-iframe
+        sandbox="allow-same-origin"
         .UNSAFE_html=${findingMarkdownHtml(finding, details.data, this.baseUrl)}
       ></secure-iframe>`
     }

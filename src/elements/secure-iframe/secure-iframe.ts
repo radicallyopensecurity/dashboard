@@ -15,6 +15,8 @@ export class SecureIframe extends MobxLitElement {
   private ref: Ref<HTMLIFrameElement> = createRef()
 
   @property()
+  private sandbox = ''
+  @property()
   private UNSAFE_html = ''
 
   private mutationObserver: MutationObserver = new MutationObserver(() => {
@@ -79,9 +81,9 @@ export class SecureIframe extends MobxLitElement {
 
   render() {
     return html`<iframe
-      class=${this.themeStore.theme}
       ${ref(this.ref)}
-      sandbox="allow-same-origin"
+      class=${this.themeStore.theme}
+      sandbox=${this.sandbox}
     ></iframe>`
   }
 }

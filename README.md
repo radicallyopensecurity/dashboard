@@ -148,15 +148,16 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [x] Meta tags
 - [x] CI/CD
 - [x] Eslint rules
-- [ ] Mock OAuth and GitLab API
-- [ ] PWA
+- [x] Mock OAuth and GitLab API
+- [ ] RocketChat API
+- [ ] Replace mobx with reactivecontroller + context
 - [ ] Unit Tests
 - [ ] Documentation
   - [ ] SSL
   - [ ] Security
   - [ ] Proxy config
   - [ ] Badges
-- [ ] Responsive
 - [ ] Security Audit
 - [ ] Cypress
+- [ ] PWA
 - [ ] Production
