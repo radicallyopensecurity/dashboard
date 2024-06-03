@@ -1,21 +1,14 @@
 import './polyfills'
-import { MobxLitElement } from '@adobe/lit-mobx'
 import { provide } from '@lit/context'
 import { Router } from '@lit-labs/router'
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
-import { html, css } from 'lit'
+import { html, css, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 import { registerTheme } from '@/theme/utils/register-theme'
 
 import { routerContext, routes } from '@/routes'
-
-import { authService } from '@/modules/auth/auth-service'
-
-import { projectsService } from '@/modules/projects/projects-service'
-
-import { userService } from '@/modules/user/user-service'
 
 import { versionValues } from '@/utils/version/version-values'
 
@@ -57,14 +50,12 @@ setBasePath('/')
 const ELEMENT_NAME = 'app-shell'
 
 @customElement(ELEMENT_NAME)
-export class AppShell extends MobxLitElement {
+export class AppShell extends LitElement {
   @provide({ context: routerContext })
   private router = new Router(this, routes)
 
-  protected async firstUpdated() {
+  protected firstUpdated() {
     registerTheme()
-    await authService.ensureAuth(window.location.pathname)
-    await Promise.all([userService.syncUser(), projectsService.syncProjects()])
   }
 
   static styles = [

@@ -3,8 +3,10 @@ import { RouteConfig, Router } from '@lit-labs/router'
 import { html } from 'lit'
 import { toJS } from 'mobx'
 
+import { ensureAuth } from './modules/auth/services/ensure-auth'
 import { projectsService } from './modules/projects/projects-service'
 import { projects } from './modules/projects/store/projects-store'
+import { userService } from './modules/user/user-service'
 
 export const routerContext = createContext<Router>('router')
 
@@ -21,6 +23,15 @@ export const routes: RouteConfig[] = [
     render: () => html`<home-page></home-page>`,
     enter: async () => {
       await import('@/pages/home')
+      if (!(await ensureAuth())) {
+        return true
+      }
+
+      await Promise.all([
+        userService.syncUser(),
+        projectsService.syncProjects(),
+      ])
+
       return true
     },
   },
@@ -29,9 +40,16 @@ export const routes: RouteConfig[] = [
     render: () => html`<project-new-page></project-new-page>`,
     enter: async () => {
       await import('@/pages/projects/new')
+
+      if (!(await ensureAuth())) {
+        return true
+      }
+
       await Promise.all([
+        userService.syncUser(),
         projectsService.syncNamespaces(),
         projectsService.syncTemplates(),
+        projectsService.syncProjects(),
       ])
       return true
     },
@@ -46,11 +64,18 @@ export const routes: RouteConfig[] = [
     enter: async ({ name, namespace }) => {
       await import('@/pages/projects/:namespace,:name')
 
+      if (!(await ensureAuth())) {
+        return true
+      }
+
       if (!name || !namespace) {
         return true
       }
 
-      await projectsService.syncProjects()
+      await Promise.all([
+        userService.syncUser(),
+        projectsService.syncProjects(),
+      ])
 
       const nameWithNamespace = `${namespace}/${name}`
 

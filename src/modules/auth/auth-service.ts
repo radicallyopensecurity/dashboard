@@ -1,12 +1,18 @@
-
-import { auth } from '@/modules/auth/auth-store'
-import { authClient } from '@/modules/auth/client/auth-client'
+import { auth } from '@/modules/auth/auth-signal'
+import { ensureAuth } from '@/modules/auth/services/ensure-auth'
 import { loginCallback } from '@/modules/auth/services/login-callback'
 
-import { ensureAuth } from './services/ensure-auth'
-
-
 export const authService = {
-  ensureAuth: ensureAuth(authClient),
-  loginCallback: loginCallback(authClient, auth),
+  ensureAuth: async (redirectTo?: string): Promise<boolean> => {
+    auth.setLoading(true)
+    const result = await ensureAuth(redirectTo)
+    auth.setAuthenticated(result)
+    return result
+  },
+  loginCallback: async (): Promise<false | string> => {
+    auth.setLoading(true)
+    const result = await loginCallback()
+    auth.setAuthenticated(Boolean(result))
+    return result
+  },
 }

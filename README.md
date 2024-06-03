@@ -126,30 +126,6 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 
 ## TODO
 
-- [x] Lit + Vite + Router
-- [x] GitLab Auth
-- [x] State management: mobx
-- [x] Vitest
-- [x] Module aliases
-- [x] Eslint
-- [x] Pretty quick
-- [x] Lint staged
-- [x] Commit hooks
-- [x] CSS Library
-- [x] App layout
-- [x] Stylelint
-- [x] Features
-  - [x] Sidebar
-  - [x] Homepage
-  - [x] Project detail
-  - [x] Project new
-  - [x] Top bar
-- [x] Staging
-- [x] Meta tags
-- [x] CI/CD
-- [x] Eslint rules
-- [x] Mock OAuth and GitLab API
-- [ ] RocketChat API
 - [ ] Replace mobx with reactivecontroller + context
 - [ ] Unit Tests
 - [ ] Documentation
@@ -161,3 +137,4 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 - [ ] Cypress
 - [ ] PWA
 - [ ] Production
+- [ ] RocketChat API
