@@ -11,7 +11,6 @@ import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
 import { normalizePdf } from './normalize-pdf'
 
-
 export const normalizeProject = (raw: GitLabProject): Project => {
   const tags = raw.tag_list.map((x) => x.toLowerCase())
   const chatUrl = getChannelUrl(config.services.rocketChatUrl, raw.name)

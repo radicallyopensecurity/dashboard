@@ -8,6 +8,7 @@ const trustedDomains = {
   default: [
     'https://login.staging.radical.sexy',
     'https://git.staging.radical.sexy',
+    'http://localhost:3001'
   ],
   // config_classic: ['https://demo.duendesoftware.com'],
   // config_without_silent_login: ['https://demo.duendesoftware.com'],
