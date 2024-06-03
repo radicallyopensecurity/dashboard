@@ -2,7 +2,7 @@ import { action, makeAutoObservable, observable } from 'mobx'
 
 export class AuthStore {
   @observable
-  public isAuthenticated = false
+  public isAuthenticated?: boolean
 
   constructor() {
     makeAutoObservable(this)

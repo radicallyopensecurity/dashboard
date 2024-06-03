@@ -60,20 +60,12 @@ export class ProjectChat extends LitElement {
 
     return html`<sl-card>
       <section>
-        ${chatUrl
-          ? html`<iframe
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-              referrerpolicy="origin"
-              style="width:100%; height: 100%; border: 0;"
-              src=${chatUrl}
-            ></iframe>`
-          : ''}
-        ${!chatUrl
-          ? html`<p>
-              <sl-icon name="exclamation-triangle"></sl-icon> Could not find
-              chat room
-            </p>`
-          : ''}
+        <iframe
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          referrerpolicy="origin"
+          style="width:100%; height: 100%; border: 0;"
+          src=${chatUrl}
+        ></iframe>
       </section>
     </sl-card>`
   }
