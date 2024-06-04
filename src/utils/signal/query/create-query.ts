@@ -3,7 +3,11 @@ import { signal as createSignal } from '@lit-labs/preact-signals'
 import { DEFAULT_QUERY_RESULT } from './constants'
 import { Query, QueryOptions, QueryFetcher, QueryResult } from './types'
 
-export const createQuery = <TResult, TParams, TIntermediate = TResult>(
+export const createQuery = <
+  TResult,
+  TParams = undefined,
+  TIntermediate = TResult,
+>(
   fetcher: QueryFetcher<TIntermediate, TParams>,
   options?: QueryOptions<TParams, TResult, TIntermediate>
 ): Query<TResult, TParams> => {

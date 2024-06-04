@@ -1,6 +1,6 @@
 import { createQuery } from '@/utils/signal/query/create-query'
 
-import { syncProjectFinding } from '../services/sync-project-finding'
+import { projectFinding } from '../services/project-finding'
 import { ProjectFindingDetails } from '../types/project-findings'
 import { projectFindingKey } from '../utils/project-finding-key'
 
@@ -11,11 +11,11 @@ type ProjectFindingsQueryData = Record<
 
 export const projectFindingsQuery = createQuery<
   ProjectFindingsQueryData,
-  Parameters<typeof syncProjectFinding>,
+  Parameters<typeof projectFinding>,
   ProjectFindingDetails
 >(
   ([projectId, issueId]) => {
-    return syncProjectFinding(projectId, issueId)
+    return projectFinding(projectId, issueId)
   },
   {
     before: (cache, [projectId, issueId], setValue) => {

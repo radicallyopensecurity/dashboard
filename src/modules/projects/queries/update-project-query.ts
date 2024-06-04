@@ -1,10 +1,11 @@
 import { createQuery } from '@/utils/signal/query/create-query'
 
+import { groupProjects } from '../normalizers/normalize-project'
 import { updateProject } from '../services/update-project'
 import { Project } from '../types/project'
 
 import { projectDetailsQuery } from './project-details.query'
-import { groupProjects, projectsQuery } from './projects-query'
+import { projectsQuery } from './projects-query'
 
 export const updateProjectQuery = createQuery<
   Project,
@@ -19,6 +20,7 @@ export const updateProjectQuery = createQuery<
       const [projectId] = val as any
       const detailsPromise = projectDetailsQuery.fetch([projectId, 'network'])
 
+      // optimistic update
       const all = projectsQuery.data?.all ?? []
       const filtered = all.filter((x) => x.id !== projectId)
       const newList = [...filtered, project]

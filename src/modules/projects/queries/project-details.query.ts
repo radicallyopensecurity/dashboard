@@ -1,7 +1,7 @@
 import { isDefined } from '@/utils/object/is-defined'
 import { createQuery } from '@/utils/signal/query/create-query'
 
-import { syncProjectDetails } from '../services/sync-project-details'
+import { projectDetails } from '../services/project-details'
 import { ProjectDetails } from '../types/project-details'
 
 type ProjectDetailsQueryResult = Record<
@@ -11,9 +11,9 @@ type ProjectDetailsQueryResult = Record<
 
 export const projectDetailsQuery = createQuery<
   ProjectDetailsQueryResult,
-  Parameters<typeof syncProjectDetails>,
+  Parameters<typeof projectDetails>,
   ProjectDetails
->(([id, mode]) => syncProjectDetails(id, mode), {
+>(([id, mode]) => projectDetails(id, mode), {
   before: (cache, [param], setValue) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     const [projectId, mode] = param as any

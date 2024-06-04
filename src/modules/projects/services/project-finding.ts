@@ -11,7 +11,7 @@ import { projectFindingKey } from '../utils/project-finding-key'
 
 const logger = createLogger('sync-project-discussion')
 
-export const syncProjectFinding = async (
+export const projectFinding = async (
   projectId: number,
   issueId: number
 ): Promise<ProjectFindingDetails> => {

@@ -2,7 +2,10 @@ import { gitlabClient } from '@/api/gitlab/gitlab-client'
 import { fetchPaginated } from '@/api/gitlab/utils/fetch-paginated'
 
 import { IGNORED_NAMESPACES_MAP } from '@/modules/projects/constants/namespaces'
-import { normalizeProject } from '@/modules/projects/normalizers/normalize-project'
+import {
+  groupProjects,
+  normalizeProject,
+} from '@/modules/projects/normalizers/normalize-project'
 
 import { createLogger } from '@/utils/logging/create-logger'
 
@@ -14,6 +17,7 @@ export const projects = async () => {
   const normalized = result
     .filter((x) => !IGNORED_NAMESPACES_MAP[x.namespace.path])
     .map(normalizeProject)
-  logger.debug('data', normalized)
-  return normalized
+  const grouped = groupProjects(normalized)
+  logger.debug('data', grouped)
+  return grouped
 }

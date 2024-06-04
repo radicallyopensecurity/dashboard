@@ -8,7 +8,7 @@ import { ProjectDetails } from '../types/project-details'
 
 const logger = createLogger('sync-project-details')
 
-export const syncProjectDetails = async (
+export const projectDetails = async (
   id: number,
   // #TODO: move this to create-query
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

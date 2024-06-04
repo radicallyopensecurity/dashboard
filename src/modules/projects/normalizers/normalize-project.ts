@@ -7,6 +7,8 @@ import { Project } from '@/modules/projects/types/project'
 import { isPentest } from '@/modules/projects/utils/is-pentest'
 import { isQuote } from '@/modules/projects/utils/is-quote'
 
+import { groupBy } from '@/utils/array/group-by'
+import { uniqueBy } from '@/utils/array/unique-by'
 import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
 import { normalizePdf } from './normalize-pdf'
@@ -44,5 +46,29 @@ export const normalizeProject = (raw: GitLabProject): Project => {
     reportPdf: normalizePdf(raw, 'report'),
     chatUrl,
     topics: raw.topics,
+  }
+}
+
+export type ProjectsData = {
+  quotes: Project[]
+  pentests: Project[]
+  all: Project[]
+  allById: Record<number, Project | undefined>
+  allByName: Record<string, Project | undefined>
+}
+
+export const groupProjects = (result: Project[]): ProjectsData => {
+  const quotes = result.filter((x) => x.isQuote)
+  const pentests = result.filter((x) => x.isPentest)
+  const all = uniqueBy((x) => x.id, quotes.concat(pentests))
+  const allById = groupBy((x) => x.id, all)
+  const allByName = groupBy((x) => x.pathWithNamespace, all)
+
+  return {
+    quotes,
+    pentests,
+    all,
+    allById,
+    allByName,
   }
 }
