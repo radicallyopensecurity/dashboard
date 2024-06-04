@@ -85,7 +85,7 @@ fastify.post('/api/v4/projects/:id/access_tokens', async (req, res) => {
   await res.send(req.body)
 })
 
-fastify.post('/api/v4/projects/:id', async (req, res) => {
+fastify.put('/api/v4/projects/:id', async (req, res) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
   const id = Number((req.params as any).id)
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
