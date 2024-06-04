@@ -1,4 +1,5 @@
 import { consume } from '@lit/context'
+import { SignalWatcher } from '@lit-labs/preact-signals'
 import { Router } from '@lit-labs/router'
 import { SlInput, SlSelect } from '@shoelace-style/shoelace'
 import { LitElement, css, html } from 'lit'
@@ -13,15 +14,12 @@ import { routerContext } from '@/routes'
 import { appSignal } from '@/modules/app/signals/app-signal'
 import { updateTitle } from '@/modules/app/utils/update-title'
 
-import { projectsService } from '@/modules/projects/projects-service'
-import { namespacesStore } from '@/modules/projects/store/namespaces-store'
-import { templatesStore } from '@/modules/projects/store/templates-store'
+import { createProjectQuery } from '@/modules/projects/queries/create-project-query'
+import { namespacesQuery } from '@/modules/projects/queries/namespaces-query'
+import { templatesQuery } from '@/modules/projects/queries/templates-query'
 
 @customElement('project-new-page')
-export class ProjectNewPage extends LitElement {
-  private namespacesStore = namespacesStore
-  private templatesStore = templatesStore
-
+export class ProjectNewPage extends SignalWatcher(LitElement) {
   private formRef: Ref<HTMLFormElement> = createRef()
 
   private namespaceRef: Ref<SlSelect> = createRef()
@@ -83,10 +81,13 @@ export class ProjectNewPage extends LitElement {
       throw new Error('values not defined')
     }
 
-    const namespace = this.namespacesStore.namespaces.find(
+    const namespaceData = namespacesQuery.data ?? []
+    const templateData = templatesQuery.data ?? []
+
+    const namespace = namespaceData.find(
       (namespace) => namespace.id === Number(namespaceValue)
     )
-    const template = this.templatesStore.templates.find(
+    const template = templateData.find(
       (template) => template.name === templateValue
     )
 
@@ -94,14 +95,14 @@ export class ProjectNewPage extends LitElement {
       throw new Error('namespace or template not found')
     }
 
-    const path = await projectsService.createProject(
+    const result = await createProjectQuery.fetch([
       template.url,
       name,
       template.name.toLowerCase(),
-      namespace.id
-    )
+      namespace.id,
+    ])
 
-    await this.router?.goto(`/projects/${path}`)
+    await this.router?.goto(`/projects/${result.pathWithNamespace}`)
   }
 
   render() {
@@ -111,7 +112,7 @@ export class ProjectNewPage extends LitElement {
         <form ${ref(this.formRef)} id="inputs" action="">
           <sl-select ${ref(this.namespaceRef)} label="Namespace" required>
             ${map(
-              this.namespacesStore.namespaces,
+              namespacesQuery.data ?? [],
               (namespace) => html`
                 <sl-option value=${namespace.id}>${namespace.path}</sl-option>
               `
@@ -132,7 +133,7 @@ export class ProjectNewPage extends LitElement {
             required
           >
             ${map(
-              this.templatesStore.templates,
+              templatesQuery.data ?? [],
               (template) => html`
                 <sl-option value=${template.name}>${template.name}</sl-option>
               `

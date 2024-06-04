@@ -1,5 +1,5 @@
-import { MobxLitElement } from '@adobe/lit-mobx'
-import { html, css } from 'lit'
+import { SignalWatcher } from '@lit-labs/preact-signals'
+import { html, css, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
@@ -14,7 +14,7 @@ import '@/features/project-detail/elements/cards/title-card.skeleton'
 const ELEMENT_NAME = 'project-detail-skeleton'
 
 @customElement(ELEMENT_NAME)
-export class ProjectDetailSkeleton extends MobxLitElement {
+export class ProjectDetailSkeleton extends SignalWatcher(LitElement) {
   static styles = [
     ...theme,
     css`

@@ -1,10 +1,11 @@
 import { signal as createSignal } from '@lit-labs/preact-signals'
 
 import { DEFAULT_QUERY_RESULT } from './constants'
-import { Query, QueryFetcher, QueryResult } from './types'
+import { Query, QueryOptions, QueryFetcher, QueryResult } from './types'
 
-export const createQuery = <TResult, TParams>(
-  fetcher: QueryFetcher<TResult, TParams>
+export const createQuery = <TResult, TParams, TIntermediate = TResult>(
+  fetcher: QueryFetcher<TIntermediate, TParams>,
+  options?: QueryOptions<TParams, TResult, TIntermediate>
 ): Query<TResult, TParams> => {
   const signal = createSignal<QueryResult<TResult>>(DEFAULT_QUERY_RESULT)
 
@@ -40,6 +41,39 @@ export const createQuery = <TResult, TParams>(
     })
   }
 
+  const fetch: QueryFetcher<TResult, TParams> = async (...params) => {
+    try {
+      setLoading()
+
+      // :( need to get this typescript inference stuff to work
+      // #TODO: Fix type inference
+
+      if (options?.before) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+        options.before(signal.value.data, params as any, setValue)
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+      const data = await fetcher(...(params as any))
+
+      const result = options?.transform
+        ? options.transform(data, signal.value.data)
+        : (data as TResult)
+
+      setCompleted(result)
+
+      if (options?.after) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unnecessary-type-assertion
+        await options.after(params as any, result)
+      }
+
+      return result
+    } catch (err) {
+      setError((err as Error).message)
+      throw err
+    }
+  }
+
   return {
     get data() {
       return signal.value.data
@@ -50,16 +84,12 @@ export const createQuery = <TResult, TParams>(
     get status() {
       return signal.value.status
     },
-    fetch: async (params?: TParams) => {
-      setLoading()
-      try {
-        const data = await fetcher(params)
-        setCompleted(data)
-        return data
-      } catch (err) {
-        setError((err as Error).message)
-        throw err
-      }
+    fetch,
+    set: (current) => {
+      setValue({
+        data: current,
+      })
+      return signal.value
     },
   }
 }

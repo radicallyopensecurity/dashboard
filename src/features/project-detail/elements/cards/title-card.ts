@@ -1,3 +1,4 @@
+import { SignalWatcher } from '@lit-labs/preact-signals'
 import { SlDialog } from '@shoelace-style/shoelace'
 import { LitElement, html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
@@ -16,7 +17,7 @@ import '../pdf-password-dialog'
 const ELEMENT_NAME = 'title-card'
 
 @customElement(ELEMENT_NAME)
-export class TitleCard extends LitElement {
+export class TitleCard extends SignalWatcher(LitElement) {
   @property()
   private project!: Project
   @property()
@@ -24,7 +25,7 @@ export class TitleCard extends LitElement {
   @property()
   private onClickReload!: () => void
   @property()
-  private isLoading = true
+  private isLoading = false
 
   private dialogRef = createRef<SlDialog>()
 
@@ -68,7 +69,7 @@ export class TitleCard extends LitElement {
   ]
 
   render() {
-    const { onClickReload, isLoading } = this
+    const { onClickReload } = this
 
     const { topics, nameWithNamespace, avatar, url, quotePdf, reportPdf } =
       this.project
@@ -89,10 +90,10 @@ export class TitleCard extends LitElement {
           </h2>
           <div id="toolbar">
             <sl-button
+              ?loading=${this.isLoading}
+              ?disabled=${this.isLoading}
               variant="default"
               @click=${onClickReload}
-              ?loading=${isLoading}
-              ?disabled=${isLoading}
             >
               <sl-icon slot="suffix" name="arrow-counterclockwise"></sl-icon>
               Reload
@@ -129,7 +130,6 @@ export class TitleCard extends LitElement {
             >
               <pdf-password-dialog
                 .projectId=${this.project.id}
-                .isLoading=${isLoading}
                 .password=${this.projectDetail.pdfPassword}
               ></pdf-password-dialog>
               <sl-button
@@ -145,8 +145,6 @@ export class TitleCard extends LitElement {
               @click=${async () => {
                 await archiveProject(this.project.id, this.project.topics)
               }}
-              ?loading=${isLoading}
-              ?disabled=${isLoading}
             >
               ${isArchived
                 ? html`<sl-icon slot="prefix" name="arrow-up-left"></sl-icon>

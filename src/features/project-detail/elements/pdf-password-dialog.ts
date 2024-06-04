@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js'
 import { theme } from '@/theme/theme'
 
 import { PDF_PASSWORD_KEY } from '@/modules/projects/constants/variables'
-import { projectsService } from '@/modules/projects/projects-service'
+import { createVariableQuery } from '@/modules/projects/queries/create-variable-query'
 
 import { generatePassword } from '@/utils/string/generate-password'
 
@@ -40,12 +40,15 @@ export class PdfPasswordDialog extends LitElement {
           ?disabled=${this.isLoading}
           @click=${async () => {
             const password = generatePassword()
-            await projectsService.createVariable(this.projectId, {
-              key: PDF_PASSWORD_KEY,
-              masked: true,
-              protected: true,
-              value: password,
-            })
+            await createVariableQuery.fetch([
+              this.projectId,
+              {
+                key: PDF_PASSWORD_KEY,
+                masked: true,
+                protected: true,
+                value: password,
+              },
+            ])
           }}
         >
           Generate

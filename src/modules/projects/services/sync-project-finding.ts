@@ -1,40 +1,43 @@
-import { toJS } from 'mobx'
-
-import { GitLabClient } from '@/api/gitlab/gitlab-client'
+import { gitlabClient } from '@/api/gitlab/gitlab-client'
 import { fetchPaginated } from '@/api/gitlab/utils/fetch-paginated'
 
 import { createLogger } from '@/utils/logging/create-logger'
+import { isDefined } from '@/utils/object/is-defined'
 
 import { normalizeProjectFinding } from '../normalizers/normalize-project-finding'
-import { ProjectFindingsStore } from '../store/project-findings-store'
+import { projectFindingsQuery } from '../queries/project-finding-query'
+import { ProjectFindingDetails } from '../types/project-findings'
 import { projectFindingKey } from '../utils/project-finding-key'
 
 const logger = createLogger('sync-project-discussion')
 
-export const syncProjectFinding =
-  (client: GitLabClient, store: ProjectFindingsStore) =>
-  async (projectId: number, issueId: number) => {
-    if (toJS(store.data)[projectFindingKey(projectId, issueId)]) {
-      logger.debug(
-        `project finding already synced. project: ${projectId}, issue: ${issueId}`
-      )
-      return
-    }
+export const syncProjectFinding = async (
+  projectId: number,
+  issueId: number
+): Promise<ProjectFindingDetails> => {
+  const key = projectFindingKey(projectId, issueId)
 
-    logger.debug(`syncing project: ${projectId} and issue: ${issueId}`)
+  const fromCache = projectFindingsQuery.data?.[key]
 
-    store.setIsLoading(projectId, issueId, true)
-
-    const discussions = await fetchPaginated(({ perPage, page }) =>
-      client.discussions({ perPage, page, projectId, issueId })
-    )
-
-    const normalized = normalizeProjectFinding(discussions, projectId, issueId)
-
+  if (isDefined(fromCache?.data)) {
     logger.debug(
-      `normalized finding for project: ${projectId} and issue: ${issueId}`,
-      normalized
+      `project finding already synced. project: ${projectId}, issue: ${issueId}`
     )
-    store.set(normalized)
-    store.setIsLoading(projectId, issueId, false)
+    return fromCache.data
   }
+
+  logger.debug(`syncing project: ${projectId} and issue: ${issueId}`)
+
+  const discussions = await fetchPaginated(({ perPage, page }) =>
+    gitlabClient.discussions({ perPage, page, projectId, issueId })
+  )
+
+  const normalized = normalizeProjectFinding(discussions, projectId, issueId)
+
+  logger.debug(
+    `normalized finding for project: ${projectId} and issue: ${issueId}`,
+    normalized
+  )
+
+  return normalized
+}

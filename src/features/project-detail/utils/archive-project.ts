@@ -1,4 +1,4 @@
-import { projectsService } from '@/modules/projects/projects-service'
+import { updateProjectQuery } from '@/modules/projects/queries/update-project-query'
 
 import { ARCHIVED_TOPIC } from '../constants'
 
@@ -10,7 +10,5 @@ export const archiveProject = async (id: number, originalTopics: string[]) => {
     topics = topics.concat([ARCHIVED_TOPIC])
   }
 
-  await projectsService.updateProject(id, {
-    topics,
-  })
+  await updateProjectQuery.fetch([id, { topics }])
 }

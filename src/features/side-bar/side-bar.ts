@@ -1,13 +1,12 @@
-import { MobxLitElement } from '@adobe/lit-mobx'
-import { html, css } from 'lit'
+import { SignalWatcher } from '@lit-labs/preact-signals'
+import { html, css, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 import { theme } from '@/theme/theme'
 
 import { AppRoute } from '@/routes'
 
-import { projectsService } from '@/modules/projects/projects-service'
-import { projects } from '@/modules/projects/store/projects-store'
+import { projectsQuery } from '@/modules/projects/queries/projects-query'
 
 import { SERVICES } from '@/features/side-bar/constants'
 
@@ -17,9 +16,7 @@ import '@/features/side-bar/elements/ros-projects'
 const ELEMENT_NAME = 'side-bar'
 
 @customElement(ELEMENT_NAME)
-export class SideBar extends MobxLitElement {
-  private projects = projects
-
+export class SideBar extends SignalWatcher(LitElement) {
   static styles = [
     ...theme,
     css`
@@ -47,7 +44,7 @@ export class SideBar extends MobxLitElement {
     `,
   ]
   render() {
-    const { all } = this.projects
+    const all = projectsQuery.data?.all ?? []
     const sorted = all.slice().sort((a, b) => a.name.localeCompare(b.name))
 
     return html`
@@ -55,8 +52,8 @@ export class SideBar extends MobxLitElement {
       <ros-projects
         .projects=${sorted}
         .newProjectHref=${AppRoute.NewProject}
-        .onReload=${projectsService.syncProjects}
-        .isLoading=${projects.isLoading}
+        .onReload=${projectsQuery.fetch}
+        .isLoading=${projectsQuery.status === 'loading'}
       ></ros-projects>
     `
   }

@@ -1,29 +1,19 @@
 import { UpdateGitLabProject } from '@/api/gitlab/client/update-project'
-import { GitLabClient } from '@/api/gitlab/gitlab-client'
+import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
 import { createLogger } from '@/utils/logging/create-logger'
 
 import { normalizeProject } from '../normalizers/normalize-project'
-import { ProjectDetailsStore } from '../store/project-details-store'
-import { ProjectsStore } from '../store/projects-store'
-
-import { syncProjectDetails } from './sync-project-details'
+import { Project } from '../types/project'
 
 const logger = createLogger('update-project')
 
-export const updateProject =
-  (
-    client: GitLabClient,
-    projectsStore: ProjectsStore,
-    detailsStore: ProjectDetailsStore
-  ) =>
-  async (id: number, payload: UpdateGitLabProject) => {
-    logger.debug('updating...')
-    detailsStore.setIsLoading(id, true)
-    const project = await client.updateProject(id, payload)
-    await Promise.all([
-      syncProjectDetails(client, detailsStore)(id, 'network'),
-      projectsStore.update(normalizeProject(project)),
-    ])
-    detailsStore.setIsLoading(id, false)
-  }
+export const updateProject = async (
+  id: number,
+  payload: UpdateGitLabProject
+): Promise<Project> => {
+  logger.debug('updating project...')
+  const project = await gitlabClient.updateProject(id, payload)
+  const normalized = normalizeProject(project)
+  return normalized
+}

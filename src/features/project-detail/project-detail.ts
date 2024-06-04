@@ -1,5 +1,5 @@
-import { MobxLitElement } from '@adobe/lit-mobx'
-import { html, css } from 'lit'
+import { SignalWatcher } from '@lit-labs/preact-signals'
+import { html, css, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
 import { config } from '@/config'
@@ -19,7 +19,7 @@ import '@/features/project-detail/elements/cards/title-card'
 const ELEMENT_NAME = 'project-detail'
 
 @customElement(ELEMENT_NAME)
-export class ProjectDetail extends MobxLitElement {
+export class ProjectDetail extends SignalWatcher(LitElement) {
   @property()
   private project!: Project
   @property()
@@ -27,7 +27,7 @@ export class ProjectDetail extends MobxLitElement {
   @property()
   private onClickReload!: () => void
   @property()
-  private isLoading = true
+  private isLoading = false
 
   static styles = [
     ...theme,
@@ -75,7 +75,7 @@ export class ProjectDetail extends MobxLitElement {
   ]
 
   render() {
-    const { project, projectDetail, onClickReload, isLoading } = this
+    const { project, projectDetail, onClickReload } = this
 
     const { chatUrl, url } = project
     const { staff, customers, history, findings, nonFindings, allFindings } =
@@ -97,8 +97,8 @@ export class ProjectDetail extends MobxLitElement {
         id="title"
         .project=${project}
         .projectDetail=${projectDetail}
-        .isLoading=${isLoading}
         .onClickReload=${onClickReload}
+        .isLoading=${this.isLoading}
       >
       </title-card>
       <project-chat id="chat" .chatUrl=${chatUrl}></project-chat>

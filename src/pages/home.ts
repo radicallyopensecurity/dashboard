@@ -7,7 +7,7 @@ import { theme } from '@/theme/theme'
 
 import { updateTitle } from '@/modules/app/utils/update-title'
 
-import { projects } from '@/modules/projects/store/projects-store'
+import { projectsQuery } from '@/modules/projects/queries/projects-query'
 
 import { userQuery } from '@/modules/user/queries/user-query'
 
@@ -17,8 +17,6 @@ const ELEMENT_NAME = 'home-page'
 
 @customElement(ELEMENT_NAME)
 export class HomePage extends SignalWatcher(LitElement) {
-  private projects = projects
-
   protected firstUpdated() {
     updateTitle()
   }
@@ -35,14 +33,17 @@ export class HomePage extends SignalWatcher(LitElement) {
 
   render() {
     const name = userQuery.data?.name
-    const { pentests, quotes } = this.projects
+    const pentests = projectsQuery.data?.pentests ?? []
+    const quotes = projectsQuery.data?.quotes ?? []
 
     const countPentestProjects = pentests.length
     const countPentestSuffix = `pentest${countPentestProjects === 1 ? '' : 's'}`
 
     const countQuoteProjects = quotes.length
 
-    const byRecentlyUpdated = this.projects.all
+    const all = projectsQuery.data?.all ?? []
+
+    const byRecentlyUpdated = all
       .slice()
       .sort((a, b) => b.lastActivityAt.getTime() - a.lastActivityAt.getTime())
       .slice(0, 10)

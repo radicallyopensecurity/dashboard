@@ -126,7 +126,6 @@ Rendered Markdown, such as data from GitLab issues, are only served from the src
 
 ## TODO
 
-- [ ] Replace mobx with reactivecontroller + context
 - [ ] Unit Tests
 - [ ] Documentation
   - [ ] SSL

@@ -1,11 +1,12 @@
 import { createContext } from '@lit/context'
 import { RouteConfig, Router } from '@lit-labs/router'
 import { html } from 'lit'
-import { toJS } from 'mobx'
 
 import { authEnsureQuery } from './modules/auth/queries/auth-ensure-query'
-import { projectsService } from './modules/projects/projects-service'
-import { projects } from './modules/projects/store/projects-store'
+import { namespacesQuery } from './modules/projects/queries/namespaces-query'
+import { projectDetailsQuery } from './modules/projects/queries/project-details.query'
+import { projectsQuery } from './modules/projects/queries/projects-query'
+import { templatesQuery } from './modules/projects/queries/templates-query'
 import { userQuery } from './modules/user/queries/user-query'
 
 export const routerContext = createContext<Router>('router')
@@ -27,7 +28,10 @@ export const routes: RouteConfig[] = [
         return true
       }
 
-      await Promise.all([userQuery.fetch(), projectsService.syncProjects()])
+      await Promise.all([
+        userQuery.data ? Promise.resolve() : userQuery.fetch(),
+        projectsQuery.data ? Promise.resolve() : projectsQuery.fetch(),
+      ])
 
       return true
     },
@@ -43,10 +47,10 @@ export const routes: RouteConfig[] = [
       }
 
       await Promise.all([
-        userQuery.fetch(),
-        projectsService.syncNamespaces(),
-        projectsService.syncTemplates(),
-        projectsService.syncProjects(),
+        userQuery.data ? Promise.resolve() : userQuery.fetch(),
+        projectsQuery.data ? Promise.resolve() : projectsQuery.fetch(),
+        namespacesQuery.fetch(),
+        templatesQuery.fetch(),
       ])
       return true
     },
@@ -69,18 +73,20 @@ export const routes: RouteConfig[] = [
         return true
       }
 
-      await Promise.all([userQuery.fetch(), projectsService.syncProjects()])
+      await Promise.all([
+        userQuery.data ? Promise.resolve() : userQuery.fetch(),
+        projectsQuery.data ? Promise.resolve() : projectsQuery.fetch(),
+      ])
 
       const nameWithNamespace = `${namespace}/${name}`
 
-      const project = toJS(projects.allByName)[nameWithNamespace]
+      const project = projectsQuery.data?.allByName[nameWithNamespace]
 
-      if (!project) {
-        return true
-      }
+      const projectDetailsPromise = project
+        ? projectDetailsQuery.fetch([project.id])
+        : Promise.resolve()
 
-      await projectsService.syncProjectDetails(project.id)
-
+      await projectDetailsPromise
       return true
     },
   },

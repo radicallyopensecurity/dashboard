@@ -1,16 +1,14 @@
-import { MobxLitElement } from '@adobe/lit-mobx'
+import { SignalWatcher } from '@lit-labs/preact-signals'
 import { type SlDetails } from '@shoelace-style/shoelace'
-import { css, html } from 'lit'
+import { LitElement, css, html } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { createRef, ref, type Ref } from 'lit/directives/ref.js'
-import { toJS } from 'mobx'
 
 import { theme } from '@/theme/theme'
 
 import { ProjectDetailsFinding } from '@/modules/projects/types/project-details'
 
-import { projectsService } from '@/modules/projects/projects-service'
-import { projectFindingsStore } from '@/modules/projects/store/project-findings-store'
+import { projectFindingsQuery } from '@/modules/projects/queries/project-finding-query'
 import { projectFindingKey } from '@/modules/projects/utils/project-finding-key'
 
 import { findingMarkdownHtml } from '@/features/project-detail/utils/finding-markdown-html'
@@ -22,8 +20,7 @@ const ELEMENT_NAME = 'finding-details-item'
 const logger = createLogger(ELEMENT_NAME)
 
 @customElement(ELEMENT_NAME)
-export class FindingDetailsItem extends MobxLitElement {
-  private projectFindingsStore = projectFindingsStore
+export class FindingDetailsItem extends SignalWatcher(LitElement) {
   private detailsRef: Ref<SlDetails> = createRef()
 
   @property()
@@ -70,7 +67,7 @@ export class FindingDetailsItem extends MobxLitElement {
 
   private onExpand() {
     if (!this.fetched) {
-      void projectsService.syncProjectFinding(this.projectId, this.finding.iid)
+      void projectFindingsQuery.fetch([this.projectId, this.finding.iid])
       this.fetched = true
     }
   }
@@ -91,12 +88,11 @@ export class FindingDetailsItem extends MobxLitElement {
   ]
 
   render() {
-    const { projectId, finding, projectFindingsStore } = this
+    const { projectId, finding } = this
     const { iid, title } = finding
 
-    const details = toJS(projectFindingsStore.data)[
-      projectFindingKey(projectId, iid)
-    ]
+    const details =
+      projectFindingsQuery.data?.[projectFindingKey(projectId, iid)]
 
     let iframe = html``
 
