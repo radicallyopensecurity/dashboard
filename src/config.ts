@@ -1,10 +1,3 @@
-import {
-  DASHBOARD_SUBDOMAIN,
-  ROCKET_CHAT_SUBDOMAIN,
-  GITLAB_SUBDOMAIN,
-  CODIMD_SUBMDOMAIN,
-} from '@/constants/services'
-
 import { parseLogLevel } from '@/utils/logging/parse-log-level'
 import { LogLevel } from '@/utils/logging/types'
 import { ensureString } from '@/utils/string/ensure-string'
@@ -57,9 +50,12 @@ export const config: Config = {
       import.meta.env.VITE_INTERNAL_ISSUE_TRACKER || undefined,
   },
   services: {
-    rocketChatUrl: appUrl.replace(DASHBOARD_SUBDOMAIN, ROCKET_CHAT_SUBDOMAIN),
-    gitlabUrl: appUrl.replace(DASHBOARD_SUBDOMAIN, GITLAB_SUBDOMAIN),
-    codiMdUrl: appUrl.replace(DASHBOARD_SUBDOMAIN, CODIMD_SUBMDOMAIN),
+    rocketChatUrl: ensureString(
+      'VITE_ROCKETCHAT_URL',
+      import.meta.env.VITE_ROCKETCHAT_URL
+    ),
+    codiMdUrl: ensureString('VITE_CODIMD_URL', import.meta.env.VITE_CODIMD_URL),
+    gitlabUrl: gitlabAuthority,
   },
   oidc: {
     clientId: ensureString(

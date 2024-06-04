@@ -12,6 +12,8 @@ interface ImportMetaEnv {
   readonly VITE_PUBLIC_ISSUE_TRACKER?: string
   readonly VITE_INTERNAL_ISSUE_TRACKER?: string
   readonly VITE_SECRET_GITLAB_TOKEN?: string
+  readonly VITE_ROCKETCHAT_URL: string
+  readonly VITE_CODIMD_URL: string
 }
 
 interface ImportMeta {
