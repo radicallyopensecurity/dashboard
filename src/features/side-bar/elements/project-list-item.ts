@@ -5,12 +5,16 @@ import { theme } from '@/theme/theme'
 
 import { type Project } from '@/modules/projects/types/project'
 
+import { ChatSubscription } from '@/modules/chat/types/chat-subscription'
+
 const ELEMENT_NAME = 'project-list-item'
 
 @customElement(ELEMENT_NAME)
 export class ProjectListItem extends LitElement {
   @property()
   private project!: Project
+  @property()
+  private subscription?: ChatSubscription
 
   static styles = [
     ...theme,
@@ -56,6 +60,10 @@ export class ProjectListItem extends LitElement {
         font-size: var(--sl-font-size-small);
         color: var(--sl-color-gray-600);
       }
+
+      #chat {
+        margin-left: auto;
+      }
     `,
   ]
 
@@ -74,6 +82,22 @@ export class ProjectListItem extends LitElement {
         <div id="details">
           <span id="namespace">${namespace.name}</span>
           <span id="name">${name}</span>
+        </div>
+        <div id="chat">
+          ${this.subscription?.unread
+            ? html`<sl-tooltip content="Unread messages">
+                <sl-badge variant="primary" pill
+                  >${this.subscription?.unread}</sl-badge
+                >
+              </sl-tooltip>`
+            : ''}
+          ${this.subscription?.mentions
+            ? html`<sl-tooltip content="Unread mentions">
+                <sl-badge variant="danger" pill
+                  >${this.subscription?.mentions}</sl-badge
+                ></sl-tooltip
+              >`
+            : ''}
         </div>
       </a>
     `

@@ -12,6 +12,7 @@ import { SERVICES } from '@/features/side-bar/constants'
 
 import '@/features/side-bar/elements/ros-services'
 import '@/features/side-bar/elements/ros-projects'
+import { chatSubscriptionsSignal } from '@/modules/chat/signals/chat-subscriptions-signal'
 
 const ELEMENT_NAME = 'side-bar'
 
@@ -51,6 +52,7 @@ export class SideBar extends SignalWatcher(LitElement) {
       <ros-services .services=${SERVICES}></ros-services>
       <ros-projects
         .projects=${sorted}
+        .subscriptions=${chatSubscriptionsSignal.subscriptions}
         .newProjectHref=${AppRoute.NewProject}
         .onReload=${projectsQuery.fetch}
         .isLoading=${projectsQuery.status === 'loading'}

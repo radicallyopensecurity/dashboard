@@ -4,13 +4,19 @@ import { Router } from '@lit-labs/router'
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js'
 import { html, css, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
+import { createRef, ref } from 'lit/directives/ref.js'
+
+import { config } from '@/config'
 
 import { theme } from '@/theme/theme'
 import { registerTheme } from '@/theme/utils/register-theme'
 
 import { routerContext, routes } from '@/routes'
 
+import { isDefined } from '@/utils/object/is-defined'
 import { versionValues } from '@/utils/version/version-values'
+
+import { ChatServiceResult, chatService } from '@/modules/chat/chat-service'
 
 import '@shoelace-style/shoelace/dist/components/alert/alert.js'
 import '@shoelace-style/shoelace/dist/components/avatar/avatar.js'
@@ -30,6 +36,7 @@ import '@shoelace-style/shoelace/dist/components/menu-label/menu-label.js'
 import '@shoelace-style/shoelace/dist/components/option/option.js'
 import '@shoelace-style/shoelace/dist/components/select/select.js'
 import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js'
+import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js'
 
 import '@/elements/secure-iframe/secure-iframe'
 import '@/elements/version-footer/version-footer'
@@ -54,8 +61,19 @@ export class AppShell extends LitElement {
   @provide({ context: routerContext })
   private router = new Router(this, routes)
 
+  iframeRef = createRef<HTMLIFrameElement>()
+  chat: ChatServiceResult | null = null
+
+  public disconnectedCallback(): void {
+    this.chat?.disconnect()
+    super.disconnectedCallback()
+  }
+
   protected firstUpdated() {
     registerTheme()
+    if (isDefined(this.iframeRef.value)) {
+      this.chat = chatService(this.iframeRef.value)
+    }
   }
 
   static styles = [
@@ -82,6 +100,10 @@ export class AppShell extends LitElement {
       #content {
         padding: var(--content-padding);
       }
+
+      #chat {
+        display: none;
+      }
     `,
   ]
 
@@ -93,7 +115,14 @@ export class AppShell extends LitElement {
           <div id="content">${this.router.outlet()}</div>
           <version-footer .values=${FOOTER_VALUES}></version-footer>
         </div>
-      </main>`
+      </main>
+      <iframe
+        ${ref(this.iframeRef)}
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        referrerpolicy="origin"
+        src=${config.services.rocketChatUrl}
+        id="chat"
+      ></iframe>`
   }
 }
 

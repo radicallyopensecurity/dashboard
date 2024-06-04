@@ -7,8 +7,11 @@ import { theme } from '@/theme/theme'
 
 import { type Project } from '@/modules/projects/types/project'
 
-import '@/features/side-bar/elements/project-list-item'
 import { filterProjects } from '../utils'
+
+import { ChatSubscriptionMap } from '@/modules/chat/signals/chat-subscriptions-signal'
+
+import '@/features/side-bar/elements/project-list-item'
 
 const ELEMENT_NAME = 'ros-projects'
 
@@ -16,6 +19,8 @@ const ELEMENT_NAME = 'ros-projects'
 export class RosProjects extends LitElement {
   @property()
   private projects!: Project[]
+  @property()
+  private subscriptions!: ChatSubscriptionMap
 
   @property()
   private newProjectHref!: string
@@ -132,6 +137,7 @@ export class RosProjects extends LitElement {
             (project) =>
               html`<project-list-item
                 .project="${project}"
+                .subscription=${this.subscriptions[project.name]}
               ></project-list-item>`
           )}
         </div>
