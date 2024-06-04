@@ -9,6 +9,8 @@ import { theme } from '@/theme/theme'
 import { Project } from '@/modules/projects/types/project'
 import { ProjectDetails } from '@/modules/projects/types/project-details'
 
+import { updateProjectQuery } from '@/modules/projects/queries/update-project-query'
+
 import { ARCHIVED_TOPIC } from '../../constants'
 import { archiveProject } from '../../utils/archive-project'
 
@@ -25,7 +27,7 @@ export class TitleCard extends SignalWatcher(LitElement) {
   @property()
   private onClickReload!: () => void
   @property()
-  private isLoading = false
+  private isDetailsLoading = false
 
   private dialogRef = createRef<SlDialog>()
 
@@ -80,6 +82,8 @@ export class TitleCard extends SignalWatcher(LitElement) {
 
     const isArchived = topics.includes(ARCHIVED_TOPIC)
 
+    const isArchivingLoading = updateProjectQuery.status === 'loading'
+
     return html`<sl-card>
       <section>
         <div>
@@ -90,8 +94,8 @@ export class TitleCard extends SignalWatcher(LitElement) {
           </h2>
           <div id="toolbar">
             <sl-button
-              ?loading=${this.isLoading}
-              ?disabled=${this.isLoading}
+              ?loading=${this.isDetailsLoading}
+              ?disabled=${this.isDetailsLoading}
               variant="default"
               @click=${onClickReload}
             >
@@ -142,6 +146,8 @@ export class TitleCard extends SignalWatcher(LitElement) {
 
             <sl-button
               variant=${isArchived ? 'warning' : 'danger'}
+              ?loading=${isArchivingLoading}
+              ?disabled=${isArchivingLoading}
               @click=${async () => {
                 await archiveProject(this.project.id, this.project.topics)
               }}

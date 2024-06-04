@@ -14,6 +14,7 @@ const COMMIT_HASH = execSync('git rev-parse --short HEAD').toString()
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const { version } = JSON.parse(readFileSync('package.json', 'utf8'))
 
+// eslint-disable-next-line import/no-default-export
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
@@ -43,7 +44,7 @@ export default defineConfig(({ mode }) => {
       port: PORT,
     },
     server: {
-      host: 'ros-dashboard.test',
+      host: 'dashboard-local.staging.radical.sexy',
       port: PORT,
       https:
         mode === 'production'

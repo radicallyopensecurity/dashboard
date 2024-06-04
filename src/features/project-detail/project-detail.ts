@@ -27,7 +27,7 @@ export class ProjectDetail extends SignalWatcher(LitElement) {
   @property()
   private onClickReload!: () => void
   @property()
-  private isLoading = false
+  private isDetailsLoading = false
 
   static styles = [
     ...theme,
@@ -98,7 +98,7 @@ export class ProjectDetail extends SignalWatcher(LitElement) {
         .project=${project}
         .projectDetail=${projectDetail}
         .onClickReload=${onClickReload}
-        .isLoading=${this.isLoading}
+        .isDetailsLoading=${this.isDetailsLoading}
       >
       </title-card>
       <project-chat id="chat" .chatUrl=${chatUrl}></project-chat>

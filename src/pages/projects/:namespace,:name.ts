@@ -71,7 +71,7 @@ export class ProjectDetailPage extends SignalWatcher(LitElement) {
       .project=${project}
       .projectDetail=${projectDetailsMap?.data}
       .onClickReload=${() => projectDetailsQuery.fetch([project.id, 'network'])}
-      .isLoading=${projectDetailsQuery.status === 'loading'}
+      .isDetailsLoading=${projectDetailsQuery.status === 'loading'}
     ></project-detail>`
   }
 }
