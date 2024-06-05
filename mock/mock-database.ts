@@ -2,6 +2,7 @@ import { discussionsMock } from './data/discussions.mock'
 import { eventsMock } from './data/events.mock'
 import { groupsMock } from './data/groups.mock'
 import { issuesMock } from './data/issues.mock'
+import { jobsMock } from './data/jobs.mock'
 import { labelsMock } from './data/labels.mock'
 import { membersMock } from './data/members.mock'
 import { buildProject } from './data/project-base.mock'
@@ -19,6 +20,7 @@ const data = {
   variables: variablesMock,
   groups: groupsMock,
   discussions: discussionsMock,
+  jobs: jobsMock,
 }
 
 export const mockDatabase = {
@@ -31,6 +33,7 @@ export const mockDatabase = {
   groups: () => data.groups,
   discussions: (issueId: number, page: number) =>
     page === 1 ? data.discussions[issueId - 1] ?? [] : [],
+  jobs: (page: number) => (page === 1 || Number.isNaN(page) ? data.jobs : []),
   projects: (page: number) =>
     page === 1 || Number.isNaN(page) ? data.projects : [],
   createProject: (name: string, namespaceId: number) => {

@@ -10,6 +10,7 @@ import { Project } from '@/modules/projects/types/project'
 import { ProjectDetails } from '@/modules/projects/types/project-details'
 
 import { updateProjectQuery } from '@/modules/projects/queries/update-project-query'
+import { getPdfPageFromName } from '@/modules/projects/utils/build-artifacts'
 
 import { ARCHIVED_TOPIC } from '../../constants'
 import { archiveProject } from '../../utils/archive-project'
@@ -109,15 +110,27 @@ export class TitleCard extends SignalWatcher(LitElement) {
               GitLab
             </sl-button>
 
-            <sl-button variant="default" href=${quotePdf} target="_blank">
-              <sl-icon slot="prefix" name="filetype-pdf"></sl-icon>
-              Quote
-            </sl-button>
+            <pdf-button
+              .downloadUrl=${quotePdf}
+              .previewUrl=${getPdfPageFromName(
+                this.project.namespace.path,
+                this.project.name,
+                'main',
+                'quote'
+              )}
+              titleText="Quote"
+            ></pdf-button>
 
-            <sl-button variant="default" href=${reportPdf} target="_blank">
-              <sl-icon slot="prefix" name="filetype-pdf"></sl-icon>
-              Report
-            </sl-button>
+            <pdf-button
+              .downloadUrl=${reportPdf}
+              .previewUrl=${getPdfPageFromName(
+                this.project.namespace.path,
+                this.project.name,
+                'main',
+                'report'
+              )}
+              titleText="Report"
+            ></pdf-button>
 
             <sl-button
               variant="warning"

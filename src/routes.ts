@@ -15,6 +15,7 @@ export enum AppRoute {
   Home = '/',
   NewProject = '/projects/new',
   ProjectDetail = '/projects/:namespace/:name',
+  ProjectPdf = '/projects/:namespace/:name/pdf/:job/:type',
   AuthCallback = '/auth/callback',
 }
 
@@ -63,7 +64,7 @@ export const routes: RouteConfig[] = [
         .projectNamespace=${namespace}
       ></project-detail-page>`,
     enter: async ({ name, namespace }) => {
-      await import('@/pages/projects/:namespace,:name')
+      await import('@/pages/projects/[:namespace.:name]/index')
 
       if (!(await authEnsureQuery.fetch())) {
         return true
@@ -81,6 +82,47 @@ export const routes: RouteConfig[] = [
       const nameWithNamespace = `${namespace}/${name}`
 
       const project = projectsQuery.data?.allByName[nameWithNamespace]
+
+      const projectDetailsPromise = project
+        ? projectDetailsQuery.fetch([project.id])
+        : Promise.resolve()
+
+      await projectDetailsPromise
+      return true
+    },
+  },
+  {
+    path: AppRoute.ProjectPdf,
+    render: ({ name, namespace, job, type }) =>
+      html`<project-pdf-page
+        .projectName=${name}
+        .projectNamespace=${namespace}
+        .job=${job}
+        .type=${type}
+      ></project-pdf-page>`,
+    enter: async ({ name, namespace }) => {
+      await import('@/pages/projects/[:namespace.:name]/pdf')
+
+      if (!(await authEnsureQuery.fetch())) {
+        return true
+      }
+
+      if (!name || !namespace) {
+        return true
+      }
+
+      await Promise.all([
+        userQuery.data ? Promise.resolve() : userQuery.fetch(),
+        projectsQuery.data ? Promise.resolve() : projectsQuery.fetch(),
+      ])
+
+      const nameWithNamespace = `${namespace}/${name}`
+
+      const project = projectsQuery.data?.allByName[nameWithNamespace]
+
+      if (project && projectDetailsQuery.data?.[project.id]) {
+        return true
+      }
 
       const projectDetailsPromise = project
         ? projectDetailsQuery.fetch([project.id])

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { BUILD_STAGE } from '@/api/gitlab/constants'
 import { type GitLabEvent } from '@/api/gitlab/types/gitlab-event'
 import { type GitLabIssue } from '@/api/gitlab/types/gitlab-issue'
+import { GitLabJob } from '@/api/gitlab/types/gitlab-job'
 import { type GitLabLabel } from '@/api/gitlab/types/gitlab-label'
 import { type GitLabMember } from '@/api/gitlab/types/gitlab-member'
 import { type GitLabVariable } from '@/api/gitlab/types/gitlab-variable'
@@ -17,6 +19,8 @@ import { isNonFinding } from '@/modules/projects/utils/is-non-finding'
 import { FINDING_LABEL, NON_FINDING_LABEL } from '../constants/labels'
 import { PDF_PASSWORD_KEY } from '../constants/variables'
 import { isFinding } from '../utils/is-finding'
+
+import { normalizeBuild } from './normalize-build'
 
 const isEitherFinding = ({ labels }: { labels: string[] }) =>
   labels.some((label) => label === FINDING_LABEL || label === NON_FINDING_LABEL)
@@ -37,7 +41,8 @@ export const normalizeProjectDetails = (
   issues: GitLabIssue[],
   _labels: GitLabLabel[],
   members: GitLabMember[],
-  variables: GitLabVariable[]
+  variables: GitLabVariable[],
+  jobs: GitLabJob[]
 ): ProjectDetails => {
   const allFindingsRaw = issues.filter(isEitherFinding)
 
@@ -65,5 +70,6 @@ export const normalizeProjectDetails = (
     customers: crew.filter(isCustomer).map(normalizeMember),
     allFindings,
     nonFindings: findingsNonFindings.filter(isNonFinding),
+    builds: jobs.filter((x) => x.stage === BUILD_STAGE).map(normalizeBuild),
   }
 }

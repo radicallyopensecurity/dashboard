@@ -1,4 +1,4 @@
-import { capitalize } from '../utils'
+import { capitalize } from '@/utils/string/capitalize'
 
 const GROUPS_BASE = {
   id: 1,

@@ -40,6 +40,12 @@ fastify.get('/api/v4/groups', async (_, res) => {
   await res.send(mockDatabase.groups())
 })
 
+fastify.get('/api/v4/projects/:id/jobs', async (req, res) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+  const page = Number((req.query as any).page)
+  await res.send(mockDatabase.jobs(page))
+})
+
 fastify.get(
   '/api/v4/projects/:id/issues/:iid/discussions',
   async (req, res) => {

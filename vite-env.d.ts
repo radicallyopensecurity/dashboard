@@ -1,6 +1,11 @@
 /// <reference types="vite/client" />
 /// <reference types="vitest" />
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, no-var
+  var pdfjsLib: any
+}
+
 interface ImportMetaEnv {
   readonly DEV_VITE_SERVER_CRT_PATH?: string
   readonly DEV_VITE_SERVER_KEY_PATH?: string

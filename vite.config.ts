@@ -7,6 +7,8 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const iconsPath = 'node_modules/@shoelace-style/shoelace/dist/assets/icons'
 
+const pdfWorker = 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs'
+
 const PORT = 3443
 
 const COMMIT_HASH = execSync('git rev-parse --short HEAD').toString()
@@ -75,6 +77,10 @@ export default defineConfig(({ mode }) => {
         targets: [
           {
             src: iconsPath,
+            dest: 'assets',
+          },
+          {
+            src: pdfWorker,
             dest: 'assets',
           },
         ],

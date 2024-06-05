@@ -1,4 +1,5 @@
 import { gitlabClient } from '@/api/gitlab/gitlab-client'
+import { fetchPaginated } from '@/api/gitlab/utils/fetch-paginated'
 
 import { normalizeProjectDetails } from '@/modules/projects/normalizers/normalize-project-details'
 
@@ -16,12 +17,20 @@ export const projectDetails = async (
 ): Promise<ProjectDetails> => {
   logger.debug(`syncing project with name: ${id}...`)
 
-  const [events, issues, labels, members, variables] = await Promise.all([
+  const [events, issues, labels, members, variables, jobs] = await Promise.all([
     gitlabClient.events({ id }),
     gitlabClient.issues({ id }),
     gitlabClient.labels({ id }),
     gitlabClient.members({ id }),
     gitlabClient.variables({ id }),
+    fetchPaginated(({ page, perPage }) =>
+      gitlabClient.jobs({
+        page,
+        perPage,
+        projectId: id,
+        scopes: ['success', 'pending', 'running'],
+      })
+    ),
   ])
 
   const normalized = normalizeProjectDetails(
@@ -30,7 +39,8 @@ export const projectDetails = async (
     issues,
     labels,
     members,
-    variables
+    variables,
+    jobs
   )
 
   logger.debug(`normalized project details with id: ${id}`, normalized)

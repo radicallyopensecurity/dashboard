@@ -22,6 +22,7 @@ import '@shoelace-style/shoelace/dist/components/alert/alert.js'
 import '@shoelace-style/shoelace/dist/components/avatar/avatar.js'
 import '@shoelace-style/shoelace/dist/components/badge/badge.js'
 import '@shoelace-style/shoelace/dist/components/button/button.js'
+import '@shoelace-style/shoelace/dist/components/button-group/button-group.js'
 import '@shoelace-style/shoelace/dist/components/card/card.js'
 import '@shoelace-style/shoelace/dist/components/details/details.js'
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js'
@@ -36,8 +37,13 @@ import '@shoelace-style/shoelace/dist/components/menu-label/menu-label.js'
 import '@shoelace-style/shoelace/dist/components/option/option.js'
 import '@shoelace-style/shoelace/dist/components/select/select.js'
 import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js'
+import '@shoelace-style/shoelace/dist/components/tab/tab.js'
+import '@shoelace-style/shoelace/dist/components/tab-group/tab-group.js'
+import '@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js'
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js'
+import '@shoelace-style/shoelace/dist/components/visually-hidden/visually-hidden.js'
 
+import '@/elements/pdf-button/pdf-button'
 import '@/elements/secure-iframe/secure-iframe'
 import '@/elements/version-footer/version-footer'
 
@@ -94,10 +100,12 @@ export class AppShell extends LitElement {
         flex-direction: column;
         justify-content: space-between;
         width: 100%;
+        min-height: calc(100% - 80px);
         overflow-y: auto;
       }
 
       #content {
+        flex: 1;
         padding: var(--content-padding);
       }
 

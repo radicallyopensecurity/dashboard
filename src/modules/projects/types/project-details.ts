@@ -1,3 +1,5 @@
+import { ProjectBuild } from './project-build'
+
 export enum ProjectDetailsFindingLabel {
   ToDo = 'ToDo',
   Extreme = 'Extreme',
@@ -100,4 +102,5 @@ export type ProjectDetails = {
   findings: ProjectDetailsGroupedFindings[]
   nonFindings: ProjectDetailsFindingNonFinding[]
   history: ProjectDetailsHistory[]
+  builds: ProjectBuild[]
 }

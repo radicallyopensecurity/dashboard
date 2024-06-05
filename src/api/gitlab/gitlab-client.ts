@@ -7,6 +7,7 @@ import { group } from '@/api/gitlab/client/group'
 import { groupProjects } from '@/api/gitlab/client/group-projects'
 import { groups } from '@/api/gitlab/client/groups'
 import { issues } from '@/api/gitlab/client/issues'
+import { jobs } from '@/api/gitlab/client/jobs'
 import { labels } from '@/api/gitlab/client/labels'
 import { members } from '@/api/gitlab/client/members'
 import { projects } from '@/api/gitlab/client/projects'
@@ -24,6 +25,7 @@ export const gitlabClient = {
   groups,
   groupProjects,
   issues,
+  jobs,
   labels,
   members,
   projects,

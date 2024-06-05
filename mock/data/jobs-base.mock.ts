@@ -1,0 +1,91 @@
+const JOBS_MOCK = {
+  stage: 'build',
+  name: 'build',
+  ref: 'main',
+  tag: false,
+  coverage: null,
+  allow_failure: false,
+  created_at: '2024-06-05T10:51:30.005Z',
+  started_at: '2024-06-05T10:51:39.352Z',
+  finished_at: '2024-06-05T10:51:49.722Z',
+  erased_at: null,
+  duration: 10.370452,
+  queued_duration: 2.502081,
+  user: {
+    id: 1,
+    username: 'user-1',
+    name: 'user-1',
+    state: 'active',
+    locked: false,
+    avatar_url: null,
+    web_url: 'https://localhost/git/user-1',
+    created_at: '2023-06-02T04:53:59.767Z',
+  },
+  commit: {
+    id: 'fasdfafawef',
+    short_id: 'fawefawef',
+    created_at: '2024-06-04T15:05:12.000+00:00',
+    parent_ids: ['fasfasf'],
+    title: 'fasdfasf',
+    message: 'fasfasf\n',
+    author_name: 'GitLab CI',
+    author_email: 'fasdfa@fasdfa.com',
+    authored_date: '2024-06-04T15:05:12.000+00:00',
+    committer_name: 'GitLab CI',
+    committer_email: 'fasfa@fasdfa.com',
+    committed_date: '2024-06-04T15:05:12.000+00:00',
+    trailers: {},
+    extended_trailers: {},
+    web_url: 'https://localhost/git/namespace-1/project-1/-/commit/fasdfasf',
+  },
+  web_url: 'https://localhost/git/namespace-1/project-1/-/jobs/1',
+  project: {
+    ci_job_token_scope_enabled: false,
+  },
+  artifacts: [
+    {
+      file_type: 'archive',
+      size: 121,
+      filename: 'artifacts.zip',
+      file_format: 'zip',
+    },
+    {
+      file_type: 'metadata',
+      size: 273,
+      filename: 'metadata.gz',
+      file_format: 'gzip',
+    },
+    {
+      file_type: 'trace',
+      size: 9630,
+      filename: 'job.log',
+      file_format: null,
+    },
+  ],
+  runner: {
+    id: 31,
+    description: 'fasfasdf',
+    ip_address: null,
+    active: true,
+    paused: false,
+    is_shared: false,
+    runner_type: 'group_type',
+    name: 'gitlab-runner',
+    online: true,
+    status: 'online',
+  },
+  artifacts_expire_at: '2024-06-05T11:51:49.121Z',
+  archived: false,
+  tag_list: ['fasfasf'],
+}
+
+export const buildJob = (
+  id: number,
+  status: 'success' | 'pending' | 'running'
+) => {
+  return {
+    ...JOBS_MOCK,
+    id,
+    status,
+  }
+}

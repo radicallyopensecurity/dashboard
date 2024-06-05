@@ -12,6 +12,7 @@ import { ProjectDetails } from '@/modules/projects/types/project-details'
 import '@/features/project-detail/elements/cards/crew-card'
 import '@/features/project-detail/elements/cards/findings-card'
 import '@/features/project-detail/elements/cards/history-card'
+import '@/features/project-detail/elements/cards/project-builds'
 import '@/features/project-detail/elements/cards/project-chat'
 import '@/features/project-detail/elements/cards/recent-changes-card'
 import '@/features/project-detail/elements/cards/title-card'
@@ -71,6 +72,10 @@ export class ProjectDetail extends SignalWatcher(LitElement) {
         z-index: 10;
         grid-area: crew;
       }
+
+      sl-tab-panel::part(base) {
+        padding-top: 0;
+      }
     `,
   ]
 
@@ -78,8 +83,15 @@ export class ProjectDetail extends SignalWatcher(LitElement) {
     const { project, projectDetail, onClickReload } = this
 
     const { chatUrl, url } = project
-    const { staff, customers, history, findings, nonFindings, allFindings } =
-      projectDetail
+    const {
+      staff,
+      customers,
+      history,
+      findings,
+      nonFindings,
+      allFindings,
+      builds,
+    } = projectDetail
 
     // #TODO: Fix grid heights when cells dont have equal height
     // probably use flex instead of grid for the columns
@@ -101,7 +113,23 @@ export class ProjectDetail extends SignalWatcher(LitElement) {
         .isDetailsLoading=${this.isDetailsLoading}
       >
       </title-card>
-      <project-chat id="chat" .chatUrl=${chatUrl}></project-chat>
+
+      <sl-tab-group id="chat">
+        <sl-tab slot="nav" panel="chat">Chat</sl-tab>
+        <sl-tab slot="nav" panel="builds">Builds</sl-tab>
+        <sl-tab-panel name="chat">
+          <project-chat .chatUrl=${chatUrl}></project-chat>
+        </sl-tab-panel>
+        <sl-tab-panel name="builds">
+          <project-builds
+            .projectId=${project.id}
+            .projectName=${project.name}
+            .projectNamespace=${project.namespace.path}
+            .builds=${builds}
+          ></project-builds>
+        </sl-tab-panel>
+      </sl-tab-group>
+
       <recent-changes-card
         id="changes"
         .findings=${recentChanges}
