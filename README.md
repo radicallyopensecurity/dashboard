@@ -184,14 +184,12 @@ Rendered Markdown, such as data from GitLab issues, are only served from the `sr
 
 ## TODO
 
-- [ ] pdf viewer
+- [ ] Security Audit
 - [ ] watch for all blur events, prevent rocketchat takeover
 - [ ] when logged in as admin, show big big big message that you should logout
 - [ ] sidebar hide
-- [ ] finding editor
-- [ ] Security Audit
-- [ ] Cypress
 - [ ] Unit Tests
+- [ ] finding editor
+- [ ] Cypress
 - [ ] PWA
 - [ ] Production
-- [ ] RocketChat API
