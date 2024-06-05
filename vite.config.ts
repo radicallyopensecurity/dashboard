@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
       port: PORT,
     },
     server: {
-      host: 'dashboard-local.staging.radical.sexy',
+      host: new URL(env.VITE_APP_URL).hostname,
       port: PORT,
       https:
         mode === 'production'
