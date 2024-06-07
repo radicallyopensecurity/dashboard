@@ -1,6 +1,5 @@
 import { config } from '@/config'
 
-
 import { GitLabLabel } from '@/api/gitlab/types/gitlab-label'
 import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 

@@ -1,6 +1,5 @@
 import { config } from '@/config'
 
-
 import { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
 import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 

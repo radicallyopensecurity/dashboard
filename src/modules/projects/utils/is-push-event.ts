@@ -1,4 +1,4 @@
-import  {
+import {
   type ProjectDetailsEvent,
   type ProjectDetailsPushEvent,
 } from '@/modules/projects/types/project-details'

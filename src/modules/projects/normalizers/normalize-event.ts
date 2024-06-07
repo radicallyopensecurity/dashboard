@@ -4,7 +4,6 @@ import { GitLabEvent } from '@/api/gitlab/types/gitlab-event'
 
 import { ProjectDetailsEvent } from '../types/project-details'
 
-
 export const normalizeEvent = (raw: GitLabEvent): ProjectDetailsEvent => {
   const base = {
     date: new Date(raw.created_at),

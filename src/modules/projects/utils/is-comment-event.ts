@@ -1,4 +1,4 @@
-import  {
+import {
   type ProjectDetailsCommentEvent,
   type ProjectDetailsEvent,
 } from '@/modules/projects/types/project-details'

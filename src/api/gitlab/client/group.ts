@@ -4,7 +4,6 @@ import { GitLabLabel } from '@/api/gitlab/types/gitlab-label'
 
 import { handleResponse } from '@/utils/fetch/handle-response'
 
-
 type GetGitLabGroup = {
   id: number
 }

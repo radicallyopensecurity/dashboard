@@ -8,7 +8,6 @@ import { ProjectDetailsHistory } from '../types/project-details'
 
 import { normalizeEvent } from './normalize-event'
 
-
 export const normalizeHistory = (
   events: GitLabEvent[]
 ): ProjectDetailsHistory[] => {

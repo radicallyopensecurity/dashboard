@@ -1,6 +1,5 @@
 import { config } from '@/config'
 
-
 import { type GitLabDiscussion } from '@/api/gitlab/types/gitlab-discussion'
 import { type FetchPaginatedParameters } from '@/api/gitlab/utils/fetch-paginated'
 
