@@ -52,7 +52,7 @@ export class BuildItem extends LitElement {
   render() {
     const { id, status, url, createdAt } = this.build
 
-    let badgeColor = 'neutral'
+    let badgeColor: 'neutral' | 'success' | 'danger' = 'neutral'
     if (status === 'success') {
       badgeColor = 'success'
     } else if (status === 'failed') {
@@ -63,32 +63,41 @@ export class BuildItem extends LitElement {
       <div id="wrapper" class=${this.background}>
         <div id="details">
           <span>
-            <a href=${url} target="_blank">#${id}</a href> 
+            <a href=${url} target="_blank">#${id}</a>
           </span>
           <span>
             <sl-badge variant=${badgeColor} pill>${status}</sl-badge>
           </span>
-          <span>
-            at ${format(createdAt, 'eeee, dd-MM-yyyy HH:mm')} 
-          </span>
+          <span> at ${format(createdAt, 'eeee, dd-MM-yyyy HH:mm')} </span>
         </div>
         <div id="actions">
-
           <pdf-button
             .downloadUrl=${getQuotePdfUrl(this.projectId, id, this.projectName)}
-            .previewUrl=${getPdfPageFromName(this.projectNamespace, this.projectName, id, 'quote')}
+            .previewUrl=${getPdfPageFromName(
+              this.projectNamespace,
+              this.projectName,
+              id,
+              'quote'
+            )}
             titleText="Quote"
           ></pdf-button>
 
           <pdf-button
-            .downloadUrl=${getReportPdfUrl(this.projectId, id, this.projectName)}
-            .previewUrl=${getPdfPageFromName(this.projectNamespace, this.projectName, id, 'report')}
+            .downloadUrl=${getReportPdfUrl(
+              this.projectId,
+              id,
+              this.projectName
+            )}
+            .previewUrl=${getPdfPageFromName(
+              this.projectNamespace,
+              this.projectName,
+              id,
+              'report'
+            )}
             titleText="Report"
           ></pdf-button>
 
-          <sl-button
-            href=${getCsvUrl(this.projectId, id, this.projectName)}
-          >
+          <sl-button href=${getCsvUrl(this.projectId, id, this.projectName)}>
             <sl-icon slot="prefix" name="filetype-csv"></sl-icon>
             <sl-icon slot="suffix" name="download"></sl-icon>
             CSV

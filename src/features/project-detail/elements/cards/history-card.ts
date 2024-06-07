@@ -103,28 +103,30 @@ export class HistoryCard extends LitElement {
                 const { path, userUrl, user, avatar, time } = event
                 return html`
                   <div class="event">
-                    <sl-icon class="event-icon" name="${getEventIcon(event)}"></sl-icon>
+                    <sl-icon
+                      class="event-icon"
+                      name="${getEventIcon(event)}"
+                    ></sl-icon>
                     <div class="content">
                       <a class="user-link" href="${userUrl}">
-                        ${
-                          avatar
-                            ? html`
+                        ${avatar
+                          ? html`
                               <sl-avatar
                                 class="avatar"
                                 image="${avatar}"
                               ></sl-avatar
                             ></a>`
-                            : defaultAvatar
-                        }
+                          : defaultAvatar}
                         ${user}
                       </a>
                       <div class="text">
-                        <a href="${baseUrl}${path}" target=__blank">
+                        <a href=${`${baseUrl}${path}`} target="_blank">
                           ${getEventText(event)}
                         </a>
                       </div>
                     </div>
                     <span class="time">${time}</span>
+                  </div>
                 `
               })}
             </sl-details>`

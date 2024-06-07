@@ -4,6 +4,8 @@ const { defineConfig } = require('eslint-define-config')
 module.exports = defineConfig({
   extends: [
     'eslint:recommended',
+    'plugin:lit/recommended',
+    'plugin:wc/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
     'plugin:@typescript-eslint/recommended-type-checked',

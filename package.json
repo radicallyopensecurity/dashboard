@@ -65,6 +65,8 @@
     "eslint-define-config": "2.1.0",
     "eslint-import-resolver-typescript": "3.6.1",
     "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-lit": "1.14.0",
+    "eslint-plugin-wc": "2.1.0",
     "fastify": "4.27.0",
     "husky": "9.0.11",
     "lint-staged": "15.2.5",
