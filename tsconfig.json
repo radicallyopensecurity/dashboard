@@ -31,5 +31,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "vite-env.d.ts", "vite.config.ts", "mock"]
+  "include": [
+    "src",
+    "vite-env.d.ts",
+    "vite.config.ts",
+    "mock",
+    "commitlint.config.ts"
+  ]
 }
