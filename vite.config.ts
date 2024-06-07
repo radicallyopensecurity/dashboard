@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
       host: new URL(env.VITE_APP_URL).hostname,
       port: PORT,
       https:
-        mode === 'production'
+        mode === 'production' || mode === 'test'
           ? undefined
           : {
               cert: readFileSync(
