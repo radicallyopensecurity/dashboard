@@ -68,12 +68,12 @@ jobs:
 
       - name: Build
         env:
-          VITE_APP_URL: main
-          VITE_ROCKETCHAT_URL: main
-          VITE_CODIMD_URL: main
-          VITE_GITLAB_CLIENT_ID: main
-          VITE_GITLAB_AUTHORITY: main
-        run: npm run build
+          VITE_APP_URL: 'https://localhost'
+          VITE_ROCKETCHAT_URL: 'https://localhost'
+          VITE_CODIMD_URL: 'https://localhost'
+          VITE_GITLAB_CLIENT_ID: 'https://localhost'
+          VITE_GITLAB_AUTHORITY: 'https://localhost'
+        run: npm run build:ci
 
   release:
     name: Release

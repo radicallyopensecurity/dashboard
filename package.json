@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "build:prod": "NODE_ENV=production tsc && vite build",
     "build:test": "tsc --noEmit",
+    "build:ci": "vite build --mode test",
     "##### DEV ###########": "###################################",
     "dev": "vite",
     "dev:preview": "vite preview",

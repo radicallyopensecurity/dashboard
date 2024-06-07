@@ -43,9 +43,9 @@ jobs:
 
       - name: Build
         env:
-          VITE_APP_URL: pull-request
-          VITE_ROCKETCHAT_URL: pull-request
-          VITE_CODIMD_URL: pull-request
-          VITE_GITLAB_CLIENT_ID: pull-request
-          VITE_GITLAB_AUTHORITY: pull-request
-        run: npm run build
+          VITE_APP_URL: 'https://localhost'
+          VITE_ROCKETCHAT_URL: 'https://localhost'
+          VITE_CODIMD_URL: 'https://localhost'
+          VITE_GITLAB_CLIENT_ID: 'https://localhost'
+          VITE_GITLAB_AUTHORITY: 'https://localhost'
+        run: npm run build:ci
