@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import { map } from 'lit/directives/map.js'
 
 import { theme } from '@/theme/theme'
 
@@ -96,10 +97,11 @@ export class HistoryCard extends LitElement {
     return html`
       <sl-card>
         <h2>History</h2>
-        ${history.map(
+        ${map(
+          history,
           ({ dateDisplay, events }) =>
             html` <sl-details summary="${dateDisplay}">
-              ${events.map((event) => {
+              ${map(events, (event) => {
                 const { path, userUrl, user, avatar, time } = event
                 return html`
                   <div class="event">
