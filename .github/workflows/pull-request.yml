@@ -41,8 +41,8 @@ jobs:
           PR_COMMITS: ${{ github.event.pull_request.commits }}
         run: |
           npm run lint:commit -- \
-            --from ${{ PR_HEAD }}~${{ PR_COMMITS }} \
-            --to ${{ PR_HEAD }} --verbose
+            --from ${{ env.PR_HEAD }}~${{ env.PR_COMMITS }} \
+            --to ${{ env.PR_HEAD }} --verbose
 
       - name: Lint files
         run: npm run lint
