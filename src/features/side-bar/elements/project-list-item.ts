@@ -20,8 +20,9 @@ export class ProjectListItem extends LitElement {
     ...theme,
     css`
       :host {
-        --image-size: 32px;
         display: flex;
+
+        --image-size: 32px;
       }
 
       a {

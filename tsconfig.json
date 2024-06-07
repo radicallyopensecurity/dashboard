@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "plugins": [
+      {
+        "name": "ts-lit-plugin"
+      }
+    ],
     /* Library */
     "target": "ESNext",
     "experimentalDecorators": true,

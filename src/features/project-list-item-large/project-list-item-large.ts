@@ -20,10 +20,11 @@ export class ProjectListItemLarge extends LitElement {
     ...theme,
     css`
       :host {
-        --image-size: 48px;
         display: flex;
         border-collapse: collapse;
         border: 1px solid var(--sl-color-gray-200);
+
+        --image-size: 48px;
       }
 
       a {

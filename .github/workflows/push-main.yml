@@ -45,9 +45,9 @@ jobs:
 
       - name: Setup node
         uses: actions/setup-node@v4
-          with:
-            node-version: 20
-            cache: npm
+        with:
+          node-version: 20
+          cache: npm
 
       - name: Setup cache
         uses: actions/cache@v4
@@ -64,12 +64,15 @@ jobs:
         run: npm run lint
 
       - name: Test
-        run: npm test      
+        run: npm test
 
       - name: Build
         env:
-          VITE_GITLAB_CLIENT_ID: pull-request
-          VITE_GITLAB_AUTHORITY: pull-request
+          VITE_APP_URL: main
+          VITE_ROCKETCHAT_URL: main
+          VITE_CODIMD_URL: main
+          VITE_GITLAB_CLIENT_ID: main
+          VITE_GITLAB_AUTHORITY: main
         run: npm run build
 
   release:

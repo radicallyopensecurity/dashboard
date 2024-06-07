@@ -116,6 +116,10 @@ export class AppShell extends LitElement {
   ]
 
   render() {
+    // https://github.com/runem/lit-analyzer/issues/239
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    const sandbox = 'allow-scripts allow-forms allow-popups' as any
+
     return html`<top-bar></top-bar>
       <main>
         <side-bar></side-bar>
@@ -126,7 +130,7 @@ export class AppShell extends LitElement {
       </main>
       <iframe
         ${ref(this.iframeRef)}
-        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        sandbox=${sandbox}
         referrerpolicy="origin"
         src=${config.services.rocketChatUrl}
         id="chat"
