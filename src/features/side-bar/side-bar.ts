@@ -24,7 +24,7 @@ export class SideBar extends SignalWatcher(LitElement) {
     css`
       :host {
         position: relative;
-        z-index: 60;
+        z-index: 20;
         display: flex;
         flex-direction: column;
         gap: var(--sl-spacing-medium);
