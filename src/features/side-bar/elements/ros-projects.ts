@@ -1,4 +1,4 @@
-import { SlInput } from '@shoelace-style/shoelace'
+import { SlInput, SlSelect } from '@shoelace-style/shoelace'
 import { LitElement, html, css } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { Ref, createRef, ref } from 'lit/directives/ref.js'
@@ -7,7 +7,15 @@ import { theme } from '@/theme/theme'
 
 import { type Project } from '@/modules/projects/types/project'
 
-import { filterProjects } from '../utils'
+import { addChannelNames } from '@/modules/projects/utils/add-channel-names'
+
+import {
+  SortDirection,
+  SortOption,
+  TypeFilter,
+  filterProjects,
+  sortProjects,
+} from '../utils'
 
 import { ChatSubscriptionMap } from '@/modules/chat/signals/chat-subscriptions-signal'
 
@@ -17,40 +25,82 @@ const ELEMENT_NAME = 'ros-projects'
 
 @customElement(ELEMENT_NAME)
 export class RosProjects extends LitElement {
+  private searchRef: Ref<SlInput> = createRef()
+  private typeFilterRef: Ref<SlSelect> = createRef()
+  private sortOptionRef: Ref<SlSelect> = createRef()
+  private sortDirectionRef: Ref<SlSelect> = createRef()
+
   @property()
   private projects!: Project[]
   @property()
   private subscriptions!: ChatSubscriptionMap
-
   @property()
   private newProjectHref!: string
-
   @property()
   private onReload!: () => undefined
-
   @property()
   private isLoading = true
 
   @state()
   private search = ''
-
-  private inputRef: Ref<SlInput> = createRef()
+  @state()
+  private typeFilter: TypeFilter = 'all'
+  @state()
+  private sortOption: SortOption = 'name'
+  @state()
+  private sortDirection: SortDirection = 'asc'
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
-    this.inputRef.value?.removeEventListener('sl-input', () =>
-      this.onChangeSearch()
-    )
-  }
 
-  private onChangeSearch() {
-    this.search = this.inputRef.value?.value ?? ''
+    this.searchRef.value?.removeEventListener('sl-input', () =>
+      this.handleSearch()
+    )
+
+    this.typeFilterRef.value?.removeEventListener('sl-change', () => {
+      this.handleType()
+    })
+
+    this.sortOptionRef.value?.removeEventListener('sl-change', () => {
+      this.handleSortOption()
+    })
+
+    this.sortDirectionRef.value?.removeEventListener('sl-change', () => {
+      this.handleSortDirection()
+    })
   }
 
   protected firstUpdated(): void {
-    this.inputRef.value?.addEventListener('sl-input', () => {
-      this.onChangeSearch()
+    this.searchRef.value?.addEventListener('sl-input', () => {
+      this.handleSearch()
     })
+
+    this.typeFilterRef.value?.addEventListener('sl-change', () => {
+      this.handleType()
+    })
+
+    this.sortOptionRef.value?.addEventListener('sl-change', () => {
+      this.handleSortOption()
+    })
+
+    this.sortDirectionRef.value?.addEventListener('sl-change', () => {
+      this.handleSortDirection()
+    })
+  }
+
+  private handleSearch() {
+    this.search = this.searchRef.value?.value ?? ''
+  }
+
+  private handleType() {
+    this.typeFilter = this.typeFilterRef.value?.value as TypeFilter
+  }
+
+  private handleSortOption() {
+    this.sortOption = this.sortOptionRef.value?.value as SortOption
+  }
+  private handleSortDirection() {
+    this.sortDirection = this.sortDirectionRef.value?.value as SortDirection
   }
 
   static styles = [
@@ -93,13 +143,26 @@ export class RosProjects extends LitElement {
         flex-direction: column;
         gap: var(--sl-spacing-small);
       }
+
+      #filters {
+        display: flex;
+        gap: var(--sl-spacing-small);
+      }
     `,
   ]
 
   render() {
     const { projects, newProjectHref, onReload } = this
 
-    const filtered = filterProjects(projects, this.search)
+    const filtered = filterProjects(projects, this.search, this.typeFilter)
+
+    const projectsWithChannels = addChannelNames(filtered, this.subscriptions)
+
+    const sorted = sortProjects(
+      projectsWithChannels,
+      this.sortOption,
+      this.sortDirection
+    )
 
     return html`
       <header id="projects-header">
@@ -123,7 +186,7 @@ export class RosProjects extends LitElement {
 
       <div id="search">
         <sl-input
-          ${ref(this.inputRef)}
+          ${ref(this.searchRef)}
           id="search-input"
           placeholder="pen-ie11"
           size="medium"
@@ -132,14 +195,33 @@ export class RosProjects extends LitElement {
           <sl-icon value=${this.search} name="search" slot="suffix"></sl-icon>
         </sl-input>
 
+        <sl-select ${ref(this.typeFilterRef)} value="all" required>
+          <sl-option value="all">All Projects</sl-option>
+          <sl-option value="quote">Quotes</sl-option>
+          <sl-option value="pentest">Pentests</sl-option>
+        </sl-select>
+
+        <div id="filters">
+          <sl-select ${ref(this.sortOptionRef)} value="name" required>
+            <sl-option value="name">Name</sl-option>
+            <sl-option value="gitlabActivity">GitLab</sl-option>
+            <sl-option value="chatActivity">Chat</sl-option>
+          </sl-select>
+
+          <sl-select ${ref(this.sortDirectionRef)} value="asc" required>
+            <sl-option value="asc">Ascending</sl-option>
+            <sl-option value="dsc">Descending</sl-option>
+          </sl-select>
+        </div>
+
         <div id="search-results">
-          ${filtered.map(
-            (project) =>
-              html`<project-list-item
-                .project="${project}"
-                .subscription=${this.subscriptions[project.name]}
-              ></project-list-item>`
-          )}
+          ${sorted.map(({ project, quoteChannel, pentestChannel }) => {
+            return html`<project-list-item
+              .project="${project}"
+              .quoteChannel=${quoteChannel}
+              .pentestChannel=${pentestChannel}
+            ></project-list-item>`
+          })}
         </div>
       </div>
     `

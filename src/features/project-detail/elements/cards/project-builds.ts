@@ -49,8 +49,6 @@ export class ProjectBuilds extends LitElement {
   ]
 
   render() {
-    console.log({ name: this.projectName })
-
     return html`<sl-card>
       <section>
         ${map(

@@ -14,5 +14,5 @@ export type RocketChatSubscription = {
   t: string
   unread: number
   userMentions: number
-  ls: string // date iso8601
+  ls: Date // date iso8601
 }

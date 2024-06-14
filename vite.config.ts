@@ -64,7 +64,7 @@ export default defineConfig(({ mode }) => {
           // 'script-src self' prevents service worker unregister and token retrieval through iframes
           // SHOULD BE SET IN PRODUCTION
           // https://github.com/AxaFrance/oidc-client/blob/main/FAQ.md#good-security-practices--does-a-hacker-can-unregister-the-service-worker-and-retrieve-tokens-via-an-iframe-
-          `script-src 'self'`,
+          // `script-src 'self'`,
           // worker-src blob: is needed for local development
           // SHOULD NOT BE SET IN PRODUCTION
           `worker-src 'self' blob:`,

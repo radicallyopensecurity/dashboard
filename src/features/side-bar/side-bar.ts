@@ -10,9 +10,10 @@ import { projectsQuery } from '@/modules/projects/queries/projects-query'
 
 import { SERVICES } from '@/features/side-bar/constants'
 
+import { chatSubscriptionsSignal } from '@/modules/chat/signals/chat-subscriptions-signal'
+
 import '@/features/side-bar/elements/ros-services'
 import '@/features/side-bar/elements/ros-projects'
-import { chatSubscriptionsSignal } from '@/modules/chat/signals/chat-subscriptions-signal'
 
 const ELEMENT_NAME = 'side-bar'
 

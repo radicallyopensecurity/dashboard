@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { LitElement, html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
@@ -14,7 +15,9 @@ export class ProjectListItem extends LitElement {
   @property()
   private project!: Project
   @property()
-  private subscription?: ChatSubscription
+  private quoteChannel?: ChatSubscription
+  @property()
+  private pentestChannel?: ChatSubscription
 
   static styles = [
     ...theme,
@@ -69,7 +72,14 @@ export class ProjectListItem extends LitElement {
   ]
 
   render() {
-    const { pathWithNamespace, avatar, namespace, name } = this.project
+    const {
+      pathWithNamespace,
+      avatar,
+      namespace,
+      name,
+      isPentest,
+      lastActivityAt,
+    } = this.project
 
     const image = avatar || namespace.avatar
 
@@ -77,25 +87,47 @@ export class ProjectListItem extends LitElement {
       ? html`<img id="avatar" src="${image}" />`
       : html`<sl-icon id="avatar" name="git"></sl-icon>`
 
+    const lastGitLabActivity = format(lastActivityAt, 'yyyy-MM-dd hh:mm')
+    const lastQuoteActivity = this.quoteChannel
+      ? html`<sl-icon name="alarm"></sl-icon> Quote:
+          ${format(this.quoteChannel.lastUpdatedAt, 'yyyy-MM-dd hh:mm')}`
+      : ''
+    const lastPentestActivity = this.pentestChannel
+      ? html`<sl-icon name="alarm"></sl-icon> Pentest:
+          ${format(this.pentestChannel.lastUpdatedAt, 'yyyy-MM-dd hh:mm')}`
+      : ''
+
     return html`
       <a href="/projects/${pathWithNamespace}">
         ${avatarElement}
         <div id="details">
-          <span id="namespace">${namespace.name}</span>
-          <span id="name">${name}</span>
+          <span id="namespace"
+            >${namespace.name}
+            <sl-badge pill variant=${isPentest ? 'danger' : 'warning'}
+              >${isPentest ? 'pentest' : 'quote'}</sl-badge
+            ></span
+          >
+          <span id="name"> ${name}</span>
+
+          <span
+            ><sl-icon name="alarm"></sl-icon> GitLab:
+            ${lastGitLabActivity}</span
+          >
+          <span>${lastQuoteActivity}</span>
+          <span>${lastPentestActivity}</span>
         </div>
         <div id="chat">
-          ${this.subscription?.unread
-            ? html`<sl-tooltip content="Unread messages">
+          ${this.quoteChannel?.unread
+            ? html`<sl-tooltip content="Unread messages in quote channel">
                 <sl-badge variant="primary" pill
-                  >${this.subscription?.unread}</sl-badge
+                  >${this.quoteChannel?.unread}</sl-badge
                 >
               </sl-tooltip>`
             : ''}
-          ${this.subscription?.mentions
-            ? html`<sl-tooltip content="Unread mentions">
+          ${this.pentestChannel?.unread
+            ? html`<sl-tooltip content="Unread messages in pentest channel">
                 <sl-badge variant="danger" pill
-                  >${this.subscription?.mentions}</sl-badge
+                  >${this.pentestChannel?.unread}</sl-badge
                 ></sl-tooltip
               >`
             : ''}
