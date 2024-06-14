@@ -42,7 +42,8 @@ export type Project = {
   isPentest: boolean
   quotePdf: string
   reportPdf: string
-  chatUrl: string | null
   startDate: Date | null
   endDate: Date | null
+  quoteChannel: string
+  pentestChannel: string
 }

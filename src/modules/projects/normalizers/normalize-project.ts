@@ -10,7 +10,7 @@ import { isQuote } from '@/modules/projects/utils/is-quote'
 
 import { groupBy } from '@/utils/array/group-by'
 import { uniqueBy } from '@/utils/array/unique-by'
-import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
+import { getChannelUrls } from '@/utils/rocket-chat/get-channel-urls'
 
 import { normalizePdf } from './normalize-pdf'
 import { normalizeProjectStatus } from './normalize-project-status'
@@ -20,7 +20,7 @@ export const normalizeProject = (
   quote: GitLabProjectFile | null
 ): Project => {
   const tags = raw.topics.map((x) => x.toLowerCase())
-  const chatUrl = getChannelUrl(config.services.rocketChatUrl, raw.name)
+  const channels = getChannelUrls(config.services.rocketChatUrl, raw.name)
 
   let startDate: Date | null = null
   let endDate: Date | null = null
@@ -70,10 +70,11 @@ export const normalizeProject = (
     isPentest: isPentest(tags, raw.name),
     quotePdf: normalizePdf(raw, 'quote'),
     reportPdf: normalizePdf(raw, 'report'),
-    chatUrl,
     topics: raw.topics,
     startDate,
     endDate,
+    quoteChannel: channels.quote,
+    pentestChannel: channels.pentest,
   }
 }
 

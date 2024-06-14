@@ -82,7 +82,7 @@ export class ProjectDetail extends SignalWatcher(LitElement) {
   render() {
     const { project, projectDetail, onClickReload } = this
 
-    const { chatUrl, url } = project
+    const { quoteChannel, pentestChannel, url } = project
     const {
       staff,
       customers,
@@ -115,11 +115,19 @@ export class ProjectDetail extends SignalWatcher(LitElement) {
       </title-card>
 
       <sl-tab-group id="chat">
-        <sl-tab slot="nav" panel="chat">Chat</sl-tab>
+        <sl-tab slot="nav" panel="quote">Quote Channel</sl-tab>
+        ${project.type === 'pentest'
+          ? html`<sl-tab slot="nav" panel="pentest">Pentest Channel</sl-tab>`
+          : ''}
         <sl-tab slot="nav" panel="builds">Builds</sl-tab>
-        <sl-tab-panel name="chat">
-          <project-chat .chatUrl=${chatUrl}></project-chat>
+        <sl-tab-panel name="quote">
+          <project-chat .chatUrl=${quoteChannel}></project-chat>
         </sl-tab-panel>
+        ${project.type === 'pentest'
+          ? html` <sl-tab-panel name="pentest">
+              <project-chat .chatUrl=${pentestChannel}></project-chat>
+            </sl-tab-panel>`
+          : ''}
         <sl-tab-panel name="builds">
           <project-builds
             .projectId=${project.id}
