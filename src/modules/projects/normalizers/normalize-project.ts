@@ -1,6 +1,7 @@
 import { config } from '@/config'
 
 import { GitLabProject } from '@/api/gitlab/types/gitlab-project'
+import { GitLabProjectFile } from '@/api/gitlab/types/gitlab-project-file'
 
 import { Project } from '@/modules/projects/types/project'
 
@@ -13,9 +14,31 @@ import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
 import { normalizePdf } from './normalize-pdf'
 
-export const normalizeProject = (raw: GitLabProject): Project => {
+export const normalizeProject = (
+  raw: GitLabProject,
+  quote: GitLabProjectFile | null
+): Project => {
   const tags = raw.tag_list.map((x) => x.toLowerCase())
   const chatUrl = getChannelUrl(config.services.rocketChatUrl, raw.name)
+
+  let startDate: Date | null = null
+  let endDate: Date | null = null
+
+  if (quote) {
+    const text = atob(quote.content)
+    const xml = new window.DOMParser().parseFromString(text, 'text/xml')
+    const planning = xml.getElementsByTagName('planning')[0]
+    const start = planning.getElementsByTagName('start')[0].textContent
+    const end = planning.getElementsByTagName('end')[0].textContent
+
+    if (start) {
+      startDate = new Date(start)
+    }
+
+    if (end) {
+      endDate = new Date(end)
+    }
+  }
 
   return {
     id: raw.id,
@@ -46,6 +69,8 @@ export const normalizeProject = (raw: GitLabProject): Project => {
     reportPdf: normalizePdf(raw, 'report'),
     chatUrl,
     topics: raw.topics,
+    startDate,
+    endDate,
   }
 }
 

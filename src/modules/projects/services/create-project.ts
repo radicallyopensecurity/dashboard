@@ -49,6 +49,17 @@ export const createProject = async (
     }),
   ])
 
-  const normalized = normalizeProject(project)
+  let quote = null
+  try {
+    quote = await gitlabClient.projectFile({
+      id: project.id,
+      path: 'source/offerte.xml',
+      branch: 'main',
+    })
+  } catch (err) {
+    /* empty */
+  }
+
+  const normalized = normalizeProject(project, quote)
   return normalized
 }

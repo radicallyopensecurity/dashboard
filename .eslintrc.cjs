@@ -34,6 +34,7 @@ module.exports = defineConfig({
     // will falsely report litelement classes, not useful
     // during development
     // 'import/no-unused-modules': ['warn', { unusedExports: true }],
+    '@typescript-eslint/unbound-method': ['off'],
     '@typescript-eslint/consistent-type-definitions': ['off'],
     'import/no-duplicates': ['error'],
     'import/no-self-import': ['error'],

@@ -8,6 +8,6 @@ export const normalizeChatSubscription = (
     project: raw.name,
     unread: raw.unread,
     mentions: raw.userMentions,
-    lastUpdatedAt: raw.ls,
+    lastUpdatedAt: raw._updatedAt,
   }
 }

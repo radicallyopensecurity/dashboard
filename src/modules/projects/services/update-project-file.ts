@@ -1,4 +1,4 @@
-import { UpdateGitLabProject } from '@/api/gitlab/client/update-project'
+import { UpdateProjectFile } from '@/api/gitlab/client/update-project-file'
 import { gitlabClient } from '@/api/gitlab/gitlab-client'
 
 import { createLogger } from '@/utils/logging/create-logger'
@@ -6,14 +6,16 @@ import { createLogger } from '@/utils/logging/create-logger'
 import { normalizeProject } from '../normalizers/normalize-project'
 import { Project } from '../types/project'
 
-const logger = createLogger('update-project')
+const logger = createLogger('update-project-file')
 
-export const updateProject = async (
-  id: number,
-  payload: UpdateGitLabProject
+export const updateProjectFile = async (
+  payload: UpdateProjectFile
 ): Promise<Project> => {
-  logger.debug('updating project...')
-  const project = await gitlabClient.updateProject(id, payload)
+  logger.debug('updating project file...')
+  const [project] = await Promise.all([
+    gitlabClient.project({ id: payload.id }),
+    gitlabClient.updateProjectFile(payload),
+  ])
 
   let quote = null
   try {

@@ -5,7 +5,7 @@ export type RocketChatSubscription = {
     _id: string
     username: string
   }
-  _updatedAt: string // date iso8601
+  _updatedAt: Date
   alert: boolean
   fname: string
   groupMentions: number
@@ -14,5 +14,5 @@ export type RocketChatSubscription = {
   t: string
   unread: number
   userMentions: number
-  ls: Date // date iso8601
+  ls: Date
 }

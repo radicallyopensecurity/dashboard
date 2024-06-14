@@ -64,6 +64,6 @@ export const config: Config = {
     ),
     authority: gitlabAuthority,
     redirectPath: '/auth/callback',
-    scope: 'openid profile api',
+    scope: 'openid profile api read_repository write_repository',
   },
 }

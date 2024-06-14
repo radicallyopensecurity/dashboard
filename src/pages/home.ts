@@ -11,6 +11,7 @@ import { projectsQuery } from '@/modules/projects/queries/projects-query'
 
 import { userQuery } from '@/modules/user/queries/user-query'
 
+import '@/features/projects-overview/projects-overview'
 import '@/features/project-list-item-large/project-list-item-large'
 
 const ELEMENT_NAME = 'home-page'
@@ -57,6 +58,11 @@ export class HomePage extends SignalWatcher(LitElement) {
           ${countQuoteProjects} quote projects.
         </p>
       </sl-card>
+
+      <sl-card>
+        <projects-overview .projects=${all}></projects-overview>
+      </sl-card>
+
       <sl-card>
         <h2>Recently Updated</h2>
         <div id="recently-updated">

@@ -10,8 +10,11 @@ import { issues } from '@/api/gitlab/client/issues'
 import { jobs } from '@/api/gitlab/client/jobs'
 import { labels } from '@/api/gitlab/client/labels'
 import { members } from '@/api/gitlab/client/members'
+import { project } from '@/api/gitlab/client/project'
+import { projectFile } from '@/api/gitlab/client/project-file'
 import { projects } from '@/api/gitlab/client/projects'
 import { updateProject } from '@/api/gitlab/client/update-project'
+import { updateProjectFile } from '@/api/gitlab/client/update-project-file'
 import { user } from '@/api/gitlab/client/user'
 import { variables } from '@/api/gitlab/client/variables'
 
@@ -28,8 +31,11 @@ export const gitlabClient = {
   jobs,
   labels,
   members,
+  projectFile,
+  project,
   projects,
   updateProject,
+  updateProjectFile,
   user,
   variables,
 }

@@ -27,4 +27,6 @@ export type Project = {
   quotePdf: string
   reportPdf: string
   chatUrl: string | null
+  startDate: Date | null
+  endDate: Date | null
 }

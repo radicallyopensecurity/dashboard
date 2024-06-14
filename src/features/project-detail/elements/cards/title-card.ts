@@ -1,7 +1,8 @@
 import { SignalWatcher } from '@lit-labs/preact-signals'
-import { SlDialog } from '@shoelace-style/shoelace'
+import { SlDialog, SlInput } from '@shoelace-style/shoelace'
+import { format } from 'date-fns'
 import { LitElement, html, css } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement, property, state } from 'lit/decorators.js'
 import { createRef, ref } from 'lit/directives/ref.js'
 
 import { theme } from '@/theme/theme'
@@ -9,6 +10,7 @@ import { theme } from '@/theme/theme'
 import { Project } from '@/modules/projects/types/project'
 import { ProjectDetails } from '@/modules/projects/types/project-details'
 
+import { updateDatesQuery } from '@/modules/projects/queries/update-dates-query'
 import { updateProjectQuery } from '@/modules/projects/queries/update-project-query'
 import { getPdfPageFromName } from '@/modules/projects/utils/build-artifacts'
 
@@ -21,16 +23,60 @@ const ELEMENT_NAME = 'title-card'
 
 @customElement(ELEMENT_NAME)
 export class TitleCard extends SignalWatcher(LitElement) {
-  @property()
-  private project!: Project
-  @property()
-  private projectDetail!: ProjectDetails
-  @property()
-  private onClickReload!: () => void
-  @property()
-  private isDetailsLoading = false
-
   private dialogRef = createRef<SlDialog>()
+  private editDatesRef = createRef<SlDialog>()
+  private startDateRef = createRef<SlInput>()
+  private endDateRef = createRef<SlInput>()
+
+  @property()
+  public project!: Project
+  @property()
+  public projectDetail!: ProjectDetails
+  @property()
+  public onClickReload!: () => void
+  @property()
+  public isDetailsLoading = false
+
+  @state()
+  private startDate: Date | null = null
+  @state()
+  private endDate: Date | null = null
+
+  public disconnectedCallback() {
+    this.startDateRef.value?.removeEventListener('sl-change', () => {
+      this.handleDateChange(this.startDateRef.value!.value, 'startDate')
+    })
+
+    this.endDateRef.value?.removeEventListener('sl-change', () => {
+      this.handleDateChange(this.endDateRef.value!.value, 'endDate')
+    })
+  }
+
+  protected firstUpdated(): void {
+    this.startDateRef.value?.addEventListener('sl-change', () => {
+      this.handleDateChange(this.startDateRef.value!.value, 'startDate')
+    })
+
+    this.endDateRef.value?.addEventListener('sl-change', () => {
+      this.handleDateChange(this.endDateRef.value!.value, 'endDate')
+    })
+  }
+
+  handleDateChange(value: string, type: 'startDate' | 'endDate') {
+    this[type] = new Date(value)
+  }
+
+  async handleSaveDates() {
+    await updateDatesQuery.fetch({
+      projectId: this.project.id,
+      endDate: this.endDate,
+      startDate: this.startDate,
+    })
+
+    await this.editDatesRef.value?.hide()
+
+    this.requestUpdate()
+  }
 
   static styles = [
     ...theme,
@@ -68,6 +114,13 @@ export class TitleCard extends SignalWatcher(LitElement) {
         font-size: var(--sl-font-size-x-large);
         color: var(--sl-color-gray-500);
       }
+
+      #dates {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sl-spacing-x-small);
+        margin-top: var(--sl-spacing-medium);
+      }
     `,
   ]
 
@@ -84,6 +137,13 @@ export class TitleCard extends SignalWatcher(LitElement) {
     const isArchived = topics.includes(ARCHIVED_TOPIC)
 
     const isArchivingLoading = updateProjectQuery.status === 'loading'
+
+    const startDate = this.project.startDate
+      ? format(this.project.startDate, 'yyyy-MM-dd')
+      : 'TBD'
+    const endDate = this.project.endDate
+      ? format(this.project.endDate, 'yyyy-MM-dd')
+      : 'TBD'
 
     return html`<sl-card>
       <section>
@@ -171,6 +231,46 @@ export class TitleCard extends SignalWatcher(LitElement) {
                 : html`<sl-icon slot="prefix" name="archive"></sl-icon>
                     Archive`}
             </sl-button>
+
+            <sl-button @click=${() => this.editDatesRef.value?.show()}
+              >Edit Dates</sl-button
+            >
+            <sl-dialog
+              ${ref(this.editDatesRef)}
+              id="date-dialog"
+              label="Edit dates"
+              class="dialog-overview"
+            >
+              Start Date
+              <sl-input
+                type="date"
+                ${ref(this.startDateRef)}
+                value=${startDate}
+                clearable
+              ></sl-input>
+              End Date
+              <sl-input
+                type="date"
+                ${ref(this.endDateRef)}
+                value=${endDate}
+                clearable
+              ></sl-input>
+              <sl-button
+                slot="footer"
+                @click=${() => this.editDatesRef.value?.hide()}
+                >Close</sl-button
+              >
+              <sl-button
+                slot="footer"
+                variant="primary"
+                @click=${this.handleSaveDates}
+                >Save</sl-button
+              >
+            </sl-dialog>
+          </div>
+          <div id="dates">
+            <span>Start Date: ${startDate}</span>
+            <span>End Date: ${endDate}</span>
           </div>
         </div>
         <div id="avatar-container">${avatarElement}</div>

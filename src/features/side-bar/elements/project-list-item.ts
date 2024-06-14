@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { formatDistance } from 'date-fns'
 import { LitElement, html, css } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
@@ -87,14 +87,16 @@ export class ProjectListItem extends LitElement {
       ? html`<img id="avatar" src="${image}" />`
       : html`<sl-icon id="avatar" name="git"></sl-icon>`
 
-    const lastGitLabActivity = format(lastActivityAt, 'yyyy-MM-dd hh:mm')
+    const now = new Date()
+
+    const lastGitLabActivity = formatDistance(lastActivityAt, now)
     const lastQuoteActivity = this.quoteChannel
-      ? html`<sl-icon name="alarm"></sl-icon> Quote:
-          ${format(this.quoteChannel.lastUpdatedAt, 'yyyy-MM-dd hh:mm')}`
+      ? html`Quote updated
+        ${formatDistance(this.quoteChannel.lastUpdatedAt, now)} ago`
       : ''
     const lastPentestActivity = this.pentestChannel
-      ? html`<sl-icon name="alarm"></sl-icon> Pentest:
-          ${format(this.pentestChannel.lastUpdatedAt, 'yyyy-MM-dd hh:mm')}`
+      ? html`Pentest updated
+        ${formatDistance(this.pentestChannel.lastUpdatedAt, now)} ago`
       : ''
 
     return html`
@@ -109,10 +111,7 @@ export class ProjectListItem extends LitElement {
           >
           <span id="name"> ${name}</span>
 
-          <span
-            ><sl-icon name="alarm"></sl-icon> GitLab:
-            ${lastGitLabActivity}</span
-          >
+          <span> GitLab updated ${lastGitLabActivity} ago </span>
           <span>${lastQuoteActivity}</span>
           <span>${lastPentestActivity}</span>
         </div>

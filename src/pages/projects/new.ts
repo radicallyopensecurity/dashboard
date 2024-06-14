@@ -1,15 +1,13 @@
-import { consume } from '@lit/context'
 import { SignalWatcher } from '@lit-labs/preact-signals'
-import { Router } from '@lit-labs/router'
 import { SlInput, SlSelect } from '@shoelace-style/shoelace'
 import { LitElement, css, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { Ref, createRef, ref } from 'lit/directives/ref.js'
 
 import { theme } from '@/theme/theme'
 
-import { routerContext } from '@/routes'
+import { QUOTE_PROJECT_TAG } from '@/constants/projects'
 
 import { appSignal } from '@/modules/app/signals/app-signal'
 import { updateTitle } from '@/modules/app/utils/update-title'
@@ -25,10 +23,6 @@ export class ProjectNewPage extends SignalWatcher(LitElement) {
   private namespaceRef: Ref<SlSelect> = createRef()
   private nameRef: Ref<SlInput> = createRef()
   private templateRef: Ref<SlSelect> = createRef()
-
-  @consume({ context: routerContext })
-  @property({ attribute: false })
-  private router?: Router
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
@@ -98,11 +92,11 @@ export class ProjectNewPage extends SignalWatcher(LitElement) {
     const result = await createProjectQuery.fetch([
       template.url,
       name,
-      template.name.toLowerCase(),
+      QUOTE_PROJECT_TAG,
       namespace.id,
     ])
 
-    await this.router?.goto(`/projects/${result.pathWithNamespace}`)
+    window.location.href = `/projects/${result.pathWithNamespace}`
   }
 
   render() {
