@@ -269,6 +269,7 @@ export class TitleCard extends SignalWatcher(LitElement) {
             </sl-dialog>
           </div>
           <div id="dates">
+            <span>Status: ${this.project.status}</span>
             <span>Start Date: ${startDate}</span>
             <span>End Date: ${endDate}</span>
           </div>

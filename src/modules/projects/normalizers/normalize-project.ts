@@ -13,12 +13,13 @@ import { uniqueBy } from '@/utils/array/unique-by'
 import { getChannelUrl } from '@/utils/rocket-chat/get-channel-url'
 
 import { normalizePdf } from './normalize-pdf'
+import { normalizeProjectStatus } from './normalize-project-status'
 
 export const normalizeProject = (
   raw: GitLabProject,
   quote: GitLabProjectFile | null
 ): Project => {
-  const tags = raw.tag_list.map((x) => x.toLowerCase())
+  const tags = raw.topics.map((x) => x.toLowerCase())
   const chatUrl = getChannelUrl(config.services.rocketChatUrl, raw.name)
 
   let startDate: Date | null = null
@@ -43,6 +44,7 @@ export const normalizeProject = (
   return {
     id: raw.id,
     name: raw.name,
+    status: normalizeProjectStatus(raw.topics),
     nameWithNamespace: raw.name_with_namespace,
     path: raw.path,
     pathWithNamespace: raw.path_with_namespace,
