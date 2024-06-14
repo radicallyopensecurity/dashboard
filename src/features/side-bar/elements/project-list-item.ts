@@ -107,6 +107,8 @@ export class ProjectListItem extends LitElement {
             >${namespace.name}
             <sl-badge pill variant=${isPentest ? 'danger' : 'warning'}
               >${isPentest ? 'pentest' : 'quote'}</sl-badge
+            ><sl-badge variant="neutral" pill
+              >Status: ${this.project.status}</sl-badge
             ></span
           >
           <span id="name"> ${name}</span>

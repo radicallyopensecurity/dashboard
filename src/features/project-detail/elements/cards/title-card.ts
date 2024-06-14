@@ -307,7 +307,7 @@ export class TitleCard extends SignalWatcher(LitElement) {
             <sl-dialog
               ${ref(this.statusDialogRef)}
               id="date-dialog"
-              label="Edit dates"
+              label="Edit status"
               class="dialog-overview"
             >
               Status
