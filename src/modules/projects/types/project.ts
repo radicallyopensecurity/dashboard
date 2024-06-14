@@ -15,6 +15,7 @@ export type ProjectStatus =
 export type Project = {
   id: number
   status: ProjectStatus
+  type: 'quote' | 'pentest'
   name: string
   nameWithNamespace: string
   path: string

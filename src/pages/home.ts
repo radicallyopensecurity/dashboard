@@ -59,9 +59,7 @@ export class HomePage extends SignalWatcher(LitElement) {
         </p>
       </sl-card>
 
-      <sl-card>
-        <projects-overview .projects=${all}></projects-overview>
-      </sl-card>
+      <projects-overview .projects=${all}></projects-overview>
 
       <sl-card>
         <h2>Recently Updated</h2>

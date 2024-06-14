@@ -1,3 +1,4 @@
+import { SignalWatcher } from '@lit-labs/preact-signals'
 import { SlInput, SlSelect } from '@shoelace-style/shoelace'
 import { LitElement, html, css } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
@@ -24,7 +25,7 @@ import '@/features/side-bar/elements/project-list-item'
 const ELEMENT_NAME = 'ros-projects'
 
 @customElement(ELEMENT_NAME)
-export class RosProjects extends LitElement {
+export class RosProjects extends SignalWatcher(LitElement) {
   private searchRef: Ref<SlInput> = createRef()
   private typeFilterRef: Ref<SlSelect> = createRef()
   private sortOptionRef: Ref<SlSelect> = createRef()

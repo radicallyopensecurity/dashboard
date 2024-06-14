@@ -45,6 +45,7 @@ export const normalizeProject = (
     id: raw.id,
     name: raw.name,
     status: normalizeProjectStatus(raw.topics),
+    type: isPentest(tags, raw.name) ? 'pentest' : 'quote',
     nameWithNamespace: raw.name_with_namespace,
     path: raw.path,
     pathWithNamespace: raw.path_with_namespace,

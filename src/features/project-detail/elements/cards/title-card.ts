@@ -1,15 +1,20 @@
 import { SignalWatcher } from '@lit-labs/preact-signals'
-import { SlDialog, SlInput } from '@shoelace-style/shoelace'
+import { SlDialog, SlInput, SlSelect } from '@shoelace-style/shoelace'
 import { format } from 'date-fns'
 import { LitElement, html, css } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
+import { map } from 'lit/directives/map.js'
 import { createRef, ref } from 'lit/directives/ref.js'
 
 import { theme } from '@/theme/theme'
 
-import { Project } from '@/modules/projects/types/project'
+import { Project, ProjectStatus } from '@/modules/projects/types/project'
 import { ProjectDetails } from '@/modules/projects/types/project-details'
 
+import {
+  PENTEST_STATUSES,
+  QUOTE_STATUSES,
+} from '@/modules/projects/normalizers/normalize-project-status'
 import { updateDatesQuery } from '@/modules/projects/queries/update-dates-query'
 import { updateProjectQuery } from '@/modules/projects/queries/update-project-query'
 import { getPdfPageFromName } from '@/modules/projects/utils/build-artifacts'
@@ -27,6 +32,8 @@ export class TitleCard extends SignalWatcher(LitElement) {
   private editDatesRef = createRef<SlDialog>()
   private startDateRef = createRef<SlInput>()
   private endDateRef = createRef<SlInput>()
+  private statusDialogRef = createRef<SlDialog>()
+  private statusRef = createRef<SlSelect>()
 
   @property()
   public project!: Project
@@ -42,6 +49,9 @@ export class TitleCard extends SignalWatcher(LitElement) {
   @state()
   private endDate: Date | null = null
 
+  @state()
+  private status: ProjectStatus | null = null
+
   public disconnectedCallback() {
     this.startDateRef.value?.removeEventListener('sl-change', () => {
       this.handleDateChange(this.startDateRef.value!.value, 'startDate')
@@ -49,6 +59,10 @@ export class TitleCard extends SignalWatcher(LitElement) {
 
     this.endDateRef.value?.removeEventListener('sl-change', () => {
       this.handleDateChange(this.endDateRef.value!.value, 'endDate')
+    })
+
+    this.statusRef.value?.removeEventListener('sl-change', () => {
+      this.handleStatusChange(this.statusRef.value?.value as ProjectStatus)
     })
   }
 
@@ -60,10 +74,18 @@ export class TitleCard extends SignalWatcher(LitElement) {
     this.endDateRef.value?.addEventListener('sl-change', () => {
       this.handleDateChange(this.endDateRef.value!.value, 'endDate')
     })
+
+    this.statusRef.value?.addEventListener('sl-change', () => {
+      this.handleStatusChange(this.statusRef.value?.value as ProjectStatus)
+    })
   }
 
   handleDateChange(value: string, type: 'startDate' | 'endDate') {
     this[type] = new Date(value)
+  }
+
+  handleStatusChange(value: ProjectStatus) {
+    this.status = value
   }
 
   async handleSaveDates() {
@@ -74,8 +96,16 @@ export class TitleCard extends SignalWatcher(LitElement) {
     })
 
     await this.editDatesRef.value?.hide()
+  }
 
-    this.requestUpdate()
+  async handleSaveStatus() {
+    const filtered = this.project.topics.filter(
+      (x) => !x.startsWith('projectStatus:')
+    )
+    const topics = [...filtered, `projectStatus:${this.status}`]
+    await updateProjectQuery.fetch([this.project.id, { topics }])
+
+    await this.statusDialogRef.value?.hide()
   }
 
   static styles = [
@@ -144,6 +174,9 @@ export class TitleCard extends SignalWatcher(LitElement) {
     const endDate = this.project.endDate
       ? format(this.project.endDate, 'yyyy-MM-dd')
       : 'TBD'
+
+    const statuses =
+      this.project.type === 'pentest' ? PENTEST_STATUSES : QUOTE_STATUSES
 
     return html`<sl-card>
       <section>
@@ -264,6 +297,40 @@ export class TitleCard extends SignalWatcher(LitElement) {
                 slot="footer"
                 variant="primary"
                 @click=${this.handleSaveDates}
+                >Save</sl-button
+              >
+            </sl-dialog>
+
+            <sl-button @click=${() => this.statusDialogRef.value?.show()}
+              >Edit Status</sl-button
+            >
+            <sl-dialog
+              ${ref(this.statusDialogRef)}
+              id="date-dialog"
+              label="Edit dates"
+              class="dialog-overview"
+            >
+              Status
+              <sl-select
+                ${ref(this.statusRef)}
+                hoist
+                value=${this.project.status}
+              >
+                ${map(
+                  statuses,
+                  ({ value, label }) =>
+                    html`<sl-option value=${value}>${label}</sl-option>`
+                )}
+              </sl-select>
+              <sl-button
+                slot="footer"
+                @click=${() => this.statusDialogRef.value?.hide()}
+                >Close</sl-button
+              >
+              <sl-button
+                slot="footer"
+                variant="primary"
+                @click=${this.handleSaveStatus}
                 >Save</sl-button
               >
             </sl-dialog>

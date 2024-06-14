@@ -1,17 +1,36 @@
+import { capitalCaseToSpaceCase } from '@/utils/string/capital-case-to-space-case'
+
 import { ProjectStatus } from '../types/project'
 
-const VALUES: ProjectStatus[] = [
+const QUOTE_PROJECT_STATUSES: ProjectStatus[] = [
   'Staffing',
   'Scoping',
   'ProposalShared',
   'ProposalAccepted',
   'ProposalRejected',
   'ProposalNoResponse',
-  'ToStart',
+]
+
+export const QUOTE_STATUSES = QUOTE_PROJECT_STATUSES.map((status) => ({
+  value: status,
+  label: capitalCaseToSpaceCase(status),
+}))
+
+const PENTEST_PROJECT_STATUSES: ProjectStatus[] = [
   'Running',
   'Delivered',
   'PmClosed',
   'ReTesting',
+]
+
+export const PENTEST_STATUSES = PENTEST_PROJECT_STATUSES.map((status) => ({
+  value: status,
+  label: capitalCaseToSpaceCase(status),
+}))
+
+const VALUES: ProjectStatus[] = [
+  ...QUOTE_PROJECT_STATUSES,
+  ...PENTEST_PROJECT_STATUSES,
   'Unknown',
 ]
 
