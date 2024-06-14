@@ -1,0 +1,62 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint commits
+        env:
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_COMMITS: ${{ github.event.pull_request.commits }}
+        run: |
+          npm run lint:commit -- \
+            --from ${{ env.PR_HEAD }}~${{ env.PR_COMMITS }} \
+            --to ${{ env.PR_HEAD }} --verbose
+
+      - name: Lint files
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        env:
+          VITE_APP_URL: 'https://localhost'
+          VITE_ROCKETCHAT_URL: 'https://localhost'
+          VITE_CODIMD_URL: 'https://localhost'
+          VITE_GITLAB_CLIENT_ID: 'https://localhost'
+          VITE_GITLAB_AUTHORITY: 'https://localhost'
+        run: npm run build:ci
