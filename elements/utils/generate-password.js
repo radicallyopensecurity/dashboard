@@ -1,8 +1,7 @@
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const NUMBERS = "0123456789";
 // not all special characters are supported in GL when masking
-// https://git.staging.radical.sexy/help/ci/variables/index#mask-a-cicd-variable
-const SYMBOLS = "@:.~-+/=";
+const SYMBOLS = "@:.~";
 
 const PASSWORD_CHARACTERS = [
   ALPHABET.toUpperCase(),
