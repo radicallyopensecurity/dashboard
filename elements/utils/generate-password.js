@@ -8,7 +8,7 @@ const PASSWORD_CHARACTERS = [
   ALPHABET.toLowerCase(),
   NUMBERS,
   SYMBOLS,
-].join();
+].join("");
 
 /**
  * Generate password
