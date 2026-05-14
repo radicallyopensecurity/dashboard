@@ -209,7 +209,7 @@ class AuthenticatedRouter extends LitSync(Gitlab) {
 			`;
 			layout = "plain";
 		} else if (!this.gitlabUser) {
-			const loginUrl = `https://login.${window.location.host.split(".").splice(1).join(".")}/users/sign_in?redirect_to=${encodeURIComponent(window.location.href)}`;
+			const loginUrl = `https://git.${window.location.host.split(".").splice(1).join(".")}`;
 			view = html`
 			<div class="px-4 py-5 my-5 text-center">
 				<img class="d-block mx-auto mb-4" src="images/favicon-180x180.png" alt="ROS Logo" width="180" height="180">
